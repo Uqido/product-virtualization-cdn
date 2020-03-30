@@ -1,0 +1,28 @@
+body{
+    font-family: sans-serif;
+}
+
+html,
+.fullscreen{
+    display:flex;
+    height: 100%;
+    margin: 10;
+    padding: 10;
+    width: 100%;
+}
+
+.container{
+    margin: 0px 0px 0px 0px;
+    text-align: center;
+    height: 100%;
+    width: 100%;
+}
+
+.title{
+    font-size: 3rem;
+}
+
+.model-viewer{
+    height: 100%;
+    width: 100%;
+}
