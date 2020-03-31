@@ -32,3 +32,10 @@ html,
     --progress-mask:#0000;
     --progress-bar-height:0px
 }
+
+.model-viewer-w80{
+    height: 100%;
+    width: 100%;
+    --progress-mask:#0000;
+    --progress-bar-height:0px
+}
