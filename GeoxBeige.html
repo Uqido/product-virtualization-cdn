@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <title>GeoxBeige</title>
     <link rel="stylesheet" href="css/style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="white"/>
+    <meta name="theme-color" content="white" />
     <meta name="description" content="">
 
     <script src="https://unpkg.com/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
@@ -40,39 +41,13 @@
     </style>
 
 </head>
+
 <body class="fullscreen">
     <div id="GeoxBeige-poster" class="cloudimage-360" data-folder="img/GeoxBeige/" data-filename="photo-{index}.png"
-         data-amount="36"></div>
-    <div id="GeoxBeige-button-load" class="button-load-class" slot="poster">Load 3D Model</div>
-    <script>
-       /* function inIframe() {
-            try {
-                return window.self !== window.top;
-            } catch (e) {
-                return true;
-            }
-        }*/
-
-        //const modelViewer = document.getElementById('GeoxBeige-load');
-        const poster = document.getElementById('GeoxBeige-poster');
-        const button = document.getElementById('GeoxBeige-button-load');
-
-        button.addEventListener("click", function () {
-            window.open("GeoxBeigeModel.html","_blank")
-            //poster.style.visibility = "hidden";
-        }, false)/*
-        if (!inIframe()) {
-            //disattivo il 360 viewer e faccio caricare il modello
-            //poster.style.visibility = "hidden";
-            //modelViewer.reveal = "auto"
-            //button.innerHTML = "Loading"
-        } else {
-            
-        }*/
-    </script>
-</model-viewer>
-<script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.js"></script>
-<script nomodule src="https://unpkg.com/@google/model-viewer/dist/model-viewer-legacy.js"></script>
-<script src="https://cdn.scaleflex.it/plugins/js-cloudimage-360-view/2/js-cloudimage-360-view.min.js"></script>
+        data-amount="36"></div>
+    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.js"></script>
+    <script nomodule src="https://unpkg.com/@google/model-viewer/dist/model-viewer-legacy.js"></script>
+    <script src="https://cdn.scaleflex.it/plugins/js-cloudimage-360-view/2/js-cloudimage-360-view.min.js"></script>
 </body>
+
 </html>
