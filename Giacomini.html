@@ -60,6 +60,38 @@
             z-index: 100;
             font-size: 20px;
         }
+
+        .iframe-loader {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 11;
+            display: block;
+            color: #DDD;
+            font-weight: 700;
+            font-size: 1.2rem;
+            pointer-events: none;
+            /*animation-name: loader-animation;
+            animation-duration: 1s;
+            animation-iteration-count: infinite;*/
+        }
+        .iframe-loader > div {
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: #DDD;
+        }
+        .iframe-loader.hidden {
+            animation: none;
+            opacity: 0;
+            -webkit-transition: all 0.25s ease-out;
+            -moz-transition: all 0.25s ease-out;
+            -o-transition: all 0.25s ease-out;
+            transition: all 0.25s ease-out;
+        }
     </style>
 
 </head>
@@ -69,6 +101,28 @@
         ios-src='models/Valvola.usdz' alt='' min-field-of-view="25deg" camera-target="0.25m 0m 0m"
         max-camera-orbit="auto 75.5deg 0" exposure="0.6" shadow-intensity="2.5" shadow-softness="0.6"
         quick-look-browsers="safari chrome">
+        <div class="iframe-loader" id="iframe-loader">
+            Loading 0%
+            <div style="width: 0%;"></div>
+        </div>
+        <script>
+
+        const modelViewer = document.getElementById('Valvola-load');
+        const progress = document.getElementById('iframe-loader');
+
+        modelViewer.addEventListener("progress", function (event) {
+            var percent=parseInt(event.detail.totalProgress)*100;
+            console.log(percent);
+            if(percent==100){
+                progress.classList.add("hidden");
+            }
+
+            progress.innerHTML=`Loading ${percent}%
+                                <div style="width: ${percent}%;"></div>
+                                `
+
+        })
+        </script>
     </model-viewer>
     <div class="giacomini-logo"></div>
     <div class="giacomini-description">
