@@ -15,8 +15,17 @@ function instantiateModelContent(srcUrl){
     contentRoot.innerHTML+=modelHtml
 }
 
+function isLocalhost(){
+    if( !window.location.host.replace( /localhost|127\.0\.0\.1/i, '' ) ){ 
+        return false; 
+    }
+    return true;
+}
+
 function parseJson(json){
     var baseurl=json.baseUrl;
+    if(isLocalhost())
+        baseurl="";
     var assets=json.assets;
     getContentRoot();
     for(asset of assets){
