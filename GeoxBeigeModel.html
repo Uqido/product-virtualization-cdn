@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Geox Beige</title>
+    <link rel="stylesheet" href="css/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="white"/>
+    <meta name="description" content="">
+
+    <script src="https://unpkg.com/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+
+    <script src="https://unpkg.com/intersection-observer/intersection-observer.js"></script>
+
+    <script src="https://unpkg.com/resize-observer-polyfill/dist/ResizeObserver.js"></script>
+
+    <script src="https://unpkg.com/fullscreen-polyfill/dist/fullscreen.polyfill.js"></script>
+
+    <script src="https://unpkg.com/focus-visible/dist/focus-visible.js" defer></script>
+
+    <style>
+        .fullscreen{
+            background: rgb(156,156,156);
+            background: linear-gradient(360deg, rgba(156,156,156,1) 0%, rgba(156,156,156,1) 10%, rgba(244,244,244,1) 100%);
+        }
+    </style>
+
+</head>
+<body class="fullscreen">
+<model-viewer id="GeoxBeige-load"
+              class='model-viewer' ar autoplay camera-controls src='models/GeoxBeige.glb'
+              ios-src='models/GeoxBeige.usdz' alt=''
+              exposure="0.6" shadow-intensity="1.5" shadow-softness="0.8" quick-look-browsers="safari chrome">
+</model-viewer>
+<script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.js"></script>
+<script nomodule src="https://unpkg.com/@google/model-viewer/dist/model-viewer-legacy.js"></script>
+<script src="https://cdn.scaleflex.it/plugins/js-cloudimage-360-view/2/js-cloudimage-360-view.min.js"></script>
+</body>
+</html>
