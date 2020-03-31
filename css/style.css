@@ -4,10 +4,9 @@ body{
 
 html,
 .fullscreen{
-    display:flex;
     height: 100%;
-    margin: 10;
-    padding: 10;
+    margin: 0px;
+    padding: 0px;
     width: 100%;
 }
 
@@ -25,4 +24,11 @@ html,
 .model-viewer{
     height: 100%;
     width: 100%;
+}
+
+.model-viewer-w80{
+    height: 100%;
+    width: 80%;
+    --progress-mask:#0000;
+    --progress-bar-height:0px
 }
