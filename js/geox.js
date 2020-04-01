@@ -21,8 +21,7 @@ function instantiateModelContent(view360url, model3Durl) {
                                     </span>
                                     <div class="category">SCARPE CASUAL</div>
                                 </div>
-                                <div title="SYMBOL UOMO"
-                                    class="tile_product-name">
+                                <div title="SYMBOL UOMO" class="tile_product-name">
                                     SYMBOL UOMO
                                 </div>
                                 <div class="pdp-price">
