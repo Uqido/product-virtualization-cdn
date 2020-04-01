@@ -45,10 +45,10 @@ function instantiateModelContent(view360url, model3Durl) {
 }
 
 function isLocalhost() {
-    if (!window.location.host.replace(/localhost|127\.0\.0\.1/i, '')) {
-        return false;
+    if( !window.location.host.replace(":8080","").replace( /localhost|127\.0\.0\.1/i, '' ) ){ 
+        return true; 
     }
-    return true;
+    return false;
 }
 
 function parseJson(json) {
