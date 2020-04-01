@@ -6,10 +6,10 @@
     <title>Valvola</title>
     <link rel="stylesheet" href="css/style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="white" />
-    <link rel="icon" 
-      type="image/png" 
-      href="favicon-uqido.png">
+    <meta name="theme-color" content="white"/>
+    <link rel="icon"
+          type="image/png"
+          href="favicon-uqido.png">
     <meta name="description" content="">
 
     <script src="https://unpkg.com/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
@@ -30,9 +30,6 @@
 
         .giacomini-logo {
             background-image: url(img/giacomini_logo.png);
-            position: absolute;
-            left: 2%;
-            top: 2%;
             background-size: 240px 48px;
             height: 48px;
             width: 240px;
@@ -40,12 +37,13 @@
         }
 
         .giacomini-description {
-            position: absolute;
-            right: 4%;
-            top: 25%;
-            background-repeat: no-repeat;
+            display: flex;
             text-align: end;
-            width: 30%;
+            align-content: center;
+            align-items: center;
+            width: 15em;
+            justify-content: center;
+            transform: translate(-25%);
         }
 
         .button-class {
@@ -79,6 +77,7 @@
             animation-duration: 1s;
             animation-iteration-count: infinite;*/
         }
+
         .iframe-loader > div {
             position: absolute;
             bottom: -10px;
@@ -87,6 +86,7 @@
             height: 3px;
             background: #DDD;
         }
+
         .iframe-loader.hidden {
             animation: none;
             opacity: 0;
@@ -95,16 +95,18 @@
             -o-transition: all 0.25s ease-out;
             transition: all 0.25s ease-out;
         }
+
         svg {
             fill: black;
             stroke: black;
             -webkit-transition: all 0.5s ease-out;
             -moz-transition: all 0.5s ease-out;
             -o-transition: all 0.5s ease-out;
-            transition: all 0.5s ease-out;  
-            cursor: pointer;          
-        } 
-        .bottom{
+            transition: all 0.5s ease-out;
+            cursor: pointer;
+        }
+
+        .bottom {
             position: absolute;
             right: 80px;
             bottom: 5px;
@@ -112,63 +114,120 @@
             user-select: none;
             text-align: center;
         }
+
+        .model-viewer-w80 {
+            height: 100%;
+            width: 80%;
+            min-width: 300px;
+            --progress-mask: #0000;
+            --progress-bar-height: 0px;
+            flex: 1;
+        }
+        html,
+        .fullscreen{
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+        }
+
+        .logo-bar {
+            display: flex;
+            flex-direction: row;
+            width: auto;
+            padding: 16px;
+        }
+
+        @media only screen and (max-width: 800px) {
+            .logo-bar {
+                justify-content: center;
+                transform: translate(0,-70%);
+            }
+
+            .model-viewer-w80 {
+                padding-top: 48px;
+                height: 300px;
+                width: 100%;
+            }
+
+            .giacomini-description {
+                transform: translate(0);
+                width: 100%;
+                padding: 16px 16px 64px;
+                text-align: start;
+            }
+
+            html,
+            .fullscreen{
+                height: auto;
+            }
+        }
+
     </style>
 
 </head>
 
 <body class="fullscreen">
+<div style="display: flex; flex-direction: row;height: 100%;min-height: 100%;flex-wrap: wrap">
     <model-viewer id="Valvola-load" class='model-viewer-w80' ar autoplay camera-controls src='models/Valvola.glb'
-        ios-src='models/Valvola.usdz' alt='' min-field-of-view="25deg" camera-target="0.25m 0m 0m"
-        max-camera-orbit="auto 75.5deg 0" exposure="0.6" shadow-intensity="2.5" shadow-softness="0.6"
-        quick-look-browsers="safari chrome">
+                  ios-src='models/Valvola.usdz' alt='' min-field-of-view="25deg" camera-target="0.25m 0.25m 0m"
+                  max-camera-orbit="auto 75.5deg 0" exposure="0.6" shadow-intensity="2.5" shadow-softness="0.6"
+                  quick-look-browsers="safari chrome">
+        <div class="logo-bar">
+            <div class="giacomini-logo"></div>
+        </div>
         <div class="iframe-loader" id="iframe-loader">
             Loading 0%
             <div style="width: 0%;"></div>
         </div>
 
-            <svg width="48" height="48" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" class="camera bottom" data-cam-id="0">
-                <title>
-                    change view
-                </title>
-                <path d="M2.5,23 L2.5,37 C2.5,37.8284271 3.17157288,38.5 4,38.5 L9,38.5 C9.82842712,38.5 10.5,37.8284271 10.5,37 L10.5,35.5 L37.5,35.5 L37.5,37 C37.5,37.8284271 38.1715729,38.5 39,38.5 L44,38.5 C44.8284271,38.5 45.5,37.8284271 45.5,37 L45.5,23 L41,18.5 C40.0666656,16.6666667 39.2333323,15.1666667 38.5,14 C37.7666677,12.8333333 36.7666677,11.5 35.5,10 C31.7608696,9.66666667 27.9347826,9.5 24.0217391,9.5 C20.1086957,9.5 16.2681159,9.66666667 12.5,10 C11.2333336,11.5 10.2333336,12.8333333 9.5,14 C8.76666641,15.1666667 7.93333308,16.6666667 7,18.5 L2.5,23 Z M15,27 L17,24.5 L31,24.5 L33,27 C31.6666667,30.6666667 30.6666667,32.5 30,32.5 C29,32.5 19,32.5 18,32.5 C17.3333333,32.5 16.3333333,30.6666667 15,27 Z M6.75,18.5 L24,18.5 L41.25,18.5 M43.5,23.5749239 C43.5,24.5459384 43.4166667,25.2053587 43.25,25.5531847 C43,26.0749239 42.5,26.5749239 42,26.5749239 L40,26.5749239 C39.5,26.5749239 35.75,25.5749239 35.25,25.0749239 C34.9166667,24.7415905 34.6666667,24.4082572 34.5,24.0749239 C36.2683726,23.841489 37.7683726,23.6748224 39,23.5749239 C40.2316274,23.4750254 41.7316274,23.4750254 43.5,23.5749239 Z M4.5,23.5749239 C6.26837257,23.4750254 7.76837257,23.4750254 9,23.5749239 C10.2316274,23.6748224 11.7316274,23.841489 13.5,24.0749239 C13.3333333,24.4082572 13.0833333,24.7415905 12.75,25.0749239 C12.25,25.5749239 8.5,26.5749239 8,26.5749239 C7.5,26.5749239 6.5,26.5749239 6,26.5749239 C5.5,26.5749239 5,26.0749239 4.75,25.5531847 C4.58333333,25.2053587 4.5,24.5459384 4.5,23.5749239 Z" stroke-width="1" fill="none" fill-rule="evenodd"></path>
-            </svg>
+        <svg width="48" height="48" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg"
+             class="camera bottom">
+            <title>
+                change view
+            </title>
+            <path d="M2.5,23 L2.5,37 C2.5,37.8284271 3.17157288,38.5 4,38.5 L9,38.5 C9.82842712,38.5 10.5,37.8284271 10.5,37 L10.5,35.5 L37.5,35.5 L37.5,37 C37.5,37.8284271 38.1715729,38.5 39,38.5 L44,38.5 C44.8284271,38.5 45.5,37.8284271 45.5,37 L45.5,23 L41,18.5 C40.0666656,16.6666667 39.2333323,15.1666667 38.5,14 C37.7666677,12.8333333 36.7666677,11.5 35.5,10 C31.7608696,9.66666667 27.9347826,9.5 24.0217391,9.5 C20.1086957,9.5 16.2681159,9.66666667 12.5,10 C11.2333336,11.5 10.2333336,12.8333333 9.5,14 C8.76666641,15.1666667 7.93333308,16.6666667 7,18.5 L2.5,23 Z M15,27 L17,24.5 L31,24.5 L33,27 C31.6666667,30.6666667 30.6666667,32.5 30,32.5 C29,32.5 19,32.5 18,32.5 C17.3333333,32.5 16.3333333,30.6666667 15,27 Z M6.75,18.5 L24,18.5 L41.25,18.5 M43.5,23.5749239 C43.5,24.5459384 43.4166667,25.2053587 43.25,25.5531847 C43,26.0749239 42.5,26.5749239 42,26.5749239 L40,26.5749239 C39.5,26.5749239 35.75,25.5749239 35.25,25.0749239 C34.9166667,24.7415905 34.6666667,24.4082572 34.5,24.0749239 C36.2683726,23.841489 37.7683726,23.6748224 39,23.5749239 C40.2316274,23.4750254 41.7316274,23.4750254 43.5,23.5749239 Z M4.5,23.5749239 C6.26837257,23.4750254 7.76837257,23.4750254 9,23.5749239 C10.2316274,23.6748224 11.7316274,23.841489 13.5,24.0749239 C13.3333333,24.4082572 13.0833333,24.7415905 12.75,25.0749239 C12.25,25.5749239 8.5,26.5749239 8,26.5749239 C7.5,26.5749239 6.5,26.5749239 6,26.5749239 C5.5,26.5749239 5,26.0749239 4.75,25.5531847 C4.58333333,25.2053587 4.5,24.5459384 4.5,23.5749239 Z"
+                  stroke-width="1" fill="none" fill-rule="evenodd"></path>
+        </svg>
         <script>
 
-        const modelViewer = document.getElementById('Valvola-load');
-        const progress = document.getElementById('iframe-loader');
+            const modelViewer = document.getElementById('Valvola-load');
+            const progress = document.getElementById('iframe-loader');
 
-        modelViewer.addEventListener("progress", function (event) {
-            var percent=parseInt(event.detail.totalProgress)*100;
-            console.log(percent);
-            if(percent==100){
-                progress.classList.add("hidden");
-            }
+            modelViewer.addEventListener("progress", function (event) {
+                var percent = parseInt(event.detail.totalProgress) * 100;
+                console.log(percent);
+                if (percent === 100) {
+                    progress.classList.add("hidden");
+                }
 
-            progress.innerHTML=`Loading ${percent}%
+                progress.innerHTML = `Loading ${percent}%
                                 <div style="width: ${percent}%;"></div>
                                 `
 
-        })
+            })
         </script>
     </model-viewer>
-    <div class="giacomini-logo"></div>
-    <div class="giacomini-description">
-        <span style="color: red; font-size: 60px;">R730GB</span><br><br>
-        <span style="font-size: 18px; font-weight: bold;">Valvola a sfera, attacchi F-F, maniglia a leva,</span><br>
-        <span style="font-size: 18px; font-weight: bold;">certificata EN331:2015, per alte temperature</span><br><br>
-        <span style="font-size: 18px; ">Valvola a sfera, in ottone nichelato, con attacchi femmina-femmina.</span><br>
-        <span style="font-size: 18px;"> Maniglia a leva gialla.</span><br>
-        <span style="font-size: 18px;"> Passaggio totale.</span><br>
-        <span style="font-size: 18px;"> Per impianti gas della prima, seconda e terza famiglia (EN 437).</span><br>
-        <span style="font-size: 18px;"> Campo di temperatura: -20÷60 °C.</span><br>
-        <span style="font-size: 18px;"> Resistenza alle alte temperature: classe B 0,1; 650 °C per 30’.</span><br>
-        <span style="font-size: 18px;"> Certificata EN 331:2015.</span><br><br>
 
-        <span style="font-size: 18px;"></span>Comunicazione Tecnica1006IT</span><br><br><br>
-        <div class="button-class">SCHEDA TECNICA</div>
+    <div class="giacomini-description">
+        <div>
+            <div style="color: red; font-size: 3em;">R730GB</div><br><br>
+            <div style="font-size: 1em; font-weight: bold;">Valvola a sfera, attacchi F-F, maniglia a leva,</div><br>
+            <div style="font-size: 1em; font-weight: bold;">certificata EN331:2015, per alte temperature</div><br><br>
+            <div style="font-size: 1em;">Valvola a sfera, in ottone nichelato, con attacchi femmina-femmina.</div><br>
+            <div style="font-size: 1em;"> Maniglia a leva gialla.</div><br>
+            <div style="font-size: 1em;"> Passaggio totale.</div><br>
+            <div style="font-size: 1em;"> Per impianti gas della prima, seconda e terza famiglia (EN 437).</div><br>
+            <div style="font-size: 1em;"> Campo di temperatura: -20÷60 °C.</div><br>
+            <div style="font-size: 1em;"> Resistenza alle alte temperature: classe B 0,1; 650 °C per 30’.</div><br>
+            <div style="font-size: 1em;"> Certificata EN 331:2015.</div><br><div
+            <div style="font-size: 18px;"></div>Comunicazione Tecnica1006IT</span><br><br><br>
+            <div class="button-class">SCHEDA TECNICA</div>
+        </div>
     </div>
-    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.js"></script>
-    <script nomodule src="https://unpkg.com/@google/model-viewer/dist/model-viewer-legacy.js"></script>
+</div>
+<script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.js"></script>
+<script nomodule src="https://unpkg.com/@google/model-viewer/dist/model-viewer-legacy.js"></script>
 </body>
 
 </html>
