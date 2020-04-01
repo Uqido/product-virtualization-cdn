@@ -169,7 +169,7 @@
 
 <body class="fullscreen">
 <div style="display: flex; flex-direction: row;height: 100%;min-height: 100%;flex-wrap: wrap">
-    <model-viewer id="Valvola-load" class='model-viewer-w80' ar autoplay camera-controls src='models/Valvola.glb'
+    <model-viewer id="Valvola-load" class='model-viewer-w80' ar camera-controls src='models/Valvola.glb'
                   ios-src='models/Valvola.usdz' alt='' min-field-of-view="25deg" camera-target="0.25m 0.25m 0m"
                   max-camera-orbit="auto 75.5deg 0" exposure="0.6" shadow-intensity="2.5" shadow-softness="0.6"
                   quick-look-browsers="safari chrome">
@@ -181,7 +181,7 @@
             <div style="width: 0%;"></div>
         </div>
 
-        <svg width="48" height="48" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg"
+        <svg id="animate" width="48" height="48" viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg"
              class="camera bottom">
             <title>
                 change view
@@ -193,6 +193,14 @@
 
             const modelViewer = document.getElementById('Valvola-load');
             const progress = document.getElementById('iframe-loader');
+            const animate = document.getElementById('animate');
+
+            animate.onclick = function () {
+                modelViewer.play();
+                self.setTimeout(()=>{
+                    modelViewer.pause()
+                },2000)
+            };
 
             modelViewer.addEventListener("progress", function (event) {
                 var percent = parseInt(event.detail.totalProgress) * 100;
