@@ -8,38 +8,34 @@ function getContentRoot() {
 
 function instantiateModelContent(view360url, model3Durl) {
     var modelHtml = `
-                    <div>
-                    <p class="lp-element lp-code" id="lp-code-40" style="width: 300px; height: 300px;">
-                            <iframe src="${view360url}" frameborder="0" allowfullscreen="" scrolling="no" style="width: 300px; height: 300px;"></iframe>
-                    </p>
-                    <div id="view-3d-model" class="product-details">
-                        <div class="first-line">
-                            <span class="colors">1
-                                colore
-                            </span>
-                            <div class="category">SCARPE CASUAL</div>
-                        </div>
-                        <a title="SYMBOL UOMO"
-                            class="tile_product-name">
-                            SYMBOL UOMO
-                        </a>
-                        <div class="pdp-price">
-                            <div class="pdp-price__details">
-                                <span class="pdp_price__label">Prezzo</span>
+                    <li class="grid-tile col col-sm-6 col-lg-4">
+                        <div class="product-tile-container">
+                            <div class="product-image" style="background-color:#eaeaea;">
+                                    <iframe src="${view360url}" frameborder="0" allowfullscreen="" scrolling="no" 
+                                            style="width: 100%; height: 100%;"></iframe>
                             </div>
-                            <div class="pdp-price__final">
-                                <span class="price-currency">€</span>99,90
-                            </div>
+                            <a href="${model3Durl}" target="_blank" class="product-details">
+                                <div class="first-line">
+                                    <span class="colors">1
+                                        colore
+                                    </span>
+                                    <div class="category">SCARPE CASUAL</div>
+                                </div>
+                                <div title="SYMBOL UOMO"
+                                    class="tile_product-name">
+                                    SYMBOL UOMO
+                                </div>
+                                <div class="pdp-price">
+                                    <div class="pdp-price__details">
+                                        <span class="pdp_price__label">Prezzo</span>
+                                    </div>
+                                    <div class="pdp-price__final">
+                                        <span class="price-currency">€</span>99,90
+                                    </div>
+                                </div>
+                            </a>
                         </div>
-                    </div>
-                    <script>
-                        const button = document.getElementById('view-3d-model');
-
-                        button.addEventListener("click", function () {
-                            window.open("${model3Durl}", "_blank")
-                        }, true)
-                    </script>
-                    </div>
+                    </li>
                     `
     contentRoot.innerHTML += modelHtml
 }
