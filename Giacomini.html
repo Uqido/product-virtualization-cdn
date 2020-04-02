@@ -23,188 +23,9 @@
     <script src="https://unpkg.com/focus-visible/dist/focus-visible.js" defer></script>
 
     <style>
-        .fullscreen {
-            background: rgb(156, 156, 156);
-            background: linear-gradient(360deg, rgba(156, 156, 156, 1) 0%, rgba(156, 156, 156, 1) 10%, rgba(244, 244, 244, 1) 100%);
-        }
-
-        .giacomini-logo {
+        .giacomini-logo{
             background-image: url(img/giacomini_logo.png);
-            background-size: 240px 48px;
-            height: 48px;
-            width: 240px;
-            background-repeat: no-repeat;
         }
-
-        .giacomini-description {
-            display: flex;
-            text-align: end;
-            align-content: center;
-            align-items: center;
-            width: 38em;
-            justify-content: center;
-            transform: translate(-25%);
-            background: linear-gradient(360deg, rgba(156, 156, 156, 1) 0%, rgba(156, 156, 156, 1) 10%, rgba(244, 244, 244, 1) 100%);
-
-        }
-
-        .giacomini-description:after{
-            content: '';
-            position: absolute;
-            top: 0; right: 0; bottom: 0; left: 0;
-            z-index: -1;
-            margin-left: -120px;
-            border-radius: inherit;
-            background: linear-gradient(360deg, rgba(156, 156, 156, 1) 0%, rgba(156, 156, 156, 1) 10%, rgba(244, 244, 244, 1) 100%);
-            filter: blur(40px);
-        }
-
-        .button-class {
-            background-repeat: no-repeat;
-            background-size: 36px 36px;
-            background-position: 6% 50%;
-            background-color: rgb(255, 0, 0);
-            color: white;
-            cursor: pointer;
-            border-radius: 6px;
-            display: inline-block;
-            padding: 20px;
-            font-weight: 500;
-            box-shadow: 0 0 8px rgba(0, 0, 0, .2), 0 0 4px rgba(0, 0, 0, .25);
-            z-index: 100;
-            font-size: 20px;
-        }
-
-        .iframe-loader {
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 11;
-            display: block;
-            color: #DDD;
-            font-weight: 700;
-            font-size: 1.2rem;
-            pointer-events: none;
-            /*animation-name: loader-animation;
-            animation-duration: 1s;
-            animation-iteration-count: infinite;*/
-        }
-
-        .iframe-loader > div {
-            position: absolute;
-            bottom: -10px;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: #DDD;
-        }
-
-        .iframe-loader.hidden {
-            animation: none;
-            opacity: 0;
-            -webkit-transition: all 0.25s ease-out;
-            -moz-transition: all 0.25s ease-out;
-            -o-transition: all 0.25s ease-out;
-            transition: all 0.25s ease-out;
-        }
-
-        svg {
-            fill: black;
-            stroke: black;
-            -webkit-transition: all 0.5s ease-out;
-            -moz-transition: all 0.5s ease-out;
-            -o-transition: all 0.5s ease-out;
-            transition: all 0.5s ease-out;
-            cursor: pointer;
-        }
-
-        .bottom {
-            position: absolute;
-            left: 40px;
-            bottom: 40px;
-        }
-
-        .clickable {
-            z-index: 21;
-            user-select: none;
-            text-align: center;
-            width: 48px;
-            height: 48px;
-            background-size: 48px 48px;
-            cursor: pointer;
-        }
-
-        .model-viewer-w80 {
-            height: 100%;
-            width: 80%;
-            min-width: 300px;
-            --progress-mask: #0000;
-            --progress-bar-height: 0px;
-            flex: 1;
-        }
-
-        html,
-        .fullscreen {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-            width: 100%;
-        }
-
-        .logo-bar {
-            display: flex;
-            flex-direction: row;
-            width: auto;
-            padding: 16px;
-        }
-
-        svg{
-            margin: 8px;
-            cursor: pointer;
-        }
-
-        .text{
-            font-size: 1.3em;
-        }
-
-        @media only screen and (max-width: 800px) {
-            .logo-bar {
-                justify-content: center;
-                transform: translate(0, -70%);
-            }
-
-            .model-viewer-w80 {
-                padding-top: 48px;
-                height: 300px;
-                width: 100%;
-            }
-
-            .giacomini-description {
-                background: #0000;
-                transform: translate(0);
-                width: 100%;
-                padding: 16px 16px 64px;
-                text-align: start;
-            }
-
-            .giacomini-description:after{
-                content: '';
-                position: absolute;
-                top: 0; right: 0; bottom: 0; left: 0;
-                z-index: -1;
-                margin-left: -120px;
-                border-radius: inherit;
-                background: #0000;
-                filter: blur(0px);
-            }
-
-            html,
-            .fullscreen {
-                height: auto;
-            }
-        }
-
     </style>
 
 </head>
@@ -212,25 +33,21 @@
 <body class="fullscreen">
 
 <div style="display: flex; flex-direction: row;height: 100%;min-height: 100%;flex-wrap: wrap">
-    <model-viewer id="Valvola-load" class='model-viewer-w80' ar camera-controls src='models/Valvola.glb' camera-orbit="-35deg 65deg 105%"
+    <model-viewer id="model-viewer" class='model-viewer-w80' ar camera-controls src='models/Valvola.glb' camera-orbit="-35deg 65deg 105%"
                   ios-src='models/Valvola.usdz' alt='' min-field-of-view="25deg" camera-target="0m 0.125m 0m"
                   max-camera-orbit="auto 75.5deg 0" exposure="0.6" shadow-intensity="2.5" shadow-softness="0.6"
                   quick-look-browsers="safari chrome">
         <div class="logo-bar">
-            <div class="giacomini-logo"></div>
+            <div class="upper-left-logo giacomini-logo"></div>
         </div>
-        <div class="iframe-loader" id="iframe-loader">
-            Loading 0%
-            <div style="width: 0%;"></div>
-        </div>
-        <div class="bottom">
+
+        <div class="viewer-bottom">
             <div id="move_camera" class="clickable" style="background-image: url(img/Move.png);"></div>
             <div id="animate" class="clickable" style="background-image: url(img/Animate.png);"></div>
         </div>
         <script>
+            const modelViewer = document.getElementById('model-viewer');
 
-            const modelViewer = document.getElementById('Valvola-load');
-            const progress = document.getElementById('iframe-loader');
             const animate = document.getElementById('animate');
             const cameraSwitch = document.getElementById('move_camera');
 
@@ -248,22 +65,9 @@
                 cameraIndex=(++cameraIndex)%positions.length;
                 modelViewer.cameraOrbit=positions[cameraIndex];
             };
-
-            modelViewer.addEventListener("progress", function (event) {
-                const percent = parseInt(event.detail.totalProgress) * 100;
-                console.log(percent);
-                if (percent === 100) {
-                    progress.classList.add("hidden");
-                }
-
-                progress.innerHTML = `Loading ${percent}%
-                                <div style="width: ${percent}%;"></div>
-                                `
-
-            })
         </script>
     </model-viewer>
-    <div class="giacomini-description">
+    <div class="right-description">
         <div>
             <div style="color: red; font-size: 3em;">R730GB</div>
             <br><br>
@@ -277,12 +81,13 @@
             <div class="text"> Resistenza alle alte temperature: classe B 0,1; 650 °C per 30’.</div><br>
             <div class="text"> Certificata EN 331:2015.</div><br>
             <div class="text">Comunicazione Tecnica1006IT</div><br><br><br>
-            <div class="button-class">SCHEDA TECNICA</div>
+            <div class="call-to-action-button">SCHEDA TECNICA</div>
         </div>
     </div>
 </div>
 <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.js"></script>
 <script nomodule src="https://unpkg.com/@google/model-viewer/dist/model-viewer-legacy.js"></script>
+<script src="/js/LoadingBar.js"></script>
 </body>
 
 </html>
