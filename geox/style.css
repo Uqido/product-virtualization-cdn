@@ -8723,8 +8723,8 @@ html {
 @media(min-width:1280px) {
     .bannerhero .bannerhero__wrap, .container {
         max-width: 1680px;
-        padding-right: 90px;
-        padding-left: 90px
+        padding-right: 70px;
+        padding-left: 70px
     }
 }
 
@@ -43427,7 +43427,7 @@ html {
 }
 
 .pt_product-details .product-details-contanier .pdp-cover-central-flow .product-images {
-    width: 40%
+    width: 60%
 }
 
 .pt_product-details .product-details-contanier .pdp-cover-central-flow .product-images .arrow-lefta, .pt_product-details .product-details-contanier .pdp-cover-central-flow .product-images .arrow-righta {
@@ -44955,7 +44955,6 @@ html {
 .pdp-selcart .pdp-selcart__column--size .pdp-selcart__size-selected {
     font-size: 23px;
     line-height: 1em;
-    padding-right: 22px;
     display: block;
     width: -webkit-fit-content;
     width: -moz-fit-content;
