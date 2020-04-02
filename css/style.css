@@ -76,6 +76,13 @@ html {
     background-repeat: no-repeat;
 }
 
+.uqido-logo{
+    background-image: url("../img/uqido-logo.png");
+    background-size: 207px 70px;
+    height: 70px;
+    width: 207px;
+}
+
 .call-to-action-button {
     background-repeat: no-repeat;
     background-size: 36px 36px;
