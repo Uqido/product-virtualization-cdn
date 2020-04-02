@@ -37,23 +37,15 @@
 
         <div class="viewer-bottom">
             <div id="move_camera" class="clickable" style="background-image: url(img/Move.png);"></div>
-            <div id="animate" class="clickable" style="background-image: url(img/Animate.png);"></div>
         </div>
+        <script src="/js/LoadingBar.js"></script>
         <script>
             const modelViewer = document.getElementById('model-viewer');
 
             const animate = document.getElementById('animate');
-            const cameraSwitch = document.getElementById('move_camera');
 
             const positions = ["-35deg 65deg 105%","-90deg 65deg 105%","180deg 65deg 105%"];
             let cameraIndex = 0;
-
-            animate.onclick = function () {
-                modelViewer.play();
-                self.setTimeout(() => {
-                    modelViewer.pause()
-                }, 2000)
-            };
 
             cameraSwitch.onclick=function(){
                 cameraIndex=(++cameraIndex)%positions.length;
@@ -81,7 +73,6 @@
 </div>
 <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.js"></script>
 <script nomodule src="https://unpkg.com/@google/model-viewer/dist/model-viewer-legacy.js"></script>
-<script src="/js/LoadingBar.js"></script>
 </body>
 
 </html>
