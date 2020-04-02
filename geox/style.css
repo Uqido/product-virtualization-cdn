@@ -30041,63 +30041,63 @@ html.is-reveal-open, html.is-reveal-open body {
 
 @font-face {
     font-family: HelveticaNeueMedium;
-    src: url(../fonts/HelveticaNeueLTW1G-Bd.svg) format("svg"), url(../fonts/HelveticaNeueLTW1G-Bd.woff) format("woff"), url(../fonts/HelveticaNeueLTW1G-Bd.ttf) format("truetype");
+    src: url(../geox/fonts/HelveticaNeueLTW1G-Bd.ttf) format("truetype");
     font-weight: 400;
     font-style: normal
 }
 
 @font-face {
     font-family: HelveticaNeueRegular;
-    src: url(../fonts/HelveticaNeue.svg) format("svg"), url(../fonts/HelveticaNeue.woff) format("woff"), url(../fonts/HelveticaNeue.ttf) format("truetype");
+    src: url(../geox/fonts/HelveticaNeue.ttf) format("truetype");
     font-weight: 400;
     font-style: normal
 }
 
 @font-face {
     font-family: HelveticaNeueLight;
-    src: url(../fonts/HelveticaLight.svg) format("svg"), url(../fonts/HelveticaLight.woff) format("woff"), url(../fonts/HelveticaLight.ttf) format("truetype");
+    src: url(../geox/fonts/HelveticaLight.ttf) format("truetype");
     font-weight: 400;
     font-style: normal
 }
 
 @font-face {
     font-family: HelveticaNeueUltraLight;
-    src: url(../fonts/HelveticaNeueLTW1G-UltLt.svg) format("svg"), url(../fonts/HelveticaNeueLTW1G-UltLt.woff) format("woff"), url(../fonts/HelveticaNeueLTW1G-UltLt.ttf) format("truetype");
+    src: url(../geox/fonts/HelveticaNeueLTW1G-UltLt.ttf) format("truetype");
     font-weight: 400;
     font-style: normal
 }
 
 @font-face {
     font-family: ProximaNova;
-    src: url(../fonts/ProximaNova-Reg.otf);
+    src: url(../geox/fonts/ProximaNova-Reg.otf);
     font-weight: 400;
     font-style: normal
 }
 
 @font-face {
     font-family: ProximaNovaItalic;
-    src: url(../fonts/ProximaNova-RegItalic.otf);
+    src: url(../geox/fonts/ProximaNova-RegItalic.otf);
     font-weight: 400;
     font-style: normal
 }
 
 @font-face {
     font-family: ProximaNovaBold;
-    src: url(../fonts/ProximaNova-Bold.otf);
+    src: url(../geox/fonts/ProximaNova-Bold.otf);
     font-weight: 400;
     font-style: normal
 }
 
 @font-face {
     font-family: ProximaNovaBoldItalic;
-    src: url(../fonts/ProximaNova-BoldIt.otf);
+    src: url(../geox/fonts/ProximaNova-BoldIt.otf);
     font-weight: 400;
     font-style: normal
 }
 
 @font-face {
     font-family: ProximaNovaSemiBold;
-    src: url(../fonts/ProximaNova-Sbold.otf);
+    src: url(../geox/fonts/ProximaNova-Sbold.otf);
     font-weight: 400;
     font-style: normal
 }
