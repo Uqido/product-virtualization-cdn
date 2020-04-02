@@ -9,9 +9,9 @@ function getContentRoot() {
 function instantiateModelContent(view360url, model3Durl) {
     var modelHtml = `
                     <li class="grid-tile col col-sm-6 col-lg-4">
-                        <div class="product-tile-container" style="">
-                            <div class="product-image" style="min-height: 300px; background-color:#eaeaea;">
-                                    <iframe src="${view360url}" frameborder="0" allowfullscreen="" scrolling="no" 
+                        <div class="product-tile-container">
+                            <div class="product-image 360view-container" style="min-height: 300px; background-color:#f2f2f2;">
+                                    <iframe class="360view-frame" src="${view360url}" frameborder="0" allowfullscreen="" scrolling="no" 
                                             style="width: 100%; min-height: 300px; height: 100%;"></iframe>
                             </div>
                             <a href="${model3Durl}" target="_blank" class="product-details">
