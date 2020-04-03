@@ -3,7 +3,7 @@ const mviewer = document.getElementsByTagName("model-viewer")[0];
 
 if (mviewer) {
     mviewer.classList.add("no-default-loading");
-    mviewer.innerHTML += `<div class="iframe-loader" id="loading-bar">
+    mviewer.innerHTML += `<div class="iframe-loader hidden" id="loading-bar">
         Loading 0%
     <div style="width: 0%;"></div>
         </div>
@@ -53,6 +53,9 @@ if (mviewer) {
         progress.innerHTML = `Loading ${percent}%
                                 <div style="width: ${percent}%;"></div>
                                 `
-
     });
+
+    setTimeout(()=>{
+        progress.classList.remove("hidden");
+    },100);
 }
