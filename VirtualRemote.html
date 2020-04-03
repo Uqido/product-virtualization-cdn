@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Virtual Remote</title>
+    <link rel="stylesheet" href="css/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="white"/>
+    <link rel="icon"
+          type="image/png"
+          href="favicon-uqido.png">
+    <meta name="description" content="">
+
+    <script src="https://unpkg.com/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+
+    <script src="https://unpkg.com/intersection-observer/intersection-observer.js"></script>
+
+    <script src="https://unpkg.com/resize-observer-polyfill/dist/ResizeObserver.js"></script>
+
+    <script src="https://unpkg.com/fullscreen-polyfill/dist/fullscreen.polyfill.js"></script>
+
+    <script src="https://unpkg.com/focus-visible/dist/focus-visible.js" defer></script>
+
+</head>
+
+<body class="fullscreen">
+
+<div style="display: flex; flex-direction: row;height: 100%;min-height: 100%;flex-wrap: wrap">
+    <model-viewer id="model-viewer" class='model-viewer-w80' ar camera-controls src='models/ERARemote.glb' camera-orbit="-175deg 75deg 105%"
+                  ios-src='models/ERARemote.usdz' alt='' field-of-view="45deg" min-field-of-view="25deg" max-field-of-view="60deg" camera-target="0m 0.08m 0m"
+                  max-camera-orbit="auto 105.5deg 0" exposure="0.6" shadow-intensity="2.5" shadow-softness="0.6"
+                  quick-look-browsers="safari chrome">
+        <div class="logo-bar">
+            <div class="upper-left-logo uqido-logo"></div>
+        </div>
+
+        <div class="viewer-bottom">
+            <div id="move_camera" class="clickable" style="background-image: url(img/Move.png);"></div>
+        </div>
+        <script src="/js/LoadingBar.js"></script>
+        <script>
+            const modelViewer = document.getElementById('model-viewer');
+
+            const cameraSwitch = document.getElementById('move_camera');
+
+            const positions = ["-170deg 75deg 105%","-80deg 75deg 105%","95deg 75deg 105%"];
+            let cameraIndex = 0;
+
+            cameraSwitch.onclick=function(){
+                cameraIndex=(++cameraIndex)%positions.length;
+                modelViewer.cameraOrbit=positions[cameraIndex];
+            };
+        </script>
+    </model-viewer>
+    <div class="right-description">
+        <div>
+            <div style="color: red; font-size: 3em;">R730GB</div>
+            <br><br>
+            <div class="text" style="font-weight: bold;">Valvola a sfera, attacchi F-F, maniglia a leva,</div><br>
+            <div class="text" style="font-weight: bold;">certificata EN331:2015, per alte temperature</div><br><br>
+            <div class="text">Valvola a sfera, in ottone nichelato, con attacchi femmina-femmina.</div><br>
+            <div class="text"> Maniglia a leva gialla.</div><br>
+            <div class="text"> Passaggio totale.</div><br>
+            <div class="text"> Per impianti gas della prima, seconda e terza famiglia (EN 437).</div><br>
+            <div class="text"> Campo di temperatura: -20÷60 °C.</div><br>
+            <div class="text"> Resistenza alle alte temperature: classe B 0,1; 650 °C per 30’.</div><br>
+            <div class="text"> Certificata EN 331:2015.</div><br>
+            <div class="text">Comunicazione Tecnica1006IT</div><br><br><br>
+            <div class="call-to-action-button">SCHEDA TECNICA</div>
+        </div>
+    </div>
+</div>
+<script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.js"></script>
+<script nomodule src="https://unpkg.com/@google/model-viewer/dist/model-viewer-legacy.js"></script>
+
+</body>
+
+</html>
