@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Virtual Remote</title>
+    <title>Dermatic</title>
     <link rel="stylesheet" href="css/style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="white"/>
@@ -22,13 +22,26 @@
 
     <script src="https://unpkg.com/focus-visible/dist/focus-visible.js" defer></script>
 
+    <style>
+        .title-color {
+            color: #01569d;
+        }
+
+        .call-action-color-bg {
+            background-color: #01569d;
+        }
+    </style>
+
 </head>
 
 <body class="fullscreen">
 
+
 <div style="display: flex; flex-direction: row;height: 100%;min-height: 100%;flex-wrap: wrap">
-    <model-viewer id="model-viewer" class='model-viewer-w80' ar camera-controls src='models/ERARemote.glb' camera-orbit="-175deg 75deg 105%"
-                  ios-src='models/ERARemote.usdz' alt='' field-of-view="45deg" min-field-of-view="25deg" max-field-of-view="60deg" camera-target="0m 0.08m 0m"
+    <model-viewer id="model-viewer" class='model-viewer-w80' ar camera-controls src='models/ERARemote.glb'
+                  camera-orbit="-175deg 75deg 105%"
+                  ios-src='models/ERARemote.usdz' alt='' field-of-view="45deg" min-field-of-view="25deg"
+                  max-field-of-view="60deg" camera-target="0m 0.08m 0m"
                   max-camera-orbit="auto 105.5deg 0" exposure="0.6" shadow-intensity="2.5" shadow-softness="0.6"
                   quick-look-browsers="safari chrome">
         <div class="logo-bar">
@@ -37,37 +50,56 @@
 
         <div class="viewer-bottom">
             <div id="move_camera" class="clickable" style="background-image: url(img/Move.png);"></div>
+            <div id="animate" class="clickable" style="background-image: url(img/Animate.png);"></div>
         </div>
         <script src="/js/LoadingBar.js"></script>
         <script>
             const modelViewer = document.getElementById('model-viewer');
 
+            const animate = document.getElementById('animate');
             const cameraSwitch = document.getElementById('move_camera');
+            let canAnimate=true;
 
-            const positions = ["-170deg 75deg 105%","-80deg 75deg 105%","95deg 75deg 105%"];
+            const positions = ["-170deg 75deg 105%", "-80deg 75deg 105%", "95deg 75deg 105%"];
             let cameraIndex = 0;
 
-            cameraSwitch.onclick=function(){
-                cameraIndex=(++cameraIndex)%positions.length;
-                modelViewer.cameraOrbit=positions[cameraIndex];
+            animate.onclick = function () {
+                canAnimate=false;
+                modelViewer.currentTime = 0;
+                modelViewer.play();
+                self.setTimeout(() => {
+                    canAnimate=true;
+                    modelViewer.pause()
+                }, 5000)
+            };
+
+            cameraSwitch.onclick = function () {
+                cameraIndex = (++cameraIndex) % positions.length;
+                modelViewer.cameraOrbit = positions[cameraIndex];
             };
         </script>
     </model-viewer>
     <div class="right-description">
         <div>
-            <div style="color: red; font-size: 3em;">R730GB</div>
+            <div class="title-color" style="font-size: 3em;">Nice ERA P</div>
             <br><br>
-            <div class="text" style="font-weight: bold;">Valvola a sfera, attacchi F-F, maniglia a leva,</div><br>
-            <div class="text" style="font-weight: bold;">certificata EN331:2015, per alte temperature</div><br><br>
-            <div class="text">Valvola a sfera, in ottone nichelato, con attacchi femmina-femmina.</div><br>
-            <div class="text"> Maniglia a leva gialla.</div><br>
-            <div class="text"> Passaggio totale.</div><br>
-            <div class="text"> Per impianti gas della prima, seconda e terza famiglia (EN 437).</div><br>
-            <div class="text"> Campo di temperatura: -20÷60 °C.</div><br>
-            <div class="text"> Resistenza alle alte temperature: classe B 0,1; 650 °C per 30’.</div><br>
-            <div class="text"> Certificata EN 331:2015.</div><br>
-            <div class="text">Comunicazione Tecnica1006IT</div><br><br><br>
-            <div class="call-to-action-button">SCHEDA TECNICA</div>
+            <div class="text" style="font-weight: bold;">Nuovi sistemi di automazione e <br>
+                gestione via radio BiDirezionali Nice
+            </div>
+            <br>
+            <br>
+            <div class="text">
+                Con i motori tubolari e l’elettronica di comando
+                bidirezionali Nice per l’automazione di tende interne
+                ora è possibile ricevere la conferma di ricezione
+                del comando e verificare lo stato delle automazioni.
+                Il protocollo radio bidirezionale Nice
+                con tecnologia mesh garantisce
+                numerosi vantaggi
+            </div>
+            <br>
+            <br>
+            <div class="call-action-color-bg call-to-action-button">SCHEDA TECNICA</div>
         </div>
     </div>
 </div>
