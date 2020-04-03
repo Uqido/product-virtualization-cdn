@@ -27,7 +27,7 @@
 <body class="fullscreen">
 
 <div style="display: flex; flex-direction: row;height: 100%;min-height: 100%;flex-wrap: wrap">
-    <model-viewer id="model-viewer" class='model-viewer-w80' ar camera-controls src='models/Valvola.glb' camera-orbit="-35deg 65deg 105%"
+    <model-viewer id="model-viewer" class='model-viewer-w80' ar camera-controls src='models/Valvola.glb' camera-orbit="-175deg 75deg 105%"
                   ios-src='models/Valvola.usdz' alt='' min-field-of-view="25deg" camera-target="0m 0.125m 0m"
                   max-camera-orbit="auto 75.5deg 0" exposure="0.6" shadow-intensity="2.5" shadow-softness="0.6"
                   quick-look-browsers="safari chrome">
@@ -46,7 +46,7 @@
             const animate = document.getElementById('animate');
             const cameraSwitch = document.getElementById('move_camera');
 
-            const positions = ["-35deg 65deg 105%","-90deg 65deg 105%","180deg 65deg 105%"];
+            const positions = ["-170deg 75deg 105%","-80deg 75deg 105%","95deg 75deg 105%"];
             let cameraIndex = 0;
 
             animate.onclick = function () {
