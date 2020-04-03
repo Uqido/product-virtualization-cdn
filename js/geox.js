@@ -8,26 +8,36 @@ function getContentRoot() {
 
 function instantiateModelContent(view360url, model3Durl, assetName) {
     var modelHtml;
+    var price;
     switch(assetName){
         case "GeoxBeige":
             assetName = "Scarpa Beige";
+            price = "109,90";
             break;
         case "GeoxBlu1":
             assetName = "Scarpa Blu 1";
+            price = "79,90";
             break;
         case "GeoxBlu2":
             assetName = "Scarpa Blu 2";
             model3Durl = "VirtualShoe1.html";
+            price = "84,90";
             break;
         case "GeoxBordeaux":
             assetName = "Scarpa Bordeaux";
+            price = "104,90";
             break;
         case "GeoxRossoOro":
             assetName = "Scarpa Rosso-oro";
+            price = "69,90";
             model3Durl = "VirtualShoe2.html";
+            break;
+        case "Leopardata":
+            price = "119,90";
             break;
         case "Stivaletto":
             model3Durl = "VirtualShoe3.html";
+            price = "99,90";
             break;
     }
     if (assetName == "Scarpa Blu 2" || assetName == "Scarpa Rosso-oro" || assetName == "Stivaletto"){
@@ -53,7 +63,7 @@ function instantiateModelContent(view360url, model3Durl, assetName) {
                                         <span class="pdp_price__label">Prezzo</span>
                                     </div>
                                     <div class="pdp-price__final">
-                                        <span class="price-currency">€</span>99,90
+                                        <span class="price-currency">€</span>${price}
                                     </div>
                                 </div>
                             </a>
@@ -84,7 +94,7 @@ function instantiateModelContent(view360url, model3Durl, assetName) {
                                         <span class="pdp_price__label">Prezzo</span>
                                     </div>
                                     <div class="pdp-price__final">
-                                        <span class="price-currency">€</span>99,90
+                                        <span class="price-currency">€</span>${price}
                                     </div>
                                 </div>
                             </a>
