@@ -9,6 +9,8 @@
     <meta name="theme-color" content="white" />
     <meta name="description" content="">
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
     <script src="https://unpkg.com/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
 
     <script src="https://unpkg.com/intersection-observer/intersection-observer.js"></script>
@@ -24,6 +26,13 @@
     <div id="GeoxBordeaux-poster" class="cloudimage-360" data-folder="img/GeoxBordeaux/"
         data-filename="photo-{index}.png" data-amount="36"></div>
     <script src="js/js-cloudimage-360-view.min.js"></script>
+
+    <script>
+		$(window).resize(function() {
+            var containerWidth = $('.cloudimage-inner-box').width()
+			$('.cloudimage-canvas-box').css({width: containerWidth, height: containerWidth})
+		});
+	</script>
 </body>
 
 </html>
