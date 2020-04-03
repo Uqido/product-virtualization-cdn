@@ -11,6 +11,10 @@ body{
     width: 100%;
 }
 
+.fullscreen > div {
+    overflow-y:hidden;
+}
+
 html {
     height: 100%;
     margin: 0;
