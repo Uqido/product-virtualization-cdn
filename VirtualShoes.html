@@ -16,9 +16,10 @@
 	<meta name="description"
 		content="Acquista online i modelli di Scarpe Casual Geox da uomo, che garantiscono massima traspirazione e comfort per l&#39;uso quotidiano e le occasioni informali.">
 
-	<title>Scarpe Geox</title>
+	<title>Scarpe Virtuali</title>
 	<link href="https://www.uqido.com/favicon-32x32.png" rel="shortcut icon">
 	<link href="./geox/jquery-ui.min.css" type="text/css" rel="stylesheet">
+
 	<link rel="stylesheet" href="./geox/style.css">
 	
 	<meta name="google-site-verification"
@@ -599,7 +600,7 @@
 	</div>
 	
 	<script>
-		$(function(){
+		$("body").on('DOMSubtreeModified', '#modelContentRoot', function(){
 			var containerWidth = $('.360view-container').width();
 			$('.360view-container').css({minHeight: containerWidth * 1.1});
 			$('.360view-frame').css({minHeight: containerWidth * 1.1});
