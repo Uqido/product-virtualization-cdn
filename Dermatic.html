@@ -62,13 +62,15 @@
             let cameraIndex = 0;
 
             animate.onclick = function () {
-                canAnimate=false;
-                modelViewer.currentTime = 0;
-                modelViewer.play();
-                self.setTimeout(() => {
-                    canAnimate=true;
-                    modelViewer.pause()
-                }, 5000)
+                if(canAnimate) {
+                    canAnimate = false;
+                    modelViewer.currentTime = 0;
+                    modelViewer.play();
+                    self.setTimeout(() => {
+                        canAnimate = true;
+                        modelViewer.pause()
+                    }, 5000)
+                }
             };
 
             cameraSwitch.onclick = function () {

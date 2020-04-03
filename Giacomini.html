@@ -51,20 +51,26 @@
 
             const animate = document.getElementById('animate');
             const cameraSwitch = document.getElementById('move_camera');
+            let canAnimate=true;
 
-            const positions = ["-170deg 75deg 105%","-80deg 75deg 105%","95deg 75deg 105%"];
+            const positions = ["-170deg 75deg 105%", "-80deg 75deg 105%", "95deg 75deg 105%"];
             let cameraIndex = 0;
 
             animate.onclick = function () {
-                modelViewer.play();
-                self.setTimeout(() => {
-                    modelViewer.pause()
-                }, 2000)
+                if(canAnimate) {
+                    canAnimate = false;
+                    modelViewer.currentTime = 0;
+                    modelViewer.play();
+                    self.setTimeout(() => {
+                        canAnimate = true;
+                        modelViewer.pause()
+                    }, 5000)
+                }
             };
 
-            cameraSwitch.onclick=function(){
-                cameraIndex=(++cameraIndex)%positions.length;
-                modelViewer.cameraOrbit=positions[cameraIndex];
+            cameraSwitch.onclick = function () {
+                cameraIndex = (++cameraIndex) % positions.length;
+                modelViewer.cameraOrbit = positions[cameraIndex];
             };
         </script>
     </model-viewer>
@@ -72,16 +78,16 @@
         <div>
             <div style="color: red; font-size: 3em;">R730GB</div>
             <br><br>
-            <div class="text" style="font-weight: bold;">Valvola a sfera, attacchi F-F, maniglia a leva,</div><br>
-            <div class="text" style="font-weight: bold;">certificata EN331:2015, per alte temperature</div><br><br>
-            <div class="text">Valvola a sfera, in ottone nichelato, con attacchi femmina-femmina.</div><br>
-            <div class="text"> Maniglia a leva gialla.</div><br>
-            <div class="text"> Passaggio totale.</div><br>
-            <div class="text"> Per impianti gas della prima, seconda e terza famiglia (EN 437).</div><br>
-            <div class="text"> Campo di temperatura: -20÷60 °C.</div><br>
-            <div class="text"> Resistenza alle alte temperature: classe B 0,1; 650 °C per 30’.</div><br>
-            <div class="text"> Certificata EN 331:2015.</div><br>
-            <div class="text">Comunicazione Tecnica1006IT</div><br><br><br>
+            <div class="text" style="font-weight: bold;">Valvola a sfera, attacchi F-F, maniglia a leva, <br>
+                certificata EN331:2015, per alte temperature</div><br><br>
+            <div class="text">Valvola a sfera, in ottone nichelato, con attacchi femmina-femmina.<br>
+             Maniglia a leva gialla.<br>
+             Passaggio totale.<br>
+             Per impianti gas della prima, seconda e terza famiglia (EN 437).<br>
+             Campo di temperatura: -20÷60 °C.<br>
+             Resistenza alle alte temperature: classe B 0,1; 650 °C per 30’.<br>
+             Certificata EN 331:2015.<br>
+            Comunicazione Tecnica1006IT</div><br><br><br>
             <div class="call-to-action-button">SCHEDA TECNICA</div>
         </div>
     </div>
