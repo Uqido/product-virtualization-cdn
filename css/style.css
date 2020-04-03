@@ -82,6 +82,13 @@ html {
     width: 207px;
 }
 
+.uqido-logo-white{
+    background-image: url("../img/uqido-logo-white.png");
+    background-size: 207px 70px;
+    height: 70px;
+    width: 207px;
+}
+
 .call-to-action-button {
     background-repeat: no-repeat;
     background-size: 36px 36px;
