@@ -45,14 +45,14 @@ if (mviewer) {
 
     mviewer.addEventListener("progress", function (event) {
         const percent = parseInt(event.detail.totalProgress) * 100;
-        console.log(percent);
-        if (percent === 100) {
-            progress.classList.add("hidden");
-        }
 
         progress.innerHTML = `Loading ${percent}%
                                 <div style="width: ${percent}%;"></div>
                                 `
+    });
+    mviewer.addEventListener("load",function () {
+        console.log("Model load");
+        progress.classList.add("hidden");
     });
 
     setTimeout(()=>{
