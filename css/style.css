@@ -140,12 +140,12 @@ html {
 @media only screen and (max-width: 950px) {
     .logo-bar {
         justify-content: center;
-        transform: translate(0, -70%);
+        transform: translate(0, -20%);
     }
 
     .model-viewer-w80 {
-        padding-top: 48px;
-        height: 300px;
+        padding-top: 24px;
+        height: 348px;
         width: 100%;
     }
 
