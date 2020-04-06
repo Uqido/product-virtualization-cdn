@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Virtual Plant</title>
+    <title>Pianta Grassa</title>
     <link rel="stylesheet" href="css/style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="white"/>
@@ -22,13 +22,29 @@
 
     <script src="https://unpkg.com/focus-visible/dist/focus-visible.js" defer></script>
 
+    <style>
+        .fullscreen{
+            background: linear-gradient(360deg, rgb(132, 75, 0) 0%, rgb(243, 230, 189) 100%);
+        }
+
+        .call-to-action-button {
+            background-color: #2f6100;
+        }
+
+        .right-description:after{
+            background: transparent;
+        }
+    </style>
+
 </head>
 
 <body class="fullscreen">
 
 <div style="display: flex; flex-direction: row;height: 100%;min-height: 100%;flex-wrap: wrap">
-    <model-viewer id="model-viewer" class='model-viewer-w80' ar camera-controls src='models/Pianta.glb' camera-orbit="-35deg 65deg 105%"
-                  ios-src='models/Pianta.usdz' alt='' min-field-of-view="55deg" max-field-of-view="85deg" camera-target="0m 0.07m 0m"
+    <model-viewer id="model-viewer" class='model-viewer-w80' ar camera-controls src='models/Pianta.glb'
+                  camera-orbit="-35deg 65deg 105%"
+                  ios-src='models/Pianta.usdz' alt='' min-field-of-view="55deg" max-field-of-view="85deg"
+                  camera-target="0m 0.09m 0m"
                   max-camera-orbit="auto 75.5deg 0" exposure="0.6" shadow-intensity="2.5" shadow-softness="0.6"
                   quick-look-browsers="safari chrome">
         <div class="logo-bar">
@@ -44,30 +60,26 @@
 
             const animate = document.getElementById('animate');
 
-            const positions = ["-35deg 65deg 105%","-90deg 65deg 105%","180deg 65deg 105%"];
+            const positions = ["-35deg 65deg 105%", "-90deg 65deg 105%", "180deg 65deg 105%"];
             let cameraIndex = 0;
 
-            cameraSwitch.onclick=function(){
-                cameraIndex=(++cameraIndex)%positions.length;
-                modelViewer.cameraOrbit=positions[cameraIndex];
+            cameraSwitch.onclick = function () {
+                cameraIndex = (++cameraIndex) % positions.length;
+                modelViewer.cameraOrbit = positions[cameraIndex];
             };
         </script>
     </model-viewer>
     <div class="right-description">
         <div>
-            <div style="color: red; font-size: 3em;">R730GB</div>
+            <div style="color: #2f6100; font-size: 3em;">Pianta Grassa</div>
             <br><br>
-            <div class="text" style="font-weight: bold;">Valvola a sfera, attacchi F-F, maniglia a leva,</div><br>
-            <div class="text" style="font-weight: bold;">certificata EN331:2015, per alte temperature</div><br><br>
-            <div class="text">Valvola a sfera, in ottone nichelato, con attacchi femmina-femmina.</div><br>
-            <div class="text"> Maniglia a leva gialla.</div><br>
-            <div class="text"> Passaggio totale.</div><br>
-            <div class="text"> Per impianti gas della prima, seconda e terza famiglia (EN 437).</div><br>
-            <div class="text"> Campo di temperatura: -20÷60 °C.</div><br>
-            <div class="text"> Resistenza alle alte temperature: classe B 0,1; 650 °C per 30’.</div><br>
-            <div class="text"> Certificata EN 331:2015.</div><br>
-            <div class="text">Comunicazione Tecnica1006IT</div><br><br><br>
-            <div class="call-to-action-button">SCHEDA TECNICA</div>
+            <div class="text">Le piante grasse si distinguono in quelle a fusti, fogliari, caduciformi e quelle che
+                fioriscono, come il cactus originario del Messico Centrale. Quest’ultima pianta si sviluppa più in
+                larghezza,ha la superficie ricoperta di spine bianche e in estate fioriscono dei fiori bianchi
+                all’apice.
+            </div>
+            <br><br><br>
+            <div class="call-to-action-button">SCOPRI DI PIU'</div>
         </div>
     </div>
 </div>
