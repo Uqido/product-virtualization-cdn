@@ -34,8 +34,8 @@
 
 <div style="display: flex; flex-direction: row;height: 100%;min-height: 100%;flex-wrap: wrap">
     <model-viewer id="model-viewer" class='model-viewer-w80' ar camera-controls src='models/Valvola.glb' camera-orbit="-175deg 75deg 105%"
-                  ios-src='models/Valvola.usdz' alt='' min-field-of-view="25deg" camera-target="0m 0.125m 0m"
-                  max-camera-orbit="auto 75.5deg 0" exposure="0.6" shadow-intensity="2.5" shadow-softness="0.6"
+                  ios-src='models/Valvola.usdz' alt='' noloop min-field-of-view="40deg" max-field-of-view="55deg" camera-target="0m 0.125m 0m"
+                  max-camera-orbit="auto 75.5deg 0" exposure="0.5" shadow-intensity="2.5" shadow-softness="0.6"
                   quick-look-browsers="safari chrome">
         <div class="logo-bar">
             <div class="upper-left-logo giacomini-logo"></div>
@@ -51,20 +51,21 @@
 
             const animate = document.getElementById('animate');
             const cameraSwitch = document.getElementById('move_camera');
-            let canAnimate=true;
 
             const positions = ["-170deg 75deg 105%", "-80deg 75deg 105%", "95deg 75deg 105%"];
             let cameraIndex = 0;
 
+            let isOpen=true;
             animate.onclick = function () {
-                if(canAnimate) {
-                    canAnimate = false;
-                    modelViewer.currentTime = 0;
+                if(modelViewer.paused){
+                    if(isOpen){
+                        modelViewer.animationName="leva_close";
+                        isOpen=false;
+                    }else{
+                        modelViewer.animationName="leva_open";
+                        isOpen=true;
+                    }
                     modelViewer.play();
-                    self.setTimeout(() => {
-                        canAnimate = true;
-                        modelViewer.pause()
-                    }, 5000)
                 }
             };
 
@@ -92,7 +93,7 @@
         </div>
     </div>
 </div>
-<script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.js"></script>
+<script type="module" src="js/model-viewer/dist/model-viewer.js"></script>
 <script nomodule src="https://unpkg.com/@google/model-viewer/dist/model-viewer-legacy.js"></script>
 </body>
 
