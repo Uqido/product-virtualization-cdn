@@ -38,8 +38,8 @@
 
 <div style="display: flex; flex-direction: row;height: 100%;min-height: 100%;flex-wrap: wrap">
     <model-viewer id="model-viewer" class='model-viewer-w80' ar camera-controls src='models/Dermatic.glb'
-                  ios-src='models/Dermatic.usdz' alt='' min-field-of-view="50deg" max-field-of-view="90deg"
-                  max-camera-orbit="auto 75.5deg 0" exposure="0.6" shadow-intensity="2.5" shadow-softness="0.6"
+                  ios-src='models/Dermatic.usdz' alt='' min-field-of-view="50deg" noloop max-field-of-view="100deg"
+                  max-camera-orbit="auto 75.5deg 0" exposure="0.5" shadow-intensity="2.5" shadow-softness="0.6"
                   quick-look-browsers="safari chrome">
         <div class="logo-bar">
             <div class="upper-left-logo uqido-logo"></div>
@@ -55,20 +55,21 @@
 
             const animate = document.getElementById('animate');
             const cameraSwitch = document.getElementById('move_camera');
-            let canAnimate=true;
+            let isOpen=false;
 
             const positions = ["-170deg 75deg 105%", "-80deg 75deg 105%", "95deg 75deg 105%"];
             let cameraIndex = 0;
 
             animate.onclick = function () {
-                if(canAnimate) {
-                    canAnimate = false;
-                    modelViewer.currentTime = 0;
+                if(modelViewer.paused){
+                    if(isOpen){
+                        modelViewer.animationName="close";
+                        isOpen=false;
+                    }else{
+                        modelViewer.animationName="open";
+                        isOpen=true;
+                    }
                     modelViewer.play();
-                    self.setTimeout(() => {
-                        canAnimate = true;
-                        modelViewer.pause()
-                    }, 5000)
                 }
             };
 

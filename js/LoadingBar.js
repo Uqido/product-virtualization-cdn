@@ -30,6 +30,7 @@ if (mviewer) {
         background: #DDD;
     }
     
+   
     .iframe-loader.hidden {
         animation: none;
         opacity: 0;
@@ -37,6 +38,16 @@ if (mviewer) {
         -moz-transition: all 0.25s ease-out;
         -o-transition: all 0.25s ease-out;
         transition: all 0.25s ease-out;
+    }
+    
+    
+    @media only screen and (max-width: 950px) {
+            .iframe-loader {
+                color: #3d3d3d;
+            }
+           .iframe-loader > div {
+             background: #3d3d3d;
+           }
     }
     </style>`;
 
