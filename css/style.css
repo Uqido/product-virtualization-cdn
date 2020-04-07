@@ -151,7 +151,7 @@ html {
     }
 
     .right-description {
-        background: #0000;
+        background: transparent;
         transform: translate(0);
         width: 100%;
         padding: 16px 16px 64px;
@@ -177,6 +177,6 @@ html {
 
     html,
     .fullscreen {
-        height: auto;
+        height: 100%;
     }
 }
