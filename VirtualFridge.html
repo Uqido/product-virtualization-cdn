@@ -22,23 +22,57 @@
 
     <script src="https://unpkg.com/focus-visible/dist/focus-visible.js" defer></script>
 
+    <style>
+        .right-description:after {
+            content: '';
+            position: absolute;
+            top: -100px;
+            right: 0;
+            bottom: -100px;
+            left: 0;
+            z-index: -1;
+            margin-left: -60px;
+            border-radius: inherit;
+            background: linear-gradient(360deg, #011e41 0%, #011e41 10%, #011e41 100%);
+            filter: blur(35px);
+        }
+
+        @font-face {
+            font-family: Lavatrice-reg;
+            src: url(fonts/Lavatrice-reg.woff2) format("woff2");
+        }
+
+        @font-face {
+            font-family: Lavatrice-bold;
+            src: url(fonts/Lavatrice-bold.woff2) format("woff2");
+        }
+
+        .text-lavatrice{
+            color: white;
+            font-family: Lavatrice-reg;
+            font-weight: 500;
+            font-size: 1rem;
+            margin-bottom: 16px;
+        }
+    </style>
+
 </head>
 
-<body class="fullscreen">
+<body class="fullscreen" style="color: #011e41;">
 
-<div style="display: flex; flex-direction: row;height: 100%;min-height: 100%;flex-wrap: wrap">
-    <model-viewer id="model-viewer" class='model-viewer-w80' ar camera-controls src='models/Fridge.glb'
+<div style="display: flex; flex-direction: row;height: 100%;min-height: 100%;flex-wrap: wrap;background-color: #011e41;">
+    <model-viewer id="model-viewer" class='model-viewer-w80' ar camera-controls src='models/WashingMachine.glb'
                   camera-orbit="-35deg 65deg 105%"
-                  ios-src='models/Fridge.usdz' alt='' min-field-of-view="43deg" camera-target="0m 0.85m 0m"
+                  ios-src='models/WashingMachine.usdz' alt='' min-field-of-view="51deg" max-field-of-view="55deg" camera-target="0m 0.45m 0m"
                   max-camera-orbit="auto 90.5deg 0" min-camera-orbit="auto 28.5deg 0" exposure="0.6"
                   shadow-intensity="2.5" shadow-softness="0.6"
                   quick-look-browsers="safari chrome">
         <div class="logo-bar">
-            <div class="upper-left-logo uqido-logo"></div>
+            <div class="upper-left-logo uqido-logo-white"></div>
         </div>
 
         <div class="viewer-bottom">
-            <div id="move_camera" class="clickable" style="background-image: url(img/Move.png);"></div>
+            <div id="move_camera" class="clickable" style="background-image: url(img/Move-white.png);"></div>
         </div>
         <script src="js/LoadingBar.js"></script>
         <script>
@@ -55,18 +89,22 @@
             };
         </script>
     </model-viewer>
-    <div class="right-description">
+    <div class="right-description" style="background: transparent;">
         <div>
-            <div style="color: red; font-size: 3em;">Fridge</div>
+            <div class="text-lavatrice" style="font-family: Lavatrice-bold;">EW6S462B</div>
+            <div class="text-lavatrice" style="font-family: Lavatrice-bold; font-size: 2rem;">
+                Lavatrice Perfect Care 600 Vapore<br>
+                6 kg A+++ 1200 giri/minuto
+            </div>
+            <img src="img/a+++.jpg"></img> 
             <br><br>
-            <div class="text">Utilizzato nella Grecia antica e nelle zone magno-greche per conservare e versare olio
-                profumato e unguenti, era impiegato dagli atleti, nelle cerimonie funebri e come segnacolo sepolcrale.
-                La principale funzione del vaso, conservazione e aspersione di olio, ha determinato l'evolversi e lo
-                stabilizzarsi della forma, dotata di collo stretto che limita la fuoriuscita del contenuto e orlo adatto
-                ad impedirne lo spreco.
+            <div class="text text-lavatrice">
+                Perfect Care 600<br>6kg A+++ 1200 giri 38cm<br>TC4 Small LED Motore Inverter Oblò Nero PTO<br>
+                SensiCare - Vapore Anti-Allergy<br>Woolmark Blue - Outdoor Denim
             </div>
             <br><br><br>
-            <div class="call-to-action-button">SCOPRI DI PIU'</div>
+            <div class="call-to-action-button text-lavatrice" style="font-family: Lavatrice-bold;
+            background-color: white; border-radius: 3px;color: #011e41;">SCOPRI DI PIU'</div>
         </div>
     </div>
 </div>
