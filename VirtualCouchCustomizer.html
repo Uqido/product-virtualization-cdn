@@ -30,6 +30,7 @@
             background-color: white;
             border-radius: 50%;
             border: 4px solid #000000;
+            box-shadow: 2px 2px 6px 0 rgba(10, 10, 10, 0.87);
         }
 
         .color-button.selected {
@@ -59,7 +60,6 @@
             <div id="colorGrey" class="clickable color-button" style="background-color: grey;"></div>
             <div id="move_camera" class="clickable" style="background-image: url(img/Move.png);"></div>
         </div>
-        <script src="js/LoadingBar.js"></script>
         <script src="js/ContentCustomizer.js"></script>
         <script>
             const modelViewer = document.getElementById('model-viewer');
@@ -75,11 +75,12 @@
             };
 
             initializeCustomizerOnMaterial("Vallentuna_Murum")
-            
+
             assignColorToButton([{colorBlack: 'rgb(10,10,10)'}, {colorWhite: 'rgb(221,221,221)'},
                 {colorBeige: 'rgb(209,178,125)'}, {colorGrey: 'rgb(103,101,96)'}]);
 
         </script>
+        <script src="js/LoadingBar.js"></script>
     </model-viewer>
     <div class="right-description">
         <div>
