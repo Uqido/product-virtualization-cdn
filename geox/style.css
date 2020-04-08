@@ -11098,7 +11098,6 @@ h3 {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background: url(../images/icons/restyle/checked.svg) no-repeat
 }
 
 .refinement ul .swatch-black .palette, .refinement ul .swatch-black .palette-dot {
@@ -33249,7 +33248,6 @@ footer {
 
 #product-images .product-images-carousel .thumbnail-link {
     display: block;
-    cursor: url(../images/icons/cursors/cursor_gallery.svg), auto
 }
 
 @media all and (-ms-high-contrast:none), (-ms-high-contrast:active) {
@@ -45492,7 +45490,6 @@ ul.pdp-swatches-color li.selected .palette:after {
     content: '';
     width: 13px;
     height: 13px;
-    background: url(../images/icons/restyle/checked.svg) no-repeat;
     z-index: 3
 }
 
