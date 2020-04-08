@@ -55266,530 +55266,6 @@ class CachingGLTFLoader {
 CachingGLTFLoader[_a$2] = new CacheEvictionPolicy(CachingGLTFLoader);
 
 /**
- * @author mrdoob / http://mrdoob.com/
- */
-
-var CSS2DObject = function ( element ) {
-
-	Object3D.call( this );
-
-	this.element = element;
-	this.element.style.position = 'absolute';
-
-	this.addEventListener( 'removed', function () {
-
-		this.traverse( function ( object ) {
-
-			if ( object.element instanceof Element && object.element.parentNode !== null ) {
-
-				object.element.parentNode.removeChild( object.element );
-
-			}
-
-		} );
-
-	} );
-
-};
-
-CSS2DObject.prototype = Object.create( Object3D.prototype );
-CSS2DObject.prototype.constructor = CSS2DObject;
-
-//
-
-var CSS2DRenderer = function () {
-
-	var _this = this;
-
-	var _width, _height;
-	var _widthHalf, _heightHalf;
-
-	var vector = new Vector3();
-	var viewMatrix = new Matrix4();
-	var viewProjectionMatrix = new Matrix4();
-
-	var cache = {
-		objects: new WeakMap()
-	};
-
-	var domElement = document.createElement( 'div' );
-	domElement.style.overflow = 'hidden';
-
-	this.domElement = domElement;
-
-	this.getSize = function () {
-
-		return {
-			width: _width,
-			height: _height
-		};
-
-	};
-
-	this.setSize = function ( width, height ) {
-
-		_width = width;
-		_height = height;
-
-		_widthHalf = _width / 2;
-		_heightHalf = _height / 2;
-
-		domElement.style.width = width + 'px';
-		domElement.style.height = height + 'px';
-
-	};
-
-	var renderObject = function ( object, scene, camera ) {
-
-		if ( object instanceof CSS2DObject ) {
-
-			object.onBeforeRender( _this, scene, camera );
-
-			vector.setFromMatrixPosition( object.matrixWorld );
-			vector.applyMatrix4( viewProjectionMatrix );
-
-			var element = object.element;
-			var style = 'translate(-50%,-50%) translate(' + ( vector.x * _widthHalf + _widthHalf ) + 'px,' + ( - vector.y * _heightHalf + _heightHalf ) + 'px)';
-
-			element.style.WebkitTransform = style;
-			element.style.MozTransform = style;
-			element.style.oTransform = style;
-			element.style.transform = style;
-
-			element.style.display = ( object.visible && vector.z >= - 1 && vector.z <= 1 ) ? '' : 'none';
-
-			var objectData = {
-				distanceToCameraSquared: getDistanceToSquared( camera, object )
-			};
-
-			cache.objects.set( object, objectData );
-
-			if ( element.parentNode !== domElement ) {
-
-				domElement.appendChild( element );
-
-			}
-
-			object.onAfterRender( _this, scene, camera );
-
-		}
-
-		for ( var i = 0, l = object.children.length; i < l; i ++ ) {
-
-			renderObject( object.children[ i ], scene, camera );
-
-		}
-
-	};
-
-	var getDistanceToSquared = function () {
-
-		var a = new Vector3();
-		var b = new Vector3();
-
-		return function ( object1, object2 ) {
-
-			a.setFromMatrixPosition( object1.matrixWorld );
-			b.setFromMatrixPosition( object2.matrixWorld );
-
-			return a.distanceToSquared( b );
-
-		};
-
-	}();
-
-	var filterAndFlatten = function ( scene ) {
-
-		var result = [];
-
-		scene.traverse( function ( object ) {
-
-			if ( object instanceof CSS2DObject ) result.push( object );
-
-		} );
-
-		return result;
-
-	};
-
-	var zOrder = function ( scene ) {
-
-		var sorted = filterAndFlatten( scene ).sort( function ( a, b ) {
-
-			var distanceA = cache.objects.get( a ).distanceToCameraSquared;
-			var distanceB = cache.objects.get( b ).distanceToCameraSquared;
-
-			return distanceA - distanceB;
-
-		} );
-
-		var zMax = sorted.length;
-
-		for ( var i = 0, l = sorted.length; i < l; i ++ ) {
-
-			sorted[ i ].element.style.zIndex = zMax - i;
-
-		}
-
-	};
-
-	this.render = function ( scene, camera ) {
-
-		if ( scene.autoUpdate === true ) scene.updateMatrixWorld();
-		if ( camera.parent === null ) camera.updateMatrixWorld();
-
-		viewMatrix.copy( camera.matrixWorldInverse );
-		viewProjectionMatrix.multiplyMatrices( camera.projectionMatrix, viewMatrix );
-
-		renderObject( scene, scene, camera );
-		zOrder( scene );
-
-	};
-
-};
-
-const numberNode = (value, unit) => ({ type: 'number', number: value, unit });
-const parseExpressions = (() => {
-    const cache = {};
-    const MAX_PARSE_ITERATIONS = 1000;
-    return (inputString) => {
-        const cacheKey = inputString;
-        if (cacheKey in cache) {
-            return cache[cacheKey];
-        }
-        const expressions = [];
-        let parseIterations = 0;
-        while (inputString) {
-            if (++parseIterations > MAX_PARSE_ITERATIONS) {
-                inputString = '';
-                break;
-            }
-            const expressionParseResult = parseExpression(inputString);
-            const expression = expressionParseResult.nodes[0];
-            if (expression == null || expression.terms.length === 0) {
-                break;
-            }
-            expressions.push(expression);
-            inputString = expressionParseResult.remainingInput;
-        }
-        return cache[cacheKey] = expressions;
-    };
-})();
-const parseExpression = (() => {
-    const IS_IDENT_RE = /^(\-\-|[a-z\u0240-\uffff])/i;
-    const IS_OPERATOR_RE = /^([\*\+\/]|[\-]\s)/i;
-    const IS_EXPRESSION_END_RE = /^[\),]/;
-    const FUNCTION_ARGUMENTS_FIRST_TOKEN = '(';
-    const HEX_FIRST_TOKEN = '#';
-    return (inputString) => {
-        const terms = [];
-        while (inputString.length) {
-            inputString = inputString.trim();
-            if (IS_EXPRESSION_END_RE.test(inputString)) {
-                break;
-            }
-            else if (inputString[0] === FUNCTION_ARGUMENTS_FIRST_TOKEN) {
-                const { nodes, remainingInput } = parseFunctionArguments(inputString);
-                inputString = remainingInput;
-                terms.push({
-                    type: 'function',
-                    name: { type: 'ident', value: 'calc' },
-                    arguments: nodes
-                });
-            }
-            else if (IS_IDENT_RE.test(inputString)) {
-                const identParseResult = parseIdent(inputString);
-                const identNode = identParseResult.nodes[0];
-                inputString = identParseResult.remainingInput;
-                if (inputString[0] === FUNCTION_ARGUMENTS_FIRST_TOKEN) {
-                    const { nodes, remainingInput } = parseFunctionArguments(inputString);
-                    terms.push({ type: 'function', name: identNode, arguments: nodes });
-                    inputString = remainingInput;
-                }
-                else {
-                    terms.push(identNode);
-                }
-            }
-            else if (IS_OPERATOR_RE.test(inputString)) {
-                terms.push({ type: 'operator', value: inputString[0] });
-                inputString = inputString.slice(1);
-            }
-            else {
-                const { nodes, remainingInput } = inputString[0] === HEX_FIRST_TOKEN ?
-                    parseHex(inputString) :
-                    parseNumber(inputString);
-                if (nodes.length === 0) {
-                    break;
-                }
-                terms.push(nodes[0]);
-                inputString = remainingInput;
-            }
-        }
-        return { nodes: [{ type: 'expression', terms }], remainingInput: inputString };
-    };
-})();
-const parseIdent = (() => {
-    const NOT_IDENT_RE = /[^a-z^0-9^_^\-^\u0240-\uffff]/i;
-    return (inputString) => {
-        const match = inputString.match(NOT_IDENT_RE);
-        const ident = match == null ? inputString : inputString.substr(0, match.index);
-        const remainingInput = match == null ? '' : inputString.substr(match.index);
-        return { nodes: [{ type: 'ident', value: ident }], remainingInput };
-    };
-})();
-const parseNumber = (() => {
-    const NOT_VALUE_RE = /[^0-9\.\-]|$/;
-    const UNIT_RE = /^[a-z%]+/i;
-    const ALLOWED_UNITS = /^(m|mm|cm|rad|deg|[%])$/;
-    return (inputString) => {
-        const notValueMatch = inputString.match(NOT_VALUE_RE);
-        const value = notValueMatch == null ?
-            inputString :
-            inputString.substr(0, notValueMatch.index);
-        inputString = notValueMatch == null ?
-            inputString :
-            inputString.slice(notValueMatch.index);
-        const unitMatch = inputString.match(UNIT_RE);
-        let unit = unitMatch != null && unitMatch[0] !== '' ? unitMatch[0] : null;
-        const remainingInput = unitMatch == null ? inputString : inputString.slice(unit.length);
-        if (unit != null && !ALLOWED_UNITS.test(unit)) {
-            unit = null;
-        }
-        return {
-            nodes: [{
-                    type: 'number',
-                    number: parseFloat(value) || 0,
-                    unit: unit
-                }],
-            remainingInput
-        };
-    };
-})();
-const parseHex = (() => {
-    const HEX_RE = /^[a-f0-9]*/i;
-    return (inputString) => {
-        inputString = inputString.slice(1).trim();
-        const hexMatch = inputString.match(HEX_RE);
-        const nodes = hexMatch == null ? [] : [{ type: 'hex', value: hexMatch[0] }];
-        return {
-            nodes,
-            remainingInput: hexMatch == null ? inputString :
-                inputString.slice(hexMatch[0].length)
-        };
-    };
-})();
-const parseFunctionArguments = (inputString) => {
-    const expressionNodes = [];
-    inputString = inputString.slice(1).trim();
-    while (inputString.length) {
-        const expressionParseResult = parseExpression(inputString);
-        expressionNodes.push(expressionParseResult.nodes[0]);
-        inputString = expressionParseResult.remainingInput.trim();
-        if (inputString[0] === ',') {
-            inputString = inputString.slice(1).trim();
-        }
-        else if (inputString[0] === ')') {
-            inputString = inputString.slice(1);
-            break;
-        }
-    }
-    return { nodes: expressionNodes, remainingInput: inputString };
-};
-const $visitedTypes = Symbol('visitedTypes');
-class ASTWalker {
-    constructor(visitedTypes) {
-        this[$visitedTypes] = visitedTypes;
-    }
-    walk(ast, callback) {
-        const remaining = ast.slice();
-        while (remaining.length) {
-            const next = remaining.shift();
-            if (this[$visitedTypes].indexOf(next.type) > -1) {
-                callback(next);
-            }
-            switch (next.type) {
-                case 'expression':
-                    remaining.unshift(...next.terms);
-                    break;
-                case 'function':
-                    remaining.unshift(next.name, ...next.arguments);
-                    break;
-            }
-        }
-    }
-}
-const ZERO = Object.freeze({ type: 'number', number: 0, unit: null });
-
-const degreesToRadians = (numberNode$$1, fallbackRadianValue = 0) => {
-    let { number, unit } = numberNode$$1;
-    if (!isFinite(number)) {
-        number = fallbackRadianValue;
-        unit = 'rad';
-    }
-    else if (numberNode$$1.unit === 'rad' || numberNode$$1.unit == null) {
-        return numberNode$$1;
-    }
-    const valueIsDegrees = unit === 'deg' && number != null;
-    const value = valueIsDegrees ? number : 0;
-    const radians = value * Math.PI / 180;
-    return { type: 'number', number: radians, unit: 'rad' };
-};
-const lengthToBaseMeters = (numberNode$$1, fallbackMeterValue = 0) => {
-    let { number, unit } = numberNode$$1;
-    if (!isFinite(number)) {
-        number = fallbackMeterValue;
-        unit = 'm';
-    }
-    else if (numberNode$$1.unit === 'm') {
-        return numberNode$$1;
-    }
-    let scale;
-    switch (unit) {
-        default:
-            scale = 1;
-            break;
-        case 'cm':
-            scale = 1 / 100;
-            break;
-        case 'mm':
-            scale = 1 / 1000;
-            break;
-    }
-    const value = scale * number;
-    return { type: 'number', number: value, unit: 'm' };
-};
-const normalizeUnit = (() => {
-    const identity = (node) => node;
-    const unitNormalizers = {
-        'rad': identity,
-        'deg': degreesToRadians,
-        'm': identity,
-        'mm': lengthToBaseMeters,
-        'cm': lengthToBaseMeters
-    };
-    return (node, fallback = ZERO) => {
-        let { number, unit } = node;
-        if (!isFinite(number)) {
-            number = fallback.number;
-            unit = fallback.unit;
-        }
-        if (unit == null) {
-            return node;
-        }
-        const normalize = unitNormalizers[unit];
-        if (normalize == null) {
-            return fallback;
-        }
-        return normalize(node);
-    };
-})();
-
-var _a$3, _b$2, _c, _d, _e;
-const $slot = Symbol('slot');
-const $pivot = Symbol('pivot');
-const $referenceCount = Symbol('referenceCount');
-const $updateVisibility = Symbol('updateVisibility');
-const $visible = Symbol('visible');
-const $onSlotchange = Symbol('onSlotchange');
-const $slotchangeHandler = Symbol('slotchangeHandler');
-class Hotspot extends CSS2DObject {
-    constructor(config) {
-        super(document.createElement('div'));
-        this.normal = new Vector3(0, 1, 0);
-        this[_a$3] = false;
-        this[_b$2] = 1;
-        this[_c] = document.createElement('div');
-        this[_d] = document.createElement('slot');
-        this[_e] = () => this[$onSlotchange]();
-        this.element.classList.add('annotation-wrapper');
-        this[$slot].name = config.name;
-        this[$slot].addEventListener('slotchange', this[$slotchangeHandler]);
-        this.element.appendChild(this[$pivot]);
-        this[$pivot].appendChild(this[$slot]);
-        this.updatePosition(config.position);
-        this.updateNormal(config.normal);
-        this.show();
-    }
-    show() {
-        if (!this[$visible]) {
-            this[$visible] = true;
-            this[$updateVisibility]({ notify: true });
-        }
-    }
-    hide() {
-        if (this[$visible]) {
-            this[$visible] = false;
-            this[$updateVisibility]({ notify: true });
-        }
-    }
-    dispose() {
-        this[$slot].removeEventListener('slotchange', this[$slotchangeHandler]);
-    }
-    increment() {
-        this[$referenceCount]++;
-    }
-    decrement() {
-        if (this[$referenceCount] > 0) {
-            --this[$referenceCount];
-        }
-        return this[$referenceCount] === 0;
-    }
-    updatePosition(position) {
-        if (position == null)
-            return;
-        const positionNodes = parseExpressions(position)[0].terms;
-        for (let i = 0; i < 3; ++i) {
-            this.position.setComponent(i, normalizeUnit(positionNodes[i]).number);
-        }
-    }
-    updateNormal(normal) {
-        if (normal == null)
-            return;
-        const normalNodes = parseExpressions(normal)[0].terms;
-        for (let i = 0; i < 3; ++i) {
-            this.normal.setComponent(i, normalizeUnit(normalNodes[i]).number);
-        }
-    }
-    orient(radians) {
-        this[$pivot].style.transform = `rotate(${radians}rad)`;
-    }
-    [(_a$3 = $visible, _b$2 = $referenceCount, _c = $pivot, _d = $slot, _e = $slotchangeHandler, $updateVisibility)]({ notify }) {
-        if (this[$visible]) {
-            this.element.classList.remove('hide');
-        }
-        else {
-            this.element.classList.add('hide');
-        }
-        this[$slot].assignedNodes().forEach((node) => {
-            if (node.nodeType !== Node.ELEMENT_NODE) {
-                return;
-            }
-            const element = node;
-            const visibilityAttribute = element.dataset.visibilityAttribute;
-            if (visibilityAttribute != null) {
-                const attributeName = `data-${visibilityAttribute}`;
-                if (this[$visible]) {
-                    element.setAttribute(attributeName, '');
-                }
-                else {
-                    element.removeAttribute(attributeName);
-                }
-            }
-            if (notify) {
-                element.dispatchEvent(new CustomEvent('hotspot-visibility', {
-                    detail: {
-                        visible: this[$visible],
-                    },
-                }));
-            }
-        });
-    }
-    [$onSlotchange]() {
-        this[$updateVisibility]({ notify: false });
-    }
-}
-
-/**
  * @author Emmett Lalish / elalish
  *
  * This class generates custom mipmaps for a roughness map by encoding the lost variation in the
@@ -56841,7 +56317,7 @@ const applyExtensionCompatibility = (gl) => {
     };
 };
 
-var _a$4, _b$3, _c$1, _d$1, _e$1, _f, _g, _h, _j, _k;
+var _a$3, _b$2, _c, _d, _e, _f, _g, _h, _j, _k;
 const AR_SHADOW_INTENSITY = 0.5;
 const $presentedScene = Symbol('presentedScene');
 const $lastTick = Symbol('lastTick');
@@ -56864,11 +56340,11 @@ class ARRenderer extends EventDispatcher {
         this.camera = new PerspectiveCamera();
         this.reticle = new Reticle(this.camera);
         this.raycaster = null;
-        this[_a$4] = null;
-        this[_b$3] = null;
-        this[_c$1] = null;
-        this[_d$1] = null;
-        this[_e$1] = null;
+        this[_a$3] = null;
+        this[_b$2] = null;
+        this[_c] = null;
+        this[_d] = null;
+        this[_e] = null;
         this[_f] = null;
         this[_g] = null;
         this[_h] = null;
@@ -56918,7 +56394,7 @@ class ARRenderer extends EventDispatcher {
         if (this.isPresenting) {
             console.warn('Cannot present while a model is already presenting');
         }
-        scene.setHotspotsVisibility(false);
+        scene.model.setHotspotsVisibility(false);
         const currentSession = await this.resolveARSession();
         currentSession.addEventListener('end', () => {
             this[$postSessionCleanup]();
@@ -56926,9 +56402,10 @@ class ARRenderer extends EventDispatcher {
         this[$refSpace] = await currentSession.requestReferenceSpace('local');
         this[$viewerRefSpace] =
             await currentSession.requestReferenceSpace('viewer');
+        scene.setARTarget();
         scene.setCamera(this.camera);
         scene.add(this.reticle);
-        scene.pivot.visible = false;
+        scene.model.visible = false;
         this[$oldBackground] = scene.background;
         scene.background = null;
         this[$oldShadowIntensity] = scene.shadowIntensity;
@@ -56963,20 +56440,22 @@ class ARRenderer extends EventDispatcher {
             this[$postSessionCleanup]();
         }
     }
-    [(_a$4 = $lastTick, _b$3 = $turntableRotation, _c$1 = $oldShadowIntensity, _d$1 = $oldBackground, _e$1 = $rafId, _f = $currentSession, _g = $refSpace, _h = $viewerRefSpace, _j = $presentedScene, _k = $resolveCleanup, $postSessionCleanup)]() {
+    [(_a$3 = $lastTick, _b$2 = $turntableRotation, _c = $oldShadowIntensity, _d = $oldBackground, _e = $rafId, _f = $currentSession, _g = $refSpace, _h = $viewerRefSpace, _j = $presentedScene, _k = $resolveCleanup, $postSessionCleanup)]() {
         this.threeRenderer.setFramebuffer(null);
         const scene = this[$presentedScene];
         if (scene != null) {
+            const { model, element } = scene;
             scene.setCamera(scene.camera);
             scene.remove(this.reticle);
-            scene.pivot.visible = true;
-            scene.setHotspotsVisibility(true);
-            scene.pivot.position.set(0, 0, 0);
-            scene.setPivotRotation(this[$turntableRotation]);
+            model.visible = true;
+            model.setHotspotsVisibility(true);
+            scene.position.set(0, 0, 0);
+            scene.yaw = this[$turntableRotation];
             scene.setShadowIntensity(this[$oldShadowIntensity]);
             scene.background = this[$oldBackground];
-            scene.orientHotspots(0);
-            scene.isDirty = true;
+            model.orientHotspots(0);
+            element.requestUpdate('cameraTarget');
+            element[$needsRender]();
             this.renderer.expandTo(scene.width, scene.height);
         }
         this.reticle.reset();
@@ -56995,15 +56474,14 @@ class ARRenderer extends EventDispatcher {
         }
         if (this.reticle && this.reticle.hitMatrix) {
             const scene = this[$presentedScene];
-            const { pivot, shadow } = scene;
+            const { model } = scene;
             const { hitMatrix } = this.reticle;
-            pivot.position.setFromMatrixPosition(hitMatrix);
+            scene.position.setFromMatrixPosition(hitMatrix);
             const camPosition = vector3.setFromMatrixPosition(this.camera.matrix);
-            pivot.lookAt(camPosition.x, pivot.position.y, camPosition.z);
-            pivot.updateMatrixWorld();
-            shadow.setRotation(pivot.rotation.y);
-            pivot.visible = true;
-            scene.setHotspotsVisibility(true);
+            scene.pointTowards(camPosition.x, camPosition.z);
+            scene.updateMatrixWorld();
+            model.visible = true;
+            model.setHotspotsVisibility(true);
             this.dispatchEvent({ type: 'modelmove' });
         }
     }
@@ -57042,7 +56520,7 @@ class ARRenderer extends EventDispatcher {
             cameraMatrix.fromArray(view.transform.matrix);
             camera.updateMatrixWorld(true);
             camera.position.setFromMatrixPosition(cameraMatrix);
-            scene.orientHotspots(Math.atan2(cameraMatrix.elements[1], cameraMatrix.elements[5]));
+            scene.model.orientHotspots(Math.atan2(cameraMatrix.elements[1], cameraMatrix.elements[5]));
             this.reticle.update(this[$currentSession], frame, this[$viewerRefSpace], this[$refSpace]);
             this.processXRInput(frame);
             this.threeRenderer.render(scene, camera);
@@ -57682,7 +57160,7 @@ class EnvironmentScene extends Scene {
     }
 }
 
-var _a$5, _b$4;
+var _a$4, _b$3;
 const GENERATED_SIGMA = 0.04;
 Cache.enabled = true;
 const HDR_FILE_RE = /\.hdr$/;
@@ -57701,8 +57179,8 @@ const userData = {
 class TextureUtils extends EventDispatcher {
     constructor(threeRenderer) {
         super();
-        this[_a$5] = null;
-        this[_b$4] = new Map();
+        this[_a$4] = null;
+        this[_b$3] = new Map();
         this[$PMREMGenerator] = new PMREMGenerator(threeRenderer);
     }
     get pmremGenerator() {
@@ -57783,7 +57261,7 @@ class TextureUtils extends EventDispatcher {
             updateGenerationProgress(1.0);
         }
     }
-    [(_a$5 = $generatedEnvironmentMap, _b$4 = $environmentMapCache, $addMetadata)](texture, url, mapping) {
+    [(_a$4 = $generatedEnvironmentMap, _b$3 = $environmentMapCache, $addMetadata)](texture, url, mapping) {
         if (texture == null) {
             return;
         }
@@ -57830,7 +57308,7 @@ class TextureUtils extends EventDispatcher {
     }
 }
 
-var _a$6, _b$5;
+var _a$5, _b$4;
 const $arRenderer = Symbol('arRenderer');
 const $onWebGLContextLost = Symbol('onWebGLContextLost');
 const $webGLContextLostHandler = Symbol('webGLContextLostHandler');
@@ -57842,7 +57320,7 @@ class Renderer extends EventDispatcher {
         this.height = 0;
         this.debugger = null;
         this.scenes = new Set();
-        this[_b$5] = (event) => this[$onWebGLContextLost](event);
+        this[_b$4] = (event) => this[$onWebGLContextLost](event);
         const webGlOptions = { alpha: true, antialias: true };
         if (IS_WEBXR_AR_CANDIDATE) {
             Object.assign(webGlOptions, { alpha: true, preserveDrawingBuffer: true });
@@ -57945,15 +57423,12 @@ class Renderer extends EventDispatcher {
         return this[$arRenderer] != null && this[$arRenderer].isPresenting;
     }
     preRender(scene, t, delta) {
-        const { element, exposure, shadow } = scene;
+        const { element, exposure, model } = scene;
         element[$tick$1](t, delta);
         const exposureIsNumber = typeof exposure === 'number' && !self.isNaN(exposure);
         this.threeRenderer.toneMappingExposure = exposureIsNumber ? exposure : 1.0;
-        const shadowNeedsUpdate = this.threeRenderer.shadowMap.needsUpdate;
-        if (shadow != null) {
-            this.threeRenderer.shadowMap.needsUpdate =
-                shadowNeedsUpdate || shadow.needsUpdate;
-            shadow.needsUpdate = false;
+        if (model.updateShadow()) {
+            this.threeRenderer.shadowMap.needsUpdate = true;
         }
     }
     expandTo(width, height) {
@@ -58027,11 +57502,11 @@ class Renderer extends EventDispatcher {
         this.scenes.clear();
         this.canvas3D.removeEventListener('webglcontextlost', this[$webGLContextLostHandler]);
     }
-    [(_a$6 = $singleton, _b$5 = $webGLContextLostHandler, $onWebGLContextLost)](event) {
+    [(_a$5 = $singleton, _b$4 = $webGLContextLostHandler, $onWebGLContextLost)](event) {
         this.dispatchEvent({ type: 'contextlost', sourceEvent: event });
     }
 }
-Renderer[_a$6] = new Renderer({ debug: isDebugMode() });
+Renderer[_a$5] = new Renderer({ debug: isDebugMode() });
 
 const alphaChunk =  `
 #ifdef ALPHATEST
@@ -58094,11 +57569,11 @@ const normalmapChunk =  `
 #endif
 `;
 
-var _a$7;
+var _a$6;
 const $roughnessMipmapper = Symbol('roughnessMipmapper');
 const $cloneAndPatchMaterial = Symbol('cloneAndPatchMaterial');
 class ModelViewerGLTFInstance extends GLTFInstance {
-    static [(_a$7 = $roughnessMipmapper, $prepare)](source) {
+    static [(_a$6 = $roughnessMipmapper, $prepare)](source) {
         const prepared = super[$prepare](source);
         const { scene } = prepared;
         const meshesToDuplicate = [];
@@ -58192,7 +57667,531 @@ class ModelViewerGLTFInstance extends GLTFInstance {
         return clone;
     }
 }
-ModelViewerGLTFInstance[_a$7] = new RoughnessMipmapper(Renderer.singleton.threeRenderer);
+ModelViewerGLTFInstance[_a$6] = new RoughnessMipmapper(Renderer.singleton.threeRenderer);
+
+/**
+ * @author mrdoob / http://mrdoob.com/
+ */
+
+var CSS2DObject = function ( element ) {
+
+	Object3D.call( this );
+
+	this.element = element;
+	this.element.style.position = 'absolute';
+
+	this.addEventListener( 'removed', function () {
+
+		this.traverse( function ( object ) {
+
+			if ( object.element instanceof Element && object.element.parentNode !== null ) {
+
+				object.element.parentNode.removeChild( object.element );
+
+			}
+
+		} );
+
+	} );
+
+};
+
+CSS2DObject.prototype = Object.create( Object3D.prototype );
+CSS2DObject.prototype.constructor = CSS2DObject;
+
+//
+
+var CSS2DRenderer = function () {
+
+	var _this = this;
+
+	var _width, _height;
+	var _widthHalf, _heightHalf;
+
+	var vector = new Vector3();
+	var viewMatrix = new Matrix4();
+	var viewProjectionMatrix = new Matrix4();
+
+	var cache = {
+		objects: new WeakMap()
+	};
+
+	var domElement = document.createElement( 'div' );
+	domElement.style.overflow = 'hidden';
+
+	this.domElement = domElement;
+
+	this.getSize = function () {
+
+		return {
+			width: _width,
+			height: _height
+		};
+
+	};
+
+	this.setSize = function ( width, height ) {
+
+		_width = width;
+		_height = height;
+
+		_widthHalf = _width / 2;
+		_heightHalf = _height / 2;
+
+		domElement.style.width = width + 'px';
+		domElement.style.height = height + 'px';
+
+	};
+
+	var renderObject = function ( object, scene, camera ) {
+
+		if ( object instanceof CSS2DObject ) {
+
+			object.onBeforeRender( _this, scene, camera );
+
+			vector.setFromMatrixPosition( object.matrixWorld );
+			vector.applyMatrix4( viewProjectionMatrix );
+
+			var element = object.element;
+			var style = 'translate(-50%,-50%) translate(' + ( vector.x * _widthHalf + _widthHalf ) + 'px,' + ( - vector.y * _heightHalf + _heightHalf ) + 'px)';
+
+			element.style.WebkitTransform = style;
+			element.style.MozTransform = style;
+			element.style.oTransform = style;
+			element.style.transform = style;
+
+			element.style.display = ( object.visible && vector.z >= - 1 && vector.z <= 1 ) ? '' : 'none';
+
+			var objectData = {
+				distanceToCameraSquared: getDistanceToSquared( camera, object )
+			};
+
+			cache.objects.set( object, objectData );
+
+			if ( element.parentNode !== domElement ) {
+
+				domElement.appendChild( element );
+
+			}
+
+			object.onAfterRender( _this, scene, camera );
+
+		}
+
+		for ( var i = 0, l = object.children.length; i < l; i ++ ) {
+
+			renderObject( object.children[ i ], scene, camera );
+
+		}
+
+	};
+
+	var getDistanceToSquared = function () {
+
+		var a = new Vector3();
+		var b = new Vector3();
+
+		return function ( object1, object2 ) {
+
+			a.setFromMatrixPosition( object1.matrixWorld );
+			b.setFromMatrixPosition( object2.matrixWorld );
+
+			return a.distanceToSquared( b );
+
+		};
+
+	}();
+
+	var filterAndFlatten = function ( scene ) {
+
+		var result = [];
+
+		scene.traverse( function ( object ) {
+
+			if ( object instanceof CSS2DObject ) result.push( object );
+
+		} );
+
+		return result;
+
+	};
+
+	var zOrder = function ( scene ) {
+
+		var sorted = filterAndFlatten( scene ).sort( function ( a, b ) {
+
+			var distanceA = cache.objects.get( a ).distanceToCameraSquared;
+			var distanceB = cache.objects.get( b ).distanceToCameraSquared;
+
+			return distanceA - distanceB;
+
+		} );
+
+		var zMax = sorted.length;
+
+		for ( var i = 0, l = sorted.length; i < l; i ++ ) {
+
+			sorted[ i ].element.style.zIndex = zMax - i;
+
+		}
+
+	};
+
+	this.render = function ( scene, camera ) {
+
+		if ( scene.autoUpdate === true ) scene.updateMatrixWorld();
+		if ( camera.parent === null ) camera.updateMatrixWorld();
+
+		viewMatrix.copy( camera.matrixWorldInverse );
+		viewProjectionMatrix.multiplyMatrices( camera.projectionMatrix, viewMatrix );
+
+		renderObject( scene, scene, camera );
+		zOrder( scene );
+
+	};
+
+};
+
+const numberNode = (value, unit) => ({ type: 'number', number: value, unit });
+const parseExpressions = (() => {
+    const cache = {};
+    const MAX_PARSE_ITERATIONS = 1000;
+    return (inputString) => {
+        const cacheKey = inputString;
+        if (cacheKey in cache) {
+            return cache[cacheKey];
+        }
+        const expressions = [];
+        let parseIterations = 0;
+        while (inputString) {
+            if (++parseIterations > MAX_PARSE_ITERATIONS) {
+                inputString = '';
+                break;
+            }
+            const expressionParseResult = parseExpression(inputString);
+            const expression = expressionParseResult.nodes[0];
+            if (expression == null || expression.terms.length === 0) {
+                break;
+            }
+            expressions.push(expression);
+            inputString = expressionParseResult.remainingInput;
+        }
+        return cache[cacheKey] = expressions;
+    };
+})();
+const parseExpression = (() => {
+    const IS_IDENT_RE = /^(\-\-|[a-z\u0240-\uffff])/i;
+    const IS_OPERATOR_RE = /^([\*\+\/]|[\-]\s)/i;
+    const IS_EXPRESSION_END_RE = /^[\),]/;
+    const FUNCTION_ARGUMENTS_FIRST_TOKEN = '(';
+    const HEX_FIRST_TOKEN = '#';
+    return (inputString) => {
+        const terms = [];
+        while (inputString.length) {
+            inputString = inputString.trim();
+            if (IS_EXPRESSION_END_RE.test(inputString)) {
+                break;
+            }
+            else if (inputString[0] === FUNCTION_ARGUMENTS_FIRST_TOKEN) {
+                const { nodes, remainingInput } = parseFunctionArguments(inputString);
+                inputString = remainingInput;
+                terms.push({
+                    type: 'function',
+                    name: { type: 'ident', value: 'calc' },
+                    arguments: nodes
+                });
+            }
+            else if (IS_IDENT_RE.test(inputString)) {
+                const identParseResult = parseIdent(inputString);
+                const identNode = identParseResult.nodes[0];
+                inputString = identParseResult.remainingInput;
+                if (inputString[0] === FUNCTION_ARGUMENTS_FIRST_TOKEN) {
+                    const { nodes, remainingInput } = parseFunctionArguments(inputString);
+                    terms.push({ type: 'function', name: identNode, arguments: nodes });
+                    inputString = remainingInput;
+                }
+                else {
+                    terms.push(identNode);
+                }
+            }
+            else if (IS_OPERATOR_RE.test(inputString)) {
+                terms.push({ type: 'operator', value: inputString[0] });
+                inputString = inputString.slice(1);
+            }
+            else {
+                const { nodes, remainingInput } = inputString[0] === HEX_FIRST_TOKEN ?
+                    parseHex(inputString) :
+                    parseNumber(inputString);
+                if (nodes.length === 0) {
+                    break;
+                }
+                terms.push(nodes[0]);
+                inputString = remainingInput;
+            }
+        }
+        return { nodes: [{ type: 'expression', terms }], remainingInput: inputString };
+    };
+})();
+const parseIdent = (() => {
+    const NOT_IDENT_RE = /[^a-z^0-9^_^\-^\u0240-\uffff]/i;
+    return (inputString) => {
+        const match = inputString.match(NOT_IDENT_RE);
+        const ident = match == null ? inputString : inputString.substr(0, match.index);
+        const remainingInput = match == null ? '' : inputString.substr(match.index);
+        return { nodes: [{ type: 'ident', value: ident }], remainingInput };
+    };
+})();
+const parseNumber = (() => {
+    const NOT_VALUE_RE = /[^0-9\.\-]|$/;
+    const UNIT_RE = /^[a-z%]+/i;
+    const ALLOWED_UNITS = /^(m|mm|cm|rad|deg|[%])$/;
+    return (inputString) => {
+        const notValueMatch = inputString.match(NOT_VALUE_RE);
+        const value = notValueMatch == null ?
+            inputString :
+            inputString.substr(0, notValueMatch.index);
+        inputString = notValueMatch == null ?
+            inputString :
+            inputString.slice(notValueMatch.index);
+        const unitMatch = inputString.match(UNIT_RE);
+        let unit = unitMatch != null && unitMatch[0] !== '' ? unitMatch[0] : null;
+        const remainingInput = unitMatch == null ? inputString : inputString.slice(unit.length);
+        if (unit != null && !ALLOWED_UNITS.test(unit)) {
+            unit = null;
+        }
+        return {
+            nodes: [{
+                    type: 'number',
+                    number: parseFloat(value) || 0,
+                    unit: unit
+                }],
+            remainingInput
+        };
+    };
+})();
+const parseHex = (() => {
+    const HEX_RE = /^[a-f0-9]*/i;
+    return (inputString) => {
+        inputString = inputString.slice(1).trim();
+        const hexMatch = inputString.match(HEX_RE);
+        const nodes = hexMatch == null ? [] : [{ type: 'hex', value: hexMatch[0] }];
+        return {
+            nodes,
+            remainingInput: hexMatch == null ? inputString :
+                inputString.slice(hexMatch[0].length)
+        };
+    };
+})();
+const parseFunctionArguments = (inputString) => {
+    const expressionNodes = [];
+    inputString = inputString.slice(1).trim();
+    while (inputString.length) {
+        const expressionParseResult = parseExpression(inputString);
+        expressionNodes.push(expressionParseResult.nodes[0]);
+        inputString = expressionParseResult.remainingInput.trim();
+        if (inputString[0] === ',') {
+            inputString = inputString.slice(1).trim();
+        }
+        else if (inputString[0] === ')') {
+            inputString = inputString.slice(1);
+            break;
+        }
+    }
+    return { nodes: expressionNodes, remainingInput: inputString };
+};
+const $visitedTypes = Symbol('visitedTypes');
+class ASTWalker {
+    constructor(visitedTypes) {
+        this[$visitedTypes] = visitedTypes;
+    }
+    walk(ast, callback) {
+        const remaining = ast.slice();
+        while (remaining.length) {
+            const next = remaining.shift();
+            if (this[$visitedTypes].indexOf(next.type) > -1) {
+                callback(next);
+            }
+            switch (next.type) {
+                case 'expression':
+                    remaining.unshift(...next.terms);
+                    break;
+                case 'function':
+                    remaining.unshift(next.name, ...next.arguments);
+                    break;
+            }
+        }
+    }
+}
+const ZERO = Object.freeze({ type: 'number', number: 0, unit: null });
+
+const degreesToRadians = (numberNode$$1, fallbackRadianValue = 0) => {
+    let { number, unit } = numberNode$$1;
+    if (!isFinite(number)) {
+        number = fallbackRadianValue;
+        unit = 'rad';
+    }
+    else if (numberNode$$1.unit === 'rad' || numberNode$$1.unit == null) {
+        return numberNode$$1;
+    }
+    const valueIsDegrees = unit === 'deg' && number != null;
+    const value = valueIsDegrees ? number : 0;
+    const radians = value * Math.PI / 180;
+    return { type: 'number', number: radians, unit: 'rad' };
+};
+const lengthToBaseMeters = (numberNode$$1, fallbackMeterValue = 0) => {
+    let { number, unit } = numberNode$$1;
+    if (!isFinite(number)) {
+        number = fallbackMeterValue;
+        unit = 'm';
+    }
+    else if (numberNode$$1.unit === 'm') {
+        return numberNode$$1;
+    }
+    let scale;
+    switch (unit) {
+        default:
+            scale = 1;
+            break;
+        case 'cm':
+            scale = 1 / 100;
+            break;
+        case 'mm':
+            scale = 1 / 1000;
+            break;
+    }
+    const value = scale * number;
+    return { type: 'number', number: value, unit: 'm' };
+};
+const normalizeUnit = (() => {
+    const identity = (node) => node;
+    const unitNormalizers = {
+        'rad': identity,
+        'deg': degreesToRadians,
+        'm': identity,
+        'mm': lengthToBaseMeters,
+        'cm': lengthToBaseMeters
+    };
+    return (node, fallback = ZERO) => {
+        let { number, unit } = node;
+        if (!isFinite(number)) {
+            number = fallback.number;
+            unit = fallback.unit;
+        }
+        if (unit == null) {
+            return node;
+        }
+        const normalize = unitNormalizers[unit];
+        if (normalize == null) {
+            return fallback;
+        }
+        return normalize(node);
+    };
+})();
+
+var _a$7, _b$5, _c$1, _d$1, _e$1;
+const $slot = Symbol('slot');
+const $pivot = Symbol('pivot');
+const $referenceCount = Symbol('referenceCount');
+const $updateVisibility = Symbol('updateVisibility');
+const $visible = Symbol('visible');
+const $onSlotchange = Symbol('onSlotchange');
+const $slotchangeHandler = Symbol('slotchangeHandler');
+class Hotspot extends CSS2DObject {
+    constructor(config) {
+        super(document.createElement('div'));
+        this.normal = new Vector3(0, 1, 0);
+        this[_a$7] = false;
+        this[_b$5] = 1;
+        this[_c$1] = document.createElement('div');
+        this[_d$1] = document.createElement('slot');
+        this[_e$1] = () => this[$onSlotchange]();
+        this.element.classList.add('annotation-wrapper');
+        this[$slot].name = config.name;
+        this[$slot].addEventListener('slotchange', this[$slotchangeHandler]);
+        this.element.appendChild(this[$pivot]);
+        this[$pivot].appendChild(this[$slot]);
+        this.updatePosition(config.position);
+        this.updateNormal(config.normal);
+        this.show();
+    }
+    show() {
+        if (!this[$visible]) {
+            this[$visible] = true;
+            this[$updateVisibility]({ notify: true });
+        }
+    }
+    hide() {
+        if (this[$visible]) {
+            this[$visible] = false;
+            this[$updateVisibility]({ notify: true });
+        }
+    }
+    dispose() {
+        this[$slot].removeEventListener('slotchange', this[$slotchangeHandler]);
+    }
+    increment() {
+        this[$referenceCount]++;
+    }
+    decrement() {
+        if (this[$referenceCount] > 0) {
+            --this[$referenceCount];
+        }
+        return this[$referenceCount] === 0;
+    }
+    updatePosition(position) {
+        if (position == null)
+            return;
+        const positionNodes = parseExpressions(position)[0].terms;
+        for (let i = 0; i < 3; ++i) {
+            this.position.setComponent(i, normalizeUnit(positionNodes[i]).number);
+        }
+    }
+    updateNormal(normal) {
+        if (normal == null)
+            return;
+        const normalNodes = parseExpressions(normal)[0].terms;
+        for (let i = 0; i < 3; ++i) {
+            this.normal.setComponent(i, normalizeUnit(normalNodes[i]).number);
+        }
+    }
+    orient(radians) {
+        this[$pivot].style.transform = `rotate(${radians}rad)`;
+    }
+    [(_a$7 = $visible, _b$5 = $referenceCount, _c$1 = $pivot, _d$1 = $slot, _e$1 = $slotchangeHandler, $updateVisibility)]({ notify }) {
+        if (this[$visible]) {
+            this.element.classList.remove('hide');
+        }
+        else {
+            this.element.classList.add('hide');
+        }
+        this[$slot].assignedNodes().forEach((node) => {
+            if (node.nodeType !== Node.ELEMENT_NODE) {
+                return;
+            }
+            const element = node;
+            const visibilityAttribute = element.dataset.visibilityAttribute;
+            if (visibilityAttribute != null) {
+                const attributeName = `data-${visibilityAttribute}`;
+                if (this[$visible]) {
+                    element.setAttribute(attributeName, '');
+                }
+                else {
+                    element.removeAttribute(attributeName);
+                }
+            }
+            if (notify) {
+                element.dispatchEvent(new CustomEvent('hotspot-visibility', {
+                    detail: {
+                        visible: this[$visible],
+                    },
+                }));
+            }
+        });
+    }
+    [$onSlotchange]() {
+        this[$updateVisibility]({ notify: false });
+    }
+}
 
 const moveChildren = (from, to) => {
     while (from.children.length) {
@@ -58230,19 +58229,121 @@ const reduceVertices = (model, func) => {
     return value;
 };
 
-var _a$8, _b$6;
-const $cancelPendingSourceChange = Symbol('cancelPendingSourceChange');
-const $currentGLTF = Symbol('currentGLTF');
+const OFFSET = 0.001;
+const LOG_MAX_RESOLUTION = 9;
+const LOG_MIN_RESOLUTION = 6;
+const ANIMATION_SCALING = 2;
+class Shadow extends DirectionalLight {
+    constructor(model, softness) {
+        super();
+        this.shadowMaterial = new ShadowMaterial;
+        this.boundingBox = new Box3;
+        this.size = new Vector3;
+        this.isAnimated = false;
+        this.needsUpdate = false;
+        this.intensity = 0;
+        this.castShadow = true;
+        this.frustumCulled = false;
+        this.floor = new Mesh(new PlaneBufferGeometry, this.shadowMaterial);
+        this.floor.rotateX(-Math.PI / 2);
+        this.floor.receiveShadow = true;
+        this.floor.castShadow = false;
+        this.floor.frustumCulled = false;
+        this.add(this.floor);
+        this.shadow.camera.up.set(0, 0, 1);
+        model.add(this);
+        this.target = model;
+        this.setModel(model, softness);
+    }
+    setModel(model, softness) {
+        const { camera } = this.shadow;
+        this.isAnimated = model.animationNames.length > 0;
+        this.boundingBox.copy(model.boundingBox);
+        this.size.copy(model.size);
+        const { boundingBox, size } = this;
+        if (this.isAnimated) {
+            const maxDimension = Math.max(size.x, size.y, size.z) * ANIMATION_SCALING;
+            size.y = maxDimension;
+            boundingBox.expandByVector(size.subScalar(maxDimension).multiplyScalar(-0.5));
+            boundingBox.max.y = boundingBox.min.y + maxDimension;
+            size.set(maxDimension, maxDimension, maxDimension);
+        }
+        const shadowOffset = size.y * OFFSET;
+        this.position.y = boundingBox.max.y + shadowOffset;
+        boundingBox.getCenter(this.floor.position);
+        this.floor.position.y -= size.y / 2 + this.position.y - 2 * shadowOffset;
+        camera.near = 0;
+        camera.far = size.y;
+        this.setSoftness(softness);
+    }
+    setSoftness(softness) {
+        const resolution = Math.pow(2, LOG_MAX_RESOLUTION -
+            softness * (LOG_MAX_RESOLUTION - LOG_MIN_RESOLUTION));
+        this.setMapSize(resolution);
+    }
+    setMapSize(maxMapSize) {
+        const { camera, mapSize, map } = this.shadow;
+        const { size, boundingBox } = this;
+        if (map != null) {
+            map.dispose();
+            this.shadow.map = null;
+        }
+        if (this.isAnimated) {
+            maxMapSize *= ANIMATION_SCALING;
+        }
+        const width = Math.floor(size.x > size.z ? maxMapSize : maxMapSize * size.x / size.z);
+        const height = Math.floor(size.x > size.z ? maxMapSize * size.z / size.x : maxMapSize);
+        mapSize.set(width, height);
+        const widthPad = 2.5 * size.x / width;
+        const heightPad = 2.5 * size.z / height;
+        camera.left = -boundingBox.max.x - widthPad;
+        camera.right = -boundingBox.min.x + widthPad;
+        camera.bottom = boundingBox.min.z - heightPad;
+        camera.top = boundingBox.max.z + heightPad;
+        this.updateMatrixWorld();
+        camera.updateProjectionMatrix();
+        this.shadow.updateMatrices(this);
+        this.floor.scale.set(size.x + 2 * widthPad, size.z + 2 * heightPad, 1);
+        this.needsUpdate = true;
+    }
+    setIntensity(intensity) {
+        this.shadowMaterial.opacity = intensity;
+        if (intensity > 0) {
+            this.visible = true;
+            this.floor.visible = true;
+        }
+        else {
+            this.visible = false;
+            this.floor.visible = false;
+        }
+    }
+    getIntensity() {
+        return this.shadowMaterial.opacity;
+    }
+    setRotation(radiansY) {
+        this.shadow.camera.up.set(Math.sin(radiansY), 0, Math.cos(radiansY));
+        this.shadow.updateMatrices(this);
+    }
+}
+
+var _a$8, _b$6, _c$2;
 const DEFAULT_FOV_DEG = 45;
 const DEFAULT_HALF_FOV = (DEFAULT_FOV_DEG / 2) * Math.PI / 180;
 const SAFE_RADIUS_RATIO = Math.sin(DEFAULT_HALF_FOV);
 const DEFAULT_TAN_FOV = Math.tan(DEFAULT_HALF_FOV);
+const $shadow = Symbol('shadow');
+const $cancelPendingSourceChange = Symbol('cancelPendingSourceChange');
+const $currentGLTF = Symbol('currentGLTF');
 const $loader$1 = Symbol('loader');
+const view = new Vector3();
+const target = new Vector3();
+const normalWorld = new Vector3();
 class Model extends Object3D {
     constructor() {
         super();
         this[_a$8] = null;
-        this[_b$6] = new CachingGLTFLoader(ModelViewerGLTFInstance);
+        this[_b$6] = null;
+        this[_c$2] = new CachingGLTFLoader(ModelViewerGLTFInstance);
         this.animations = [];
         this.animationsByName = new Map();
         this.currentAnimationAction = null;
@@ -58339,7 +58440,7 @@ class Model extends Object3D {
         return this.currentAnimationAction != null;
     }
     playAnimation(name = null, crossfadeTime = 0, loop = true) {
-        var _c;
+        var _d;
         const { animations } = this;
         if (animations == null || animations.length === 0) {
             console.warn(`Cannot play animation (model does not have any animations)`);
@@ -58352,7 +58453,7 @@ class Model extends Object3D {
         if (animationClip == null) {
             animationClip = animations[0];
         }
-        if ((_c = this.currentAnimationAction) === null || _c === void 0 ? void 0 : _c.paused) {
+        if ((_d = this.currentAnimationAction) === null || _d === void 0 ? void 0 : _d.paused) {
             this.stopAnimation();
         }
         try {
@@ -58421,110 +58522,85 @@ class Model extends Object3D {
             reduceVertices(this.modelContainer, horizontalFov) / DEFAULT_TAN_FOV;
         this.add(this.modelContainer);
     }
-}
-_a$8 = $currentGLTF, _b$6 = $loader$1;
-
-const OFFSET = 0.001;
-const LOG_MAX_RESOLUTION = 9;
-const LOG_MIN_RESOLUTION = 6;
-const ANIMATION_SCALING = 2;
-class Shadow extends DirectionalLight {
-    constructor(model, target, softness) {
-        super();
-        this.model = model;
-        this.shadowMaterial = new ShadowMaterial;
-        this.boundingBox = new Box3;
-        this.size = new Vector3;
-        this.needsUpdate = false;
-        this.intensity = 0;
-        this.castShadow = true;
-        this.frustumCulled = false;
-        this.floor = new Mesh(new PlaneBufferGeometry, this.shadowMaterial);
-        this.floor.rotateX(-Math.PI / 2);
-        this.floor.receiveShadow = true;
-        this.floor.castShadow = false;
-        this.floor.frustumCulled = false;
-        this.add(this.floor);
-        this.shadow.camera.up.set(0, 0, 1);
-        this.target = target;
-        this.setModel(model, softness);
-    }
-    setModel(model, softness) {
-        this.model = model;
-        const { camera } = this.shadow;
-        this.boundingBox.copy(model.boundingBox);
-        this.size.copy(model.size);
-        const { boundingBox, size } = this;
-        if (this.model.animationNames.length > 0) {
-            const maxDimension = Math.max(size.x, size.y, size.z) * ANIMATION_SCALING;
-            size.y = maxDimension;
-            boundingBox.expandByVector(size.subScalar(maxDimension).multiplyScalar(-0.5));
-            boundingBox.max.y = boundingBox.min.y + maxDimension;
-            size.set(maxDimension, maxDimension, maxDimension);
+    setShadowIntensity(shadowIntensity, shadowSoftness) {
+        let shadow = this[$shadow];
+        if (shadow != null) {
+            shadow.setIntensity(shadowIntensity);
+            shadow.setModel(this, shadowSoftness);
         }
-        const shadowOffset = size.y * OFFSET;
-        this.position.y = boundingBox.max.y + shadowOffset;
-        boundingBox.getCenter(this.floor.position);
-        this.floor.position.y -= size.y / 2 + this.position.y - 2 * shadowOffset;
-        camera.near = 0;
-        camera.far = size.y;
-        this.setSoftness(softness);
-    }
-    setSoftness(softness) {
-        const resolution = Math.pow(2, LOG_MAX_RESOLUTION -
-            softness * (LOG_MAX_RESOLUTION - LOG_MIN_RESOLUTION));
-        this.setMapSize(resolution);
-    }
-    setMapSize(maxMapSize) {
-        const { camera, mapSize, map } = this.shadow;
-        const { boundingBox, size } = this;
-        if (map != null) {
-            map.dispose();
-            this.shadow.map = null;
+        else if (shadowIntensity > 0) {
+            shadow = new Shadow(this, shadowSoftness);
+            shadow.setIntensity(shadowIntensity);
+            this[$shadow] = shadow;
         }
-        if (this.model.animationNames.length > 0) {
-            maxMapSize *= ANIMATION_SCALING;
-        }
-        const width = Math.floor(size.x > size.z ? maxMapSize : maxMapSize * size.x / size.z);
-        const height = Math.floor(size.x > size.z ? maxMapSize * size.z / size.x : maxMapSize);
-        mapSize.set(width, height);
-        const widthPad = 2.5 * size.x / width;
-        const heightPad = 2.5 * size.z / height;
-        camera.left = -boundingBox.max.x - widthPad;
-        camera.right = -boundingBox.min.x + widthPad;
-        camera.bottom = boundingBox.min.z - heightPad;
-        camera.top = boundingBox.max.z + heightPad;
-        this.updateMatrixWorld();
-        camera.updateProjectionMatrix();
-        this.shadow.updateMatrices(this);
-        this.floor.scale.set(size.x + 2 * widthPad, size.z + 2 * heightPad, 1);
-        this.needsUpdate = true;
     }
-    setIntensity(intensity) {
-        this.shadowMaterial.opacity = intensity;
-        if (intensity > 0) {
-            this.visible = true;
-            this.floor.visible = true;
+    setShadowSoftness(softness) {
+        const shadow = this[$shadow];
+        if (shadow != null) {
+            shadow.setSoftness(softness);
+        }
+    }
+    setShadowRotation(radiansY) {
+        const shadow = this[$shadow];
+        if (shadow != null) {
+            shadow.setRotation(radiansY);
+        }
+    }
+    updateShadow() {
+        const shadow = this[$shadow];
+        if (shadow == null) {
+            return false;
         }
         else {
-            this.visible = false;
-            this.floor.visible = false;
+            const { needsUpdate } = shadow;
+            shadow.needsUpdate = false;
+            return needsUpdate;
         }
     }
-    getIntensity() {
-        return this.shadowMaterial.opacity;
+    addHotspot(hotspot) {
+        this.add(hotspot);
     }
-    setRotation(radiansY) {
-        this.shadow.camera.up.set(Math.sin(radiansY), 0, Math.cos(radiansY));
-        this.shadow.updateMatrices(this);
+    removeHotspot(hotspot) {
+        this.remove(hotspot);
+    }
+    forHotspots(func) {
+        const { children } = this;
+        for (let i = 0, l = children.length; i < l; i++) {
+            const hotspot = children[i];
+            if (hotspot instanceof Hotspot) {
+                func(hotspot);
+            }
+        }
+    }
+    updateHotspots(viewerPosition) {
+        this.forHotspots((hotspot) => {
+            view.copy(viewerPosition);
+            target.setFromMatrixPosition(hotspot.matrixWorld);
+            view.sub(target);
+            normalWorld.copy(hotspot.normal).transformDirection(this.matrixWorld);
+            if (view.dot(normalWorld) < 0) {
+                hotspot.hide();
+            }
+            else {
+                hotspot.show();
+            }
+        });
+    }
+    orientHotspots(radians) {
+        this.forHotspots((hotspot) => {
+            hotspot.orient(radians);
+        });
+    }
+    setHotspotsVisibility(visible) {
+        this.forHotspots((hotspot) => {
+            hotspot.visible = visible;
+        });
     }
 }
+_a$8 = $shadow, _b$6 = $currentGLTF, _c$2 = $loader$1;
 
 var _a$9;
 const DEFAULT_TAN_FOV$1 = Math.tan((DEFAULT_FOV_DEG / 2) * Math.PI / 180);
-const view = new Vector3();
-const target = new Vector3();
-const normalWorld = new Vector3();
 const pixelPosition = new Vector2();
 const raycaster = new Raycaster();
 const $paused = Symbol('paused');
@@ -58533,7 +58609,6 @@ class ModelScene extends Scene {
         super();
         this[_a$9] = false;
         this.aspect = 1;
-        this.shadow = null;
         this.shadowIntensity = 0;
         this.shadowSoftness = 1;
         this.width = 1;
@@ -58550,11 +58625,7 @@ class ModelScene extends Scene {
         this.camera = new PerspectiveCamera(45, 1, 0.1, 100);
         this.camera.name = 'MainCamera';
         this.activeCamera = this.camera;
-        this.pivot = new Object3D();
-        this.pivot.name = 'Pivot';
-        this.pivotCenter = new Vector3;
-        this.add(this.pivot);
-        this.pivot.add(this.model);
+        this.add(this.model);
         this.setSize(width, height);
         this.model.addEventListener('model-load', (event) => this.onModelLoad(event));
     }
@@ -58612,47 +58683,42 @@ class ModelScene extends Scene {
     setCamera(camera) {
         this.activeCamera = camera;
     }
-    setPivotRotation(radiansY) {
-        this.pivot.rotation.y = radiansY;
-        this.pivot.position.x = -this.pivotCenter.x;
-        this.pivot.position.z = -this.pivotCenter.z;
-        this.pivot.position.applyAxisAngle(this.pivot.up, radiansY);
-        this.pivot.position.x += this.pivotCenter.x;
-        this.pivot.position.z += this.pivotCenter.z;
-        if (this.shadow != null) {
-            this.shadow.setRotation(radiansY);
-        }
-    }
-    getPivotRotation() {
-        return this.pivot.rotation.y;
-    }
     onModelLoad(event) {
         this.frameModel();
         this.setShadowIntensity(this.shadowIntensity);
-        if (this.shadow != null) {
-            this.shadow.setModel(this.model, this.shadowSoftness);
-        }
-        this.element[$needsRender]();
+        this.isDirty = true;
         this.dispatchEvent({ type: 'model-load', url: event.url });
+    }
+    setTarget(modelX, modelY, modelZ) {
+        this.model.position.set(-modelX, -modelY, -modelZ);
+        this.isDirty = true;
+    }
+    setARTarget() {
+        const { min, max } = this.model.boundingBox;
+        this.model.position.set(-(min.x + max.x) / 2, -min.y, -max.z);
+    }
+    pointTowards(worldX, worldZ) {
+        const { x, z } = this.position;
+        this.yaw = Math.atan2(worldX - x, worldZ - z);
+    }
+    set yaw(radiansY) {
+        this.rotation.y = radiansY;
+        this.model.setShadowRotation(radiansY);
+        this.isDirty = true;
+    }
+    get yaw() {
+        return this.rotation.y;
     }
     setShadowIntensity(shadowIntensity) {
         shadowIntensity = Math.max(shadowIntensity, 0);
         this.shadowIntensity = shadowIntensity;
         if (this.model.hasModel()) {
-            if (this.shadow == null && shadowIntensity > 0) {
-                this.shadow = new Shadow(this.model, this.pivot, this.shadowSoftness);
-                this.pivot.add(this.shadow);
-            }
-            if (this.shadow != null) {
-                this.shadow.setIntensity(shadowIntensity);
-            }
+            this.model.setShadowIntensity(shadowIntensity, this.shadowSoftness);
         }
     }
     setShadowSoftness(softness) {
         this.shadowSoftness = softness;
-        if (this.shadow != null) {
-            this.shadow.setSoftness(softness);
-        }
+        this.model.setShadowSoftness(softness);
     }
     positionAndNormalFromPoint(pixelX, pixelY) {
         pixelPosition.set(pixelX / this.width, pixelY / this.height)
@@ -58668,51 +58734,11 @@ class ModelScene extends Scene {
         if (hit.face == null) {
             return null;
         }
-        const worldToPivot = new Matrix4().getInverse(this.pivot.matrixWorld);
+        const worldToPivot = new Matrix4().getInverse(this.model.matrixWorld);
         const position = toVector3D(hit.point.applyMatrix4(worldToPivot));
         const normal = toVector3D(hit.face.normal.transformDirection(hit.object.matrixWorld)
             .transformDirection(worldToPivot));
         return { position: position, normal: normal };
-    }
-    addHotspot(hotspot) {
-        this.pivot.add(hotspot);
-    }
-    removeHotspot(hotspot) {
-        this.pivot.remove(hotspot);
-    }
-    forHotspots(func) {
-        const { children } = this.pivot;
-        for (let i = 0, l = children.length; i < l; i++) {
-            const hotspot = children[i];
-            if (hotspot instanceof Hotspot) {
-                func(hotspot);
-            }
-        }
-    }
-    updateHotspots() {
-        this.forHotspots((hotspot) => {
-            view.copy(this.activeCamera.position);
-            target.setFromMatrixPosition(hotspot.matrixWorld);
-            view.sub(target);
-            normalWorld.copy(hotspot.normal)
-                .transformDirection(this.pivot.matrixWorld);
-            if (view.dot(normalWorld) < 0) {
-                hotspot.hide();
-            }
-            else {
-                hotspot.show();
-            }
-        });
-    }
-    orientHotspots(radians) {
-        this.forHotspots((hotspot) => {
-            hotspot.orient(radians);
-        });
-    }
-    setHotspotsVisibility(visible) {
-        this.forHotspots((hotspot) => {
-            hotspot.visible = visible;
-        });
     }
 }
 _a$9 = $paused;
@@ -58799,7 +58825,7 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-var _a$b, _b$8, _c$2, _d$2, _e$2, _f$1, _g$1, _h$1, _j$1, _k$1, _l;
+var _a$b, _b$8, _c$3, _d$2, _e$2, _f$1, _g$1, _h$1, _j$1, _k$1, _l;
 const CLEAR_MODEL_TIMEOUT_MS = 1000;
 const FALLBACK_SIZE_UPDATE_THRESHOLD_MS = 50;
 const ANNOUNCE_MODEL_VISIBILITY_DEBOUNCE_THRESHOLD = 0;
@@ -58855,7 +58881,7 @@ class ModelViewerElementBase extends UpdatingElement {
         this.src = null;
         this[_a$b] = false;
         this[_b$8] = false;
-        this[_c$2] = 0;
+        this[_c$3] = 0;
         this[_d$2] = resolveDpr();
         this[_e$2] = null;
         this[_f$1] = debounce(() => {
@@ -58964,7 +58990,7 @@ class ModelViewerElementBase extends UpdatingElement {
     get loaded() {
         return this[$getLoaded]();
     }
-    get [(_a$b = $isElementInViewport, _b$8 = $loaded, _c$2 = $loadedTime, _d$2 = $lastDpr, _e$2 = $clearModelTimeout, _f$1 = $fallbackResizeHandler, _g$1 = $announceModelVisibility, _h$1 = $resizeObserver, _j$1 = $intersectionObserver, _k$1 = $progressTracker, _l = $contextLostHandler, $renderer)]() {
+    get [(_a$b = $isElementInViewport, _b$8 = $loaded, _c$3 = $loadedTime, _d$2 = $lastDpr, _e$2 = $clearModelTimeout, _f$1 = $fallbackResizeHandler, _g$1 = $announceModelVisibility, _h$1 = $resizeObserver, _j$1 = $intersectionObserver, _k$1 = $progressTracker, _l = $contextLostHandler, $renderer)]() {
         return Renderer.singleton;
     }
     get modelIsVisible() {
@@ -59339,9 +59365,10 @@ const AnnotationMixin = (ModelViewerElement) => {
         [(_a = $annotationRenderer, _b = $hotspotMap, _c = $mutationCallback, _d = $observer, $tick$1)](time, delta) {
             super[$tick$1](time, delta);
             const scene = this[$scene];
+            const { activeCamera } = scene;
             if (scene.isDirty) {
-                scene.updateHotspots();
-                this[$annotationRenderer].render(scene, scene.activeCamera);
+                scene.model.updateHotspots(activeCamera.position);
+                this[$annotationRenderer].render(scene, activeCamera);
             }
         }
         [$onResize](e) {
@@ -59364,7 +59391,7 @@ const AnnotationMixin = (ModelViewerElement) => {
                     normal: node.dataset.normal,
                 });
                 this[$hotspotMap].set(node.slot, hotspot);
-                this[$scene].addHotspot(hotspot);
+                this[$scene].model.addHotspot(hotspot);
             }
         }
         [$removeHotspot](node) {
@@ -59376,7 +59403,7 @@ const AnnotationMixin = (ModelViewerElement) => {
                 return;
             }
             if (hotspot.decrement()) {
-                this[$scene].removeHotspot(hotspot);
+                this[$scene].model.removeHotspot(hotspot);
                 this[$hotspotMap].delete(node.slot);
                 hotspot.dispose();
             }
@@ -59658,7 +59685,7 @@ configuration or device capabilities');
     return ARModelViewerElement;
 };
 
-var _a$c, _b$9, _c$3;
+var _a$c, _b$9, _c$4;
 const $evaluate = Symbol('evaluate');
 const $lastValue = Symbol('lastValue');
 class Evaluator {
@@ -59780,7 +59807,7 @@ const $evaluator = Symbol('evalutor');
 class CalcEvaluator extends Evaluator {
     constructor(calcFunction, basis = ZERO) {
         super();
-        this[_c$3] = null;
+        this[_c$4] = null;
         if (calcFunction.arguments.length !== 1) {
             return;
         }
@@ -59818,7 +59845,7 @@ class CalcEvaluator extends Evaluator {
     get isConstant() {
         return this[$evaluator] == null || Evaluator.isConstant(this[$evaluator]);
     }
-    [(_c$3 = $evaluator, $evaluate)]() {
+    [(_c$4 = $evaluator, $evaluate)]() {
         return this[$evaluator] != null ? Evaluator.evaluate(this[$evaluator]) :
             ZERO;
     }
@@ -59901,7 +59928,7 @@ class StyleEvaluator extends Evaluator {
     }
 }
 
-var _a$d, _b$a, _c$4, _d$3;
+var _a$d, _b$a, _c$5, _d$3;
 const $instances = Symbol('instances');
 const $activateListener = Symbol('activateListener');
 const $deactivateListener = Symbol('deactivateListener');
@@ -59949,7 +59976,7 @@ const $onScroll = Symbol('onScroll');
 class StyleEffector {
     constructor(callback) {
         this[_b$a] = {};
-        this[_c$4] = new ASTWalker(['function']);
+        this[_c$5] = new ASTWalker(['function']);
         this[_d$3] = () => this[$onScroll]();
         this[$computeStyleCallback] = callback;
     }
@@ -59989,7 +60016,7 @@ class StyleEffector {
             observer.disconnect();
         }
     }
-    [(_b$a = $dependencies, _c$4 = $astWalker, _d$3 = $scrollHandler, $onScroll)]() {
+    [(_b$a = $dependencies, _c$5 = $astWalker, _d$3 = $scrollHandler, $onScroll)]() {
         this[$computeStyleCallback]({ relatedState: 'window-scroll' });
     }
 }
@@ -60061,7 +60088,45 @@ const style = (config) => {
     };
 };
 
-var _a$e, _b$b, _c$5, _d$4, _e$3, _f$2, _g$2, _h$2, _j$2, _k$2, _l$1, _m, _o, _p, _q, _r, _s;
+var _a$e;
+const DECAY_MILLISECONDS = 50;
+const NATURAL_FREQUENCY = 1 / DECAY_MILLISECONDS;
+const NIL_SPEED = 0.0002 * NATURAL_FREQUENCY;
+const $velocity = Symbol('velocity');
+class Damper {
+    constructor() {
+        this[_a$e] = 0;
+    }
+    update(x, xGoal, timeStepMilliseconds, xNormalization) {
+        if (x == null) {
+            return xGoal;
+        }
+        if (x === xGoal && this[$velocity] === 0) {
+            return xGoal;
+        }
+        if (timeStepMilliseconds < 0) {
+            return x;
+        }
+        const deltaX = (x - xGoal);
+        const intermediateVelocity = this[$velocity] + NATURAL_FREQUENCY * deltaX;
+        const intermediateX = deltaX + timeStepMilliseconds * intermediateVelocity;
+        const decay = Math.exp(-NATURAL_FREQUENCY * timeStepMilliseconds);
+        const newVelocity = (intermediateVelocity - NATURAL_FREQUENCY * intermediateX) * decay;
+        const acceleration = -NATURAL_FREQUENCY * (newVelocity + intermediateVelocity * decay);
+        if (Math.abs(newVelocity) < NIL_SPEED * xNormalization &&
+            acceleration * deltaX >= 0) {
+            this[$velocity] = 0;
+            return xGoal;
+        }
+        else {
+            this[$velocity] = newVelocity;
+            return xGoal + intermediateX * decay;
+        }
+    }
+}
+_a$e = $velocity;
+
+var _a$f, _b$b, _c$6, _d$4, _e$3, _f$2, _g$2, _h$2, _j$2, _k$2, _l$1;
 const DEFAULT_OPTIONS = Object.freeze({
     minimumRadius: 0,
     maximumRadius: Infinity,
@@ -60074,7 +60139,6 @@ const DEFAULT_OPTIONS = Object.freeze({
     eventHandlingBehavior: 'prevent-all',
     interactionPolicy: 'always-allow'
 });
-const $velocity = Symbol('velocity');
 const $spherical = Symbol('spherical');
 const $goalSpherical = Symbol('goalSpherical');
 const $thetaDamper = Symbol('thetaDamper');
@@ -60083,11 +60147,6 @@ const $radiusDamper = Symbol('radiusDamper');
 const $logFov = Symbol('fov');
 const $goalLogFov = Symbol('goalLogFov');
 const $fovDamper = Symbol('fovDamper');
-const $target = Symbol('target');
-const $goalTarget = Symbol('goalTarget');
-const $targetDamperX = Symbol('targetDamperX');
-const $targetDamperY = Symbol('targetDamperY');
-const $targetDamperZ = Symbol('targetDamperZ');
 const $options = Symbol('options');
 const $touchMode = Symbol('touchMode');
 const $canInteract = Symbol('canInteract');
@@ -60121,9 +60180,6 @@ const $handleKey = Symbol('handleKey');
 const TOUCH_EVENT_RE = /^touch(start|end|move)$/;
 const KEYBOARD_ORBIT_INCREMENT = Math.PI / 8;
 const ZOOM_SENSITIVITY = 0.04;
-const DECAY_MILLISECONDS = 50;
-const NATURAL_FREQUENCY = 1 / DECAY_MILLISECONDS;
-const NIL_SPEED = 0.0002 * NATURAL_FREQUENCY;
 const KeyCode = {
     PAGE_UP: 33,
     PAGE_DOWN: 34,
@@ -60136,59 +60192,22 @@ const ChangeSource = {
     USER_INTERACTION: 'user-interaction',
     NONE: 'none'
 };
-class Damper {
-    constructor() {
-        this[_a$e] = 0;
-    }
-    update(x, xGoal, timeStepMilliseconds, xNormalization) {
-        if (x == null) {
-            return xGoal;
-        }
-        if (x === xGoal && this[$velocity] === 0) {
-            return xGoal;
-        }
-        if (timeStepMilliseconds < 0) {
-            return x;
-        }
-        const deltaX = (x - xGoal);
-        const intermediateVelocity = this[$velocity] + NATURAL_FREQUENCY * deltaX;
-        const intermediateX = deltaX + timeStepMilliseconds * intermediateVelocity;
-        const decay = Math.exp(-NATURAL_FREQUENCY * timeStepMilliseconds);
-        const newVelocity = (intermediateVelocity - NATURAL_FREQUENCY * intermediateX) * decay;
-        const acceleration = -NATURAL_FREQUENCY * (newVelocity + intermediateVelocity * decay);
-        if (Math.abs(newVelocity) < NIL_SPEED * xNormalization &&
-            acceleration * deltaX >= 0) {
-            this[$velocity] = 0;
-            return xGoal;
-        }
-        else {
-            this[$velocity] = newVelocity;
-            return xGoal + intermediateX * decay;
-        }
-    }
-}
-_a$e = $velocity;
 class SmoothControls extends EventDispatcher {
     constructor(camera, element) {
         super();
         this.camera = camera;
         this.element = element;
+        this[_a$f] = false;
         this[_b$b] = false;
-        this[_c$5] = false;
-        this[_d$4] = false;
+        this[_c$6] = false;
+        this[_d$4] = new Spherical();
         this[_e$3] = new Spherical();
-        this[_f$2] = new Spherical();
+        this[_f$2] = new Damper();
         this[_g$2] = new Damper();
         this[_h$2] = new Damper();
         this[_j$2] = new Damper();
-        this[_k$2] = new Damper();
-        this[_l$1] = new Vector3();
-        this[_m] = new Vector3();
-        this[_o] = new Damper();
-        this[_p] = new Damper();
-        this[_q] = new Damper();
-        this[_r] = false;
-        this[_s] = {
+        this[_k$2] = false;
+        this[_l$1] = {
             clientX: 0,
             clientY: 0,
         };
@@ -60251,7 +60270,6 @@ class SmoothControls extends EventDispatcher {
         Object.assign(this[$options], options);
         this.setOrbit();
         this.setFieldOfView(Math.exp(this[$goalLogFov]));
-        this.jumpToGoal();
     }
     updateNearFar(nearPlane, farPlane) {
         this.camera.near = Math.max(nearPlane, farPlane / 1000);
@@ -60292,12 +60310,6 @@ class SmoothControls extends EventDispatcher {
         fov = clamp(fov, minimumFieldOfView, maximumFieldOfView);
         this[$goalLogFov] = Math.log(fov);
     }
-    setTarget(x, y, z) {
-        this[$goalTarget].set(x, y, z);
-    }
-    getTarget() {
-        return this[$target].clone();
-    }
     adjustOrbit(deltaTheta, deltaPhi, deltaZoom) {
         const { theta, phi, radius } = this[$goalSpherical];
         const { minimumRadius, maximumRadius, minimumFieldOfView, maximumFieldOfView } = this[$options];
@@ -60311,7 +60323,9 @@ class SmoothControls extends EventDispatcher {
                 (Math.log(maximumFieldOfView) - this[$goalLogFov]) :
                 (radius - minimumRadius) /
                     (this[$goalLogFov] - Math.log(minimumFieldOfView));
-        const goalRadius = radius + (isFinite(deltaRatio) ? deltaZoom * deltaRatio : 0);
+        const goalRadius = radius +
+            deltaZoom *
+                Math.min(isFinite(deltaRatio) ? deltaRatio : Infinity, maximumRadius - minimumRadius);
         let handled = this.setOrbit(goalTheta, goalPhi, goalRadius);
         if (deltaZoom !== 0) {
             const goalLogFov = this[$goalLogFov] + deltaZoom;
@@ -60321,7 +60335,7 @@ class SmoothControls extends EventDispatcher {
         return handled;
     }
     jumpToGoal() {
-        this.update(0, 100 * DECAY_MILLISECONDS);
+        this.update(0, 10000);
     }
     update(_time, delta) {
         if (this[$isStationary]()) {
@@ -60338,22 +60352,17 @@ class SmoothControls extends EventDispatcher {
         this[$spherical].phi = this[$phiDamper].update(this[$spherical].phi, this[$goalSpherical].phi, delta, maximumPolarAngle);
         this[$spherical].radius = this[$radiusDamper].update(this[$spherical].radius, this[$goalSpherical].radius, delta, maximumRadius);
         this[$logFov] = this[$fovDamper].update(this[$logFov], this[$goalLogFov], delta, maximumFieldOfView);
-        this[$target].x = this[$targetDamperX].update(this[$target].x, this[$goalTarget].x, delta, maximumRadius);
-        this[$target].y = this[$targetDamperY].update(this[$target].y, this[$goalTarget].y, delta, maximumRadius);
-        this[$target].z = this[$targetDamperZ].update(this[$target].z, this[$goalTarget].z, delta, maximumRadius);
         this[$moveCamera]();
     }
-    [(_b$b = $interactionEnabled, _c$5 = $isUserChange, _d$4 = $isUserPointing, _e$3 = $spherical, _f$2 = $goalSpherical, _g$2 = $thetaDamper, _h$2 = $phiDamper, _j$2 = $radiusDamper, _k$2 = $fovDamper, _l$1 = $target, _m = $goalTarget, _o = $targetDamperX, _p = $targetDamperY, _q = $targetDamperZ, _r = $pointerIsDown, _s = $lastPointerPosition, $isStationary)]() {
+    [(_a$f = $interactionEnabled, _b$b = $isUserChange, _c$6 = $isUserPointing, _d$4 = $spherical, _e$3 = $goalSpherical, _f$2 = $thetaDamper, _g$2 = $phiDamper, _h$2 = $radiusDamper, _j$2 = $fovDamper, _k$2 = $pointerIsDown, _l$1 = $lastPointerPosition, $isStationary)]() {
         return this[$goalSpherical].theta === this[$spherical].theta &&
             this[$goalSpherical].phi === this[$spherical].phi &&
             this[$goalSpherical].radius === this[$spherical].radius &&
-            this[$goalLogFov] === this[$logFov] &&
-            this[$goalTarget].equals(this[$target]);
+            this[$goalLogFov] === this[$logFov];
     }
     [$moveCamera]() {
         this[$spherical].makeSafe();
         this.camera.position.setFromSpherical(this[$spherical]);
-        this.camera.position.add(this[$target]);
         this.camera.setRotationFromEuler(new Euler(this[$spherical].phi - Math.PI / 2, this[$spherical].theta, 0, 'YXZ'));
         if (this.camera.fov !== Math.exp(this[$logFov])) {
             this.camera.fov = Math.exp(this[$logFov]);
@@ -60688,6 +60697,11 @@ const $focusedTime = Symbol('focusedTime');
 const $zoomAdjustedFieldOfView = Symbol('zoomAdjustedFieldOfView');
 const $lastSpherical = Symbol('lastSpherical');
 const $jumpCamera = Symbol('jumpCamera');
+const $target = Symbol('target');
+const $goalTarget = Symbol('goalTarget');
+const $targetDamperX = Symbol('targetDamperX');
+const $targetDamperY = Symbol('targetDamperY');
+const $targetDamperZ = Symbol('targetDamperZ');
 const $syncCameraOrbit = Symbol('syncCameraOrbit');
 const $syncFieldOfView = Symbol('syncFieldOfView');
 const $syncCameraTarget = Symbol('syncCameraTarget');
@@ -60696,7 +60710,7 @@ const $syncMaxCameraOrbit = Symbol('syncMaxCameraOrbit');
 const $syncMinFieldOfView = Symbol('syncMinFieldOfView');
 const $syncMaxFieldOfView = Symbol('syncMaxFieldOfView');
 const ControlsMixin = (ModelViewerElement) => {
-    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r;
+    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w;
     class ControlsModelViewerElement extends ModelViewerElement {
         constructor() {
             super(...arguments);
@@ -60724,17 +60738,22 @@ const ControlsMixin = (ModelViewerElement) => {
             this[_k] = 0;
             this[_l] = new Spherical();
             this[_m] = false;
-            this[_o] = (event) => this[$onChange](event);
-            this[_p] = (event) => this[$onPointerChange](event);
-            this[_q] = () => this[$onFocus]();
-            this[_r] = () => this[$onBlur]();
+            this[_o] = new Vector3();
+            this[_p] = new Vector3();
+            this[_q] = new Damper();
+            this[_r] = new Damper();
+            this[_s] = new Damper();
+            this[_t] = (event) => this[$onChange](event);
+            this[_u] = (event) => this[$onPointerChange](event);
+            this[_v] = () => this[$onFocus]();
+            this[_w] = () => this[$onBlur]();
         }
         getCameraOrbit() {
             const { theta, phi, radius } = this[$lastSpherical];
             return { theta, phi, radius };
         }
         getCameraTarget() {
-            return this[$controls].getTarget();
+            return this[$target];
         }
         getFieldOfView() {
             return this[$controls].getFieldOfView();
@@ -60805,11 +60824,14 @@ const ControlsMixin = (ModelViewerElement) => {
             if (this[$jumpCamera] === true) {
                 Promise.resolve().then(() => {
                     this[$controls].jumpToGoal();
+                    const goal = this[$goalTarget];
+                    this[$target].copy(goal);
+                    this[$scene].setTarget(goal.x, goal.y, goal.z);
                     this[$jumpCamera] = false;
                 });
             }
         }
-        [(_a = $promptElement, _b = $promptAnimatedContainer, _c = $focusedTime, _d = $lastPromptOffset, _e = $promptElementVisibleTime, _f = $userPromptedOnce, _g = $waitingToPromptUser, _h = $shouldPromptUserToInteract, _j = $controls, _k = $zoomAdjustedFieldOfView, _l = $lastSpherical, _m = $jumpCamera, _o = $changeHandler, _p = $pointerChangeHandler, _q = $focusHandler, _r = $blurHandler, $syncFieldOfView)](style$$1) {
+        [(_a = $promptElement, _b = $promptAnimatedContainer, _c = $focusedTime, _d = $lastPromptOffset, _e = $promptElementVisibleTime, _f = $userPromptedOnce, _g = $waitingToPromptUser, _h = $shouldPromptUserToInteract, _j = $controls, _k = $zoomAdjustedFieldOfView, _l = $lastSpherical, _m = $jumpCamera, _o = $target, _p = $goalTarget, _q = $targetDamperX, _r = $targetDamperY, _s = $targetDamperZ, _t = $changeHandler, _u = $pointerChangeHandler, _v = $focusHandler, _w = $blurHandler, $syncFieldOfView)](style$$1) {
             this[$controls].setFieldOfView(style$$1[0] * 180 / Math.PI);
         }
         [$syncCameraOrbit](style$$1) {
@@ -60822,6 +60844,7 @@ const ControlsMixin = (ModelViewerElement) => {
                 minimumPolarAngle: style$$1[1],
                 minimumRadius: style$$1[2]
             });
+            this.jumpCameraToGoal();
         }
         [$syncMaxCameraOrbit](style$$1) {
             this[$controls].applyOptions({
@@ -60829,22 +60852,25 @@ const ControlsMixin = (ModelViewerElement) => {
                 maximumPolarAngle: style$$1[1],
                 maximumRadius: style$$1[2]
             });
+            this.jumpCameraToGoal();
         }
         [$syncMinFieldOfView](style$$1) {
             this[$controls].applyOptions({ minimumFieldOfView: style$$1[0] * 180 / Math.PI });
+            this.jumpCameraToGoal();
         }
         [$syncMaxFieldOfView](style$$1) {
             this[$controls].applyOptions({ maximumFieldOfView: style$$1[0] * 180 / Math.PI });
+            this.jumpCameraToGoal();
         }
         [$syncCameraTarget](style$$1) {
             const [x, y, z] = style$$1;
-            const scene = this[$scene];
-            this[$controls].setTarget(x, y, z);
-            scene.pivotCenter.set(x, y, z);
-            scene.setPivotRotation(scene.getPivotRotation());
+            this[$goalTarget].set(x, y, z);
         }
         [$tick$1](time, delta) {
             super[$tick$1](time, delta);
+            if (this[$renderer].isPresenting) {
+                return;
+            }
             const now = performance.now();
             if (this[$waitingToPromptUser] &&
                 this.interactionPrompt !== InteractionPromptStrategy.NONE) {
@@ -60876,12 +60902,17 @@ const ControlsMixin = (ModelViewerElement) => {
                 this[$lastPromptOffset] = offset;
                 this[$needsRender]();
             }
-            this[$controls].update(time, delta);
-            const target = this[$controls].getTarget();
-            if (!this[$scene].pivotCenter.equals(target)) {
-                this[$scene].pivotCenter.copy(target);
-                this[$scene].setPivotRotation(this[$scene].getPivotRotation());
+            const goal = this[$goalTarget];
+            if (!goal.equals(this[$target])) {
+                const radius = this[$scene].model.idealCameraDistance;
+                let { x, y, z } = this[$target];
+                x = this[$targetDamperX].update(x, goal.x, delta, radius);
+                y = this[$targetDamperY].update(y, goal.y, delta, radius);
+                z = this[$targetDamperZ].update(z, goal.z, delta, radius);
+                this[$target].set(x, y, z);
+                this[$scene].setTarget(x, y, z);
             }
+            this[$controls].update(time, delta);
         }
         [$deferInteractionPrompt]() {
             this[$waitingToPromptUser] = false;
@@ -60917,6 +60948,9 @@ const ControlsMixin = (ModelViewerElement) => {
             }
         }
         [$onResize](event) {
+            if (this[$renderer].isPresenting) {
+                return;
+            }
             const controls = this[$controls];
             const oldFramedFieldOfView = this[$scene].framedFieldOfView;
             super[$onResize](event);
@@ -61177,7 +61211,7 @@ const EnvironmentMixin = (ModelViewerElement) => {
     return EnvironmentModelViewerElement;
 };
 
-var _a$f, _b$c;
+var _a$g, _b$c;
 const INITIAL_STATUS_ANNOUNCEMENT = 'This page includes one or more 3D models that are loading';
 const FINISHED_LOADING_ANNOUNCEMENT = 'All 3D models in the page have loaded';
 const UPDATE_STATUS_DEBOUNCE_MS = 100;
@@ -61186,7 +61220,7 @@ const $updateStatus = Symbol('updateStatus');
 class LoadingStatusAnnouncer extends EventDispatcher {
     constructor() {
         super();
-        this[_a$f] = null;
+        this[_a$g] = null;
         this.registeredInstanceStatuses = new Map();
         this.loadingPromises = [];
         this.statusElement = document.createElement('p');
@@ -61274,7 +61308,7 @@ class LoadingStatusAnnouncer extends EventDispatcher {
         this.dispatchEvent({ type: 'finished-loading-announced' });
     }
 }
-_a$f = $modelViewerStatusInstance, _b$c = $updateStatus;
+_a$g = $modelViewerStatusInstance, _b$c = $updateStatus;
 
 var __decorate$5 = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -62469,7 +62503,7 @@ const generateInitializer = () => initialize.toString();
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-var _a$g, _b$d;
+var _a$h, _b$d;
 const $modelGraft = Symbol('modelGraft');
 const $port = Symbol('port');
 const $messageEventHandler = Symbol('messageEventHandler');
@@ -62482,7 +62516,7 @@ const $onMessageEvent = Symbol('onMessageEvent');
  */
 class ModelGraftManipulator {
     constructor(modelGraft, port) {
-        this[_a$g] = (event) => this[$onMessageEvent](event);
+        this[_a$h] = (event) => this[$onMessageEvent](event);
         this[$modelGraft] = modelGraft;
         this[$port] = port;
         this[$port].addEventListener('message', this[$messageEventHandler]);
@@ -62496,7 +62530,7 @@ class ModelGraftManipulator {
         this[$port].removeEventListener('message', this[$messageEventHandler]);
         this[$port].close();
     }
-    [(_a$g = $messageEventHandler, $onMessageEvent)](event) {
+    [(_a$h = $messageEventHandler, $onMessageEvent)](event) {
         const { data } = event;
         if (data && data.type) {
             if (data.type === ThreeDOMMessageType.MUTATE) {
@@ -62672,7 +62706,7 @@ const getLocallyUniqueId = (() => {
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-var _a$h;
+var _a$i;
 const $relatedObject = Symbol('relatedObject');
 const $graft = Symbol('graft');
 const $id = Symbol('id');
@@ -62684,7 +62718,7 @@ const $id = Symbol('id');
  */
 class ThreeDOMElement {
     constructor(graft, relatedObject) {
-        this[_a$h] = getLocallyUniqueId();
+        this[_a$i] = getLocallyUniqueId();
         this[$relatedObject] = relatedObject;
         this[$graft] = graft;
         graft.adopt(this);
@@ -62737,7 +62771,7 @@ class ThreeDOMElement {
         return serialized;
     }
 }
-_a$h = $id;
+_a$i = $id;
 
 /* @license
  * Copyright 2020 Google LLC. All Rights Reserved.
@@ -62838,7 +62872,7 @@ class Material$1 extends ThreeDOMElement {
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-var _a$i, _b$e;
+var _a$j, _b$e;
 const $modelUri = Symbol('modelUri');
 const $materials = Symbol('materials');
 /**
@@ -62849,7 +62883,7 @@ const $materials = Symbol('materials');
 class Model$1 extends ThreeDOMElement {
     constructor(graft, modelUri, gltf) {
         super(graft, gltf);
-        this[_a$i] = '';
+        this[_a$j] = '';
         this[_b$e] = [];
         this[$modelUri] = modelUri;
         const visitedMaterials = new Set();
@@ -62889,7 +62923,7 @@ class Model$1 extends ThreeDOMElement {
         return serialized;
     }
 }
-_a$i = $modelUri, _b$e = $materials;
+_a$j = $modelUri, _b$e = $materials;
 
 /* @license
  * Copyright 2020 Google LLC. All Rights Reserved.
@@ -62905,7 +62939,7 @@ _a$i = $modelUri, _b$e = $materials;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-var _a$j;
+var _a$k;
 const $model = Symbol('model');
 const $elementsByInternalId = Symbol('elementsByInternalId');
 /**
@@ -62943,7 +62977,7 @@ const $elementsByInternalId = Symbol('elementsByInternalId');
 class ModelGraft extends EventTarget {
     constructor(modelUri, gltf) {
         super();
-        this[_a$j] = new Map();
+        this[_a$k] = new Map();
         this[$model] = new Model$1(this, modelUri, gltf);
     }
     get model() {
@@ -62970,7 +63004,7 @@ class ModelGraft extends EventTarget {
         }
     }
 }
-_a$j = $elementsByInternalId;
+_a$k = $elementsByInternalId;
 
 var __decorate$7 = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -63168,9 +63202,8 @@ const StagingMixin = (ModelViewerElement) => {
             }
             const rotationDelta = Math.min(delta, time - this[$autoRotateStartTime] - this.autoRotateDelay);
             if (rotationDelta > 0) {
-                this[$scene].setPivotRotation(this[$scene].getPivotRotation() +
-                    ROTATION_SPEED * rotationDelta * 0.001);
-                this[$needsRender]();
+                this[$scene].yaw =
+                    this.turntableRotation + ROTATION_SPEED * rotationDelta * 0.001;
             }
         }
         [$onCameraChange](event) {
@@ -63182,11 +63215,10 @@ const StagingMixin = (ModelViewerElement) => {
             }
         }
         get turntableRotation() {
-            return this[$scene].getPivotRotation();
+            return this[$scene].yaw;
         }
         resetTurntableRotation() {
-            this[$scene].setPivotRotation(0);
-            this[$needsRender]();
+            this[$scene].yaw = 0;
         }
     }
     __decorate$8([

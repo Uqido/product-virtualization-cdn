@@ -45,20 +45,21 @@
 
             const animate = document.getElementById('animate');
             const cameraSwitch = document.getElementById('move_camera');
-            let canAnimate=true;
 
             const positions = ["-170deg 75deg 105%", "-80deg 75deg 105%", "95deg 75deg 105%"];
             let cameraIndex = 0;
 
+            let isOpen=true;
             animate.onclick = function () {
-                if(canAnimate) {
-                    canAnimate = false;
-                    modelViewer.currentTime = 0;
+                if(modelViewer.paused){
+                    if(isOpen){
+                        modelViewer.animationName="leva_close";
+                        isOpen=false;
+                    }else{
+                        modelViewer.animationName="leva_open";
+                        isOpen=true;
+                    }
                     modelViewer.play();
-                    self.setTimeout(() => {
-                        canAnimate = true;
-                        modelViewer.pause()
-                    }, 5000)
                 }
             };
 
