@@ -113,6 +113,7 @@ html {
     position: absolute;
     left: 40px;
     bottom: 40px;
+
 }
 
 .clickable {
@@ -120,6 +121,7 @@ html {
     user-select: none;
     text-align: center;
     width: 48px;
+    margin: auto;
     height: 48px;
     background-size: 48px 48px;
     cursor: pointer;

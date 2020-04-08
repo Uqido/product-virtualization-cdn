@@ -1,9 +1,11 @@
-const mviewer = document.getElementsByTagName("model-viewer")[0];
 
+if (typeof modelviewer === "undefined") {
+    window.modelviewer = document.getElementsByTagName("model-viewer")[0];
+}
 
-if (mviewer) {
-    mviewer.classList.add("no-default-loading");
-    mviewer.innerHTML += `<div class="iframe-loader hidden" id="loading-bar">
+if (modelviewer) {
+    modelviewer.classList.add("no-default-loading");
+    modelviewer.innerHTML += `<div class="iframe-loader hidden" id="loading-bar">
         Loading 0%
     <div style="width: 0%;"></div>
         </div>
@@ -54,14 +56,14 @@ if (mviewer) {
     const progress = document.getElementById('loading-bar');
 
 
-    mviewer.addEventListener("progress", function (event) {
+    modelviewer.addEventListener("progress", function (event) {
         const percent = parseInt(event.detail.totalProgress) * 100;
 
         progress.innerHTML = `Loading ${percent}%
                                 <div style="width: ${percent}%;"></div>
                                 `
     });
-    mviewer.addEventListener("load",function () {
+    modelviewer.addEventListener("load",function () {
         console.log("Model load");
         progress.classList.add("hidden");
     });

@@ -22,13 +22,29 @@
 
     <script src="https://unpkg.com/focus-visible/dist/focus-visible.js" defer></script>
 
+    <style>
+        .color-button {
+            width: 40px;
+            height: 40px;
+            margin: 5px;
+            background-color: white;
+            border-radius: 50%;
+            border: 4px solid #000000;
+        }
+
+        .color-button.selected {
+            border: 4px solid #717171;
+        }
+    </style>
+
 </head>
 
 <body class="fullscreen">
 
 <div style="display: flex; flex-direction: row;height: 100%;min-height: 100%;flex-wrap: wrap">
     <model-viewer id="model-viewer" class='model-viewer-w80' ar camera-controls src='models/Vallentuna.glb'
-                  ios-src='models/Vallentuna.usdz' alt='' min-field-of-view="20deg" field-of-view="35deg" max-field-of-view="60deg" camera-target="0m 0.4m 0m"
+                  ios-src='models/Vallentuna.usdz' alt='' min-field-of-view="20deg" field-of-view="35deg"
+                  max-field-of-view="60deg" camera-target="0m 0.4m 0m"
                   max-camera-orbit="auto 85.5deg 0" min-camera-orbit="auto 28.5deg 0" exposure="0.6"
                   shadow-intensity="2.5" shadow-softness="0.4"
                   quick-look-browsers="safari chrome">
@@ -37,13 +53,14 @@
         </div>
 
         <div class="viewer-bottom">
-            <div id="colorBlack" class="clickable" style="width:48px;height: 48px; background-color: black; border-radius: 50%;"></div>
-            <div id="colorWhite" class="clickable" style="width:48px;height: 48px; background-color: white; border-radius: 50%;"></div>
-            <div id="colorBeige" class="clickable" style="width:48px;height: 48px; background-color: beige; border-radius: 50%;"></div>
-            <div id="colorGrey" class="clickable" style="width:48px;height: 48px; background-color: grey; border-radius: 50%;"></div>
+            <div id="colorBlack" class="clickable color-button" style="background-color: black;"></div>
+            <div id="colorWhite" class="clickable color-button selected" style="background-color: white;"></div>
+            <div id="colorBeige" class="clickable color-button" style="background-color: beige;"></div>
+            <div id="colorGrey" class="clickable color-button" style="background-color: grey;"></div>
             <div id="move_camera" class="clickable" style="background-image: url(img/Move.png);"></div>
         </div>
         <script src="js/LoadingBar.js"></script>
+        <script src="js/ContentCustomizer.js"></script>
         <script>
             const modelViewer = document.getElementById('model-viewer');
 
@@ -57,70 +74,10 @@
                 modelViewer.cameraOrbit = positions[cameraIndex];
             };
 
-            let worker=null;
-
-            const colorBlack = document.getElementById('colorBlack');
-            const colorWhite = document.getElementById('colorWhite');
-            const colorBeige = document.getElementById('colorBeige');
-            const colorGrey = document.getElementById('colorGrey');
-
-            function colorToArray(color) {
-                return color.replace(/[^\d,]/g, '').split(',').map(value => value/255);
-            }
-
-
-            colorBlack.onclick=()=>{
-                if(worker==null) return;
-                let color = colorToArray('rgb(10,10,10)');
-                console.log(color)
-                worker.postMessage({type:"change-color",payload:color})
-            }
-            colorWhite.onclick=()=>{
-                if(worker==null) return;
-                let color = colorToArray('rgb(221,221,221)');
-                worker.postMessage({type:"change-color",payload:color})
-            }
-            colorBeige.onclick=()=>{
-                if(worker==null) return;
-                let color = colorToArray('rgb(209,178,125)');
-                worker.postMessage({type:"change-color",payload:color})
-            }
-            colorGrey.onclick=()=>{
-                if(worker==null) return;
-                let color = colorToArray('rgb(103,101,96)');
-                worker.postMessage({type:"change-color",payload:color})
-            }
-
-            modelViewer.addEventListener("worklet-created",(event)=>{
-                worker=event.detail.worklet;
-            })
-        </script>
-
-        <script type="experimental-scene-graph-worklet" allow="material-properties;messaging">
-
-            console.log('Hello from the scene graph worklet!');
-
-
-        let ColoredMat=null;
-
-        self.addEventListener('model-change', () => {
-            ColoredMat=model.materials.find(mat=> mat.name==="Vallentuna_Murum")?.pbrMetallicRoughness;
-        });
-
-        self.addEventListener('message', (event) => {
-            /*if(event.data.type==="toggle-visibility"){
-                if(ColoredMat.visible===true){
-                    console.log('Become invisible');
-                    ColoredMat.setVisible(false);
-                }else{
-                    console.log('Become visible');
-                    ColoredMat.setVisible(true);
-                }
-            }else */if(event.data.type==="change-color"){
-                console.log('Changing color to:', event.data.payload);
-                ColoredMat.setBaseColorFactor(event.data.payload);
-            }
-        });
+            initializeCustomizerOnMaterial("Vallentuna_Murum")
+            
+            assignColorToButton([{colorBlack: 'rgb(10,10,10)'}, {colorWhite: 'rgb(221,221,221)'},
+                {colorBeige: 'rgb(209,178,125)'}, {colorGrey: 'rgb(103,101,96)'}]);
 
         </script>
     </model-viewer>
