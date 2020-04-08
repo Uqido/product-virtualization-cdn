@@ -11,6 +11,9 @@ body{
     width: 100%;
 }
 
+html{
+    height: 100%;
+}
 .fullscreen-100{
     background: rgb(156, 156, 156);
     background: linear-gradient(360deg, rgba(156, 156, 156, 1) 0%, rgba(156, 156, 156, 1) 10%, rgba(244, 244, 244, 1) 100%);
