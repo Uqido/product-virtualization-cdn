@@ -602,15 +602,16 @@
 	</div>
 	
 	<script>
+		var scale = 1.05;
 		$("body").on('DOMSubtreeModified', '#modelContentRoot', function(){
 			var containerWidth = $('.360view-container').width();
-			$('.360view-container').css({minHeight: containerWidth * 1.1});
-			$('.360view-frame').css({minHeight: containerWidth * 1.1});
+			$('.360view-container').css({minHeight: containerWidth * scale});
+			$('.360view-frame').css({minHeight: containerWidth * scale});
 		});
 		$(window).resize(function() {
 			var containerWidth = $('.360view-container').width();
-			$('.360view-container').css({minHeight: containerWidth * 1.1});
-			$('.360view-frame').css({minHeight: containerWidth * 1.1});
+			$('.360view-container').css({minHeight: containerWidth * scale});
+			$('.360view-frame').css({minHeight: containerWidth * scale});
 		});
 	</script>
 	
