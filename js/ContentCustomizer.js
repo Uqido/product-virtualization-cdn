@@ -1,4 +1,6 @@
 
+document.addEventListener('DOMContentLoaded', ()=>initCallbacks(), false);
+
 if (typeof modelviewer === "undefined") {
     window.modelviewer = document.getElementsByTagName("model-viewer")[0];
 }
@@ -25,6 +27,12 @@ function colorToArray(color) {
 
 let NameToColor;
 
+function initCallbacks() {
+    for (let button of buttons) {
+        button.onclick = onClickCallback;
+    }
+}
+
 function onClickCallback(event) {
     if (worker === undefined) return;
     if (NameToColor === undefined) return;
@@ -49,18 +57,19 @@ function assignColorToButton(buttonNameAndColor) {
 }
 
 
-function initializeCustomizerOnMaterial(materialName) {
+function initializeCustomizerOnMaterials(materialsName) {
     if (modelviewer === undefined) return;
 
-    modelviewer.innerHTML +=`<script type="experimental-scene-graph-worklet" allow="material-properties;messaging">
+    modelviewer.innerHTML +=`<script type="experimental-scene-graph-worklet"  allow="material-properties;messaging">
 
         console.log('Hello from the scene graph worklet!');
 
-
-        let ColoredMat=null;
+        let materials=[]
     
         self.addEventListener('model-change', () => {
-            ColoredMat=model.materials.find(mat=> mat.name==="${materialName}")?.pbrMetallicRoughness;
+            for(let matName of [${materialsName.map(elem=> '"'+elem+'"')}]){
+                materials.push(model.materials.find(mat=> mat.name===matName));
+            }
         });
     
         self.addEventListener('message', (event) => {
@@ -74,12 +83,10 @@ function initializeCustomizerOnMaterial(materialName) {
                 }
             }else */if(event.data.type==="change-color"){
                 console.log('Changing color to:', event.data.payload);
-                ColoredMat.setBaseColorFactor(event.data.payload);
+                for(let mat of materials){
+                    mat.pbrMetallicRoughness.setBaseColorFactor(event.data.payload);
+                }
             }
         });
 </script>`
-
-    for (let button of buttons) {
-        button.onclick = onClickCallback;
-    }
 }

@@ -181,11 +181,15 @@ html{
         bottom: 16px;
     }
 
+    html{
+        height: auto;
+    }
+
     .fullscreen {
         height: auto;
     }
 
     .fullscreen-100{
-        height: 100%;
+        height: auto;
     }
 }
