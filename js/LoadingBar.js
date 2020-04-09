@@ -3,6 +3,34 @@ if (typeof modelviewer === "undefined") {
     window.modelviewer = document.getElementsByTagName("model-viewer")[0];
 }
 
+document.addEventListener('DOMContentLoaded', ()=>init(), false);
+
+let loadingWasDismissed=false;
+
+function init() {
+    if(loadingWasDismissed) return;
+
+    const progress = document.getElementById('loading-bar');
+
+
+    modelviewer.addEventListener("progress", function (event) {
+        const percent = parseInt(event.detail.totalProgress) * 100;
+
+        progress.innerHTML = `Loading ${percent}%
+                                <div style="width: ${percent}%;"></div>
+                                `
+    });
+    modelviewer.addEventListener("load",function () {
+        console.log("Model load");
+        progress.classList.add("hidden");
+        loadingWasDismissed=true
+    });
+
+    setTimeout(()=>{
+        progress.classList.remove("hidden");
+    },100);
+}
+
 if (modelviewer) {
     modelviewer.classList.add("no-default-loading");
     modelviewer.innerHTML += `<div class="iframe-loader hidden" id="loading-bar">
@@ -53,22 +81,5 @@ if (modelviewer) {
     }
     </style>`;
 
-    const progress = document.getElementById('loading-bar');
-
-
-    modelviewer.addEventListener("progress", function (event) {
-        const percent = parseInt(event.detail.totalProgress) * 100;
-
-        progress.innerHTML = `Loading ${percent}%
-                                <div style="width: ${percent}%;"></div>
-                                `
-    });
-    modelviewer.addEventListener("load",function () {
-        console.log("Model load");
-        progress.classList.add("hidden");
-    });
-
-    setTimeout(()=>{
-        progress.classList.remove("hidden");
-    },100);
+    init()
 }

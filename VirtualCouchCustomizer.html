@@ -64,7 +64,7 @@
 
         .model-viewer-w80{
             height: 100%;
-            width: 80%;
+            width: 100%;
             min-width: 300px;
             flex: 1;
         }
@@ -125,11 +125,16 @@
         <script src="js/ContentCustomizer.js"></script>
         <script src="js/LoadingBar.js"></script>
         <script>
+            initializeCustomizerOnMaterials(["Vallentuna_Murum","Vallentuna_Hillared"])
+
+            assignColorToButton([{colorBlack: 'rgb(10,10,10)'}, {colorWhite: 'rgb(221,221,221)'},
+                {colorBeige: 'rgb(209,178,125)'}, {colorGrey: 'rgb(103,101,96)'}]);
+
             const modelViewer = document.getElementById('model-viewer');
 
             const cameraSwitch = document.getElementById('move_camera');
 
-            const positions = ["-35deg 65deg 105%", "-90deg 65deg 105%", "180deg 65deg 105%"];
+            const positions = ["35deg 65deg 105%", "-60deg 65deg 105%", "180deg 65deg 105%"];
             let cameraIndex = 0;
 
             cameraSwitch.onclick = function () {
@@ -137,17 +142,20 @@
                 modelViewer.cameraOrbit = positions[cameraIndex];
             };
 
-            initializeCustomizerOnMaterial("Vallentuna_Murum")
-
-            assignColorToButton([{colorBlack: 'rgb(10,10,10)'}, {colorWhite: 'rgb(221,221,221)'},
-                {colorBeige: 'rgb(209,178,125)'}, {colorGrey: 'rgb(103,101,96)'}]);
-
         </script>
+        <style>
+            .iframe-loader {
+                color: #181818;
+            }
 
+            .iframe-loader > div {
+                background: #181818;
+            }
+        </style>
     </model-viewer>
     <div class="right-description">
         <div>
-            <div style="color: black;font-size: 1.5em;font-family: Verdana;font-weight: bold;">DIVANO ANGOLARE</div>
+            <div style="color: black;font-size: 1.5em;font-family: Verdana,serif;font-weight: bold;">DIVANO ANGOLARE</div>
             <br><br>
             <div class="text">Un divano 3 posti, infinite possibilità. Hai bisogno di un letto extra, di un contenitore o di un
                 angolo accogliente dove leggere? Scegli gli elementi che più ti piacciono, combinali tra loro come
