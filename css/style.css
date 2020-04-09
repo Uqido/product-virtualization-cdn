@@ -190,6 +190,6 @@ html{
     }
 
     .fullscreen-100{
-        height: auto;
+        height: 100%;
     }
 }
