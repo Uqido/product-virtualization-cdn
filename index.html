@@ -18,25 +18,43 @@
         #lp-pom-root {
             display: block;
             background: rgba(238, 238, 238, 1) url(img/1af4180c-climato-background.png);
+            justify-content: center;
         }
 
-        .image-element{
+        .image-element {
             width: 300px;
             height: 300px;
             margin: 8px;
             background-size: contain;
         }
 
-        .modelcontent{
-            padding: 0 15em 0 15em;
+        .modelcontent {
             justify-content: center;
+            max-width: 1300px;
+            min-width: 316px;
+            margin: 0;
         }
-        .title{
+
+        .title {
             padding: 16px;
             height: 64px;
         }
-        .title>img{
+
+        .title > img {
             height: 64px;
+        }
+
+        @media only screen and (max-width: 650px) {
+            .modelcontent {
+                padding: 0 16px 0 16px;
+                justify-content: center;
+            }
+
+            .image-element {
+                width: 150px;
+                height: 150px;
+                margin: 4px;
+            }
         }
     </style>
 </head>
@@ -46,11 +64,13 @@
 
 <div class="lp-pom-root" id="lp-pom-root">
 
-    <div class="title" >
+    <div class="title">
         <img src="img/uqido-logo.png">
     </div>
 
-    <div id="modelContentRoot" class="modelcontent" style="display: flex; flex-direction: row; flex-wrap: wrap;">
+    <div style="display: flex;justify-content: center">
+        <div id="modelContentRoot" class="modelcontent" style="display: flex; flex-direction: row; flex-wrap: wrap;">
+        </div>
     </div>
 </div>
 <script async src="js/main.js" type="text/javascript"></script>
