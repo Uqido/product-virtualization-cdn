@@ -3,27 +3,23 @@ var contentRoot;
 
 function getContentRoot(){
     contentRoot=document.getElementById("modelContentRoot")
-    
+
 }
 
-function instantiateModelContent(srcUrl){
-    var modelHtml=`
-                    <div class="lp-element lp-code" id="lp-code-40" style="width: 300px; height: 300px;">
-                            <iframe src="${srcUrl}" frameborder="0" allowfullscreen="" scrolling="no" style="width: 300px; height: 300px;"></iframe>
-                    </div>
-                    `
-    contentRoot.innerHTML+=modelHtml
+function instantiateModelContent(srcUrl,assetName){
+    const element = document.createElement("a");
+    element.classList.add("image-element");
+    element.style.backgroundImage=`url('img/index/${assetName}.jpg')`;
+    element.href=`${srcUrl}/${assetName}.html`;
+    contentRoot.appendChild(element);
 }
 
 function isLocalhost(){
-    if( !window.location.host.replace(":8080","").replace( /localhost|127\.0\.0\.1/i, '' ) ){ 
-        return true; 
-    }
-    return false;
+    return !window.location.host.replace(":8080", "").replace(/localhost|127\.0\.0\.1/i, '');
 }
 
 function parseJson(json){
-    var baseurl=json.baseUrl;
+    let baseurl = json.baseUrl;
     if(isLocalhost()){
         console.log("Is Localhost!")
         baseurl="";
@@ -34,7 +30,7 @@ function parseJson(json){
     var assets=json.assets;
     getContentRoot();
     for(asset of assets){
-        instantiateModelContent(`${baseurl}/${asset}.html`);
+        instantiateModelContent(`${baseurl}`,asset);
     }
 }
 
