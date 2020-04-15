@@ -17,7 +17,7 @@
 
         #lp-pom-root {
             display: block;
-            background: rgba(238, 238, 238, 1) url(img/1af4180c-climato-background.png);
+            background: rgb(43, 43, 44);
             justify-content: center;
         }
 
@@ -26,14 +26,14 @@
             height: 300px;
             margin: 8px;
             background-size: contain;
-            box-shadow: 2px 3px 3px 0 rgba(0,0,0,0.4);
+            box-shadow: 2px 3px 3px 0 rgba(0,0,0,0.6);
             border-radius: 4px;
             transition: all 250ms;
         }
 
         .image-element::after {
             content: "";
-            box-shadow: 3px 5px 8px rgba(0,0,0,0.4);
+            box-shadow: 3px 5px 8px rgba(0,0,0,0.6);
             opacity: 0;
             border-radius: 5px;
             position: absolute;
@@ -62,12 +62,13 @@
 
         .title {
             padding: 16px;
-            height: 64px;
-            display: flex
+            height: 92px;
+            display: flex;
+            justify-content: center;
         }
 
         .title > img {
-            height: 64px;
+            height: 92px;
         }
 
         @media only screen and (max-width: 1300px) and (min-width: 960px) {
@@ -84,8 +85,13 @@
 
         @media only screen and (max-width: 650px) {
             .title {
-                justify-content: center;
+                height: 64px;
             }
+
+            .title > img {
+                height: 64px;
+            }
+
             .modelcontent {
                 grid-template-columns: 1fr 1fr;
             }
@@ -105,7 +111,7 @@
 <div class="lp-pom-root" id="lp-pom-root">
 
     <div class="title">
-        <img src="img/uqido-logo.png">
+        <img src="img/uqido-logo-white.png">
     </div>
 
     <div style="display: flex;justify-content: center; padding-bottom: 48px">
