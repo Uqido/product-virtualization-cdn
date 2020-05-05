@@ -1,10 +1,7 @@
 @font-face {
 	font-family: 'themify';
-	src:url('https://usa.fitt.com/themes/foundry/fonts/themify.eot?');
-	src:url('https://usa.fitt.com/themes/foundry/fonts/themify.eot?#iefix-fvbane') format('embedded-opentype'),
-		url('https://usa.fitt.com/themes/foundry/fonts/themify.woff') format('woff'),
-		url('https://usa.fitt.com/themes/foundry/fonts/themify.ttf') format('truetype'),
-		url('https://usa.fitt.com/themes/foundry/fonts/themify.svg') format('svg');
+	src:url('themify.woff') format('woff'),
+		url('themify.ttf') format('truetype');
 	font-weight: normal;
 	font-style: normal;
 }

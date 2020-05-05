@@ -202,8 +202,9 @@ hr.short-thick {
   url('/themes/foundry/css/../fonts/fitt/a749575d-6796-4421-9e5f-cef160236ad6.woff2') format("woff2"),
   url('/themes/foundry/css/../fonts/fitt/6702e787-460e-41a0-bb70-be92745e11d2.woff') format("woff"),
   url('/themes/foundry/css/../fonts/fitt/3cb1674d-a0e6-4fe7-8f92-eb7aa0fd1f9e.ttf') format("truetype")*/
-  src: url('https://usa.fitt.com/themes/foundry/fonts/HelveticaLTStd-Light.woff2') format('woff2'),
-  url('https://usa.fitt.com/themes/foundry/fonts/HelveticaLTStd-Light.woff') format('woff');
+  src: url('HelveticaLTStd-Light.woff2') format('woff2'),
+  url('HelveticaLTStd-Light.woff') format('woff');
+  url('HelveticaLTStd-Light.woff') format('woff');
   font-weight: 300;
   font-style: normal;
 }
@@ -215,8 +216,8 @@ hr.short-thick {
   url('/themes/foundry/css/../fonts/fitt/2777391c-5cbf-48e5-823d-27116421e911.woff2') format("woff2"),
   url('/themes/foundry/css/../fonts/fitt/1d330248-e6cb-49f0-9fa2-f1e4eafc4f59.woff') format("woff"),
   url('/themes/foundry/css/../fonts/fitt/1105de32-530e-46bd-8452-7c03fee6d3c7.ttf') format("truetype")*/
-  src: url('https://usa.fitt.com/themes/foundry/fonts/HelveticaLTStd-Bold.woff2') format('woff2'),
-  url('https://usa.fitt.com/themes/foundry/fonts/HelveticaLTStd-Bold.woff') format('woff');
+  src: url('HelveticaLTStd-Bold.woff2') format('woff2'),
+  url('HelveticaLTStd-Bold.woff') format('woff');
   font-weight: bold;
   font-style: normal;
 }
@@ -228,8 +229,8 @@ hr.short-thick {
   url('/themes/foundry/css/../fonts/fitt/e3a56a4d-ea2a-47a4-87d0-fcd77fd10a05.woff2') format("woff2"),
   url('/themes/foundry/css/../fonts/fitt/cdbecebd-e2d4-4ed4-8309-6ca6c9240c05.woff') format("woff"),
   url('/themes/foundry/css/../fonts/fitt/14739b62-1558-4eb1-b1cd-4aead98f9ba2.ttf') format("truetype")*/
-  src: url('https://usa.fitt.com/themes/foundry/fonts/HelveticaLTStd-Roman.woff2') format('woff2'),
-  url('https://usa.fitt.com/themes/foundry/fonts/HelveticaLTStd-Roman.woff') format('woff');
+  src: url('HelveticaLTStd-Roman.woff2') format('woff2'),
+  url('HelveticaLTStd-Roman.woff') format('woff');
   font-weight: 500;
   font-style: normal;
 }
