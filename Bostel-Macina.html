@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" class="fullscreen-100">
+<head>
+    <meta charset="utf-8">
+    <title>Bostel-Macina</title>
+    <link rel="stylesheet" href="css/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="white"/>
+    <meta name="description" content="">
+
+    <script src="https://unpkg.com/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+
+    <script src="https://unpkg.com/intersection-observer/intersection-observer.js"></script>
+
+    <script src="https://unpkg.com/resize-observer-polyfill/dist/ResizeObserver.js"></script>
+
+    <script src="https://unpkg.com/fullscreen-polyfill/dist/fullscreen.polyfill.js"></script>
+
+    <script src="https://unpkg.com/focus-visible/dist/focus-visible.js" defer></script>
+
+    <style>
+        .button-load-class {
+            background-repeat: no-repeat;
+            background-size: 24px 24px;
+            background-position: 6% 50%;
+            background-color: #000;
+            color: white;
+            cursor: pointer;
+            border-radius: 6px;
+            display: inline-block;
+            padding: 10px 10px 10px 10px;
+            font-weight: 500;
+            box-shadow: 0 0 8px rgba(0, 0, 0, .2), 0 0 4px rgba(0, 0, 0, .25);
+            position: absolute;
+            left: 50%;
+            top: 86%;
+            transform: translate3d(-50%, -50%, 0);
+            z-index: 100;
+        }
+    </style>
+
+</head>
+<body class="fullscreen-100">
+<model-viewer id="Bostel-Macina-load" reveal="interaction"
+              class='model-viewer' ar autoplay camera-controls src='models/Bostel-Macina.glb'
+              ios-src='models/Bostel-Macina.usdz' alt=''
+              exposure="0.6" shadow-intensity="1.5" shadow-softness="0.8" quick-look-browsers="safari chrome">
+    <div id="Bostel-Macina-poster" class="cloudimage-360" data-folder="img/Bostel-Macina/" data-filename="photo-{index}.png"
+         data-amount="36"></div>
+    <div id="Bostel-Macina-button-load" class="button-load-class" slot="poster">Load 3D Model</div>
+    <script>
+        function inIframe() {
+            try {
+                return window.self !== window.top;
+            } catch (e) {
+                return true;
+            }
+        }
+
+        const modelViewer = document.getElementById('Bostel-Macina-load');
+        const poster = document.getElementById('Bostel-Macina-poster');
+        const button = document.getElementById('Bostel-Macina-button-load');
+
+        if (!inIframe()) {
+            //disattivo il 360 viewer e faccio caricare il modello
+            poster.style.visibility = "hidden";
+            modelViewer.reveal = "auto"
+            button.innerHTML = "Loading"
+        } else {
+            modelViewer.addEventListener("load", function (event) {
+                console.log(event);
+                poster.style.visibility = "hidden";
+            })
+        }
+    </script>
+</model-viewer>
+<script type="module" src="js/model-viewer/dist/model-viewer.js"></script>
+<script nomodule src="https://unpkg.com/@google/model-viewer/dist/model-viewer-legacy.js"></script>
+<script src="https://cdn.scaleflex.it/plugins/js-cloudimage-360-view/2/js-cloudimage-360-view.min.js"></script>
+</body>
+</html>
