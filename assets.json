@@ -1,3 +1,5 @@
 {"baseUrl":"https://uqido.github.io/product-virtualization-cdn",
  "assets":["VirtualDermatic","VirtualShoe1","VirtualShoe2","VirtualShoe3","VirtualShoes","PoltronaPolpetta","VirtualBag","VirtualCouchCustomizer","VirtualPlant","VirtualRemote","VirtualValve","VirtualVase","VirtualWashingMachine","FittForcePro"],
- "assets_shoes":["GeoxBeige","GeoxBlu1","GeoxBlu2","GeoxBordeaux","GeoxRossoOro","Leopardata","Stivaletto"]}
+ "assets_shoes":["GeoxBeige","GeoxBlu1","GeoxBlu2","GeoxBordeaux","GeoxRossoOro","Leopardata","Stivaletto"],
+ "assets_bostel":["Bostel-Chiave","Bostel-Ciotola","Bostel-Coppa","Bostel-GrandeDolio","Bostel-Macina","Bostel-Vaso","Bostel-VasoNero","Bostel-VasoTripode"]
+}
