@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" style="height: 100%;width: 100%;margin: 0">
+<head>
+    <meta charset="UTF-8">
+    <title>Test</title>
+</head>
+<body style="height: 100%;width: 100%;margin: 0;display: flex;flex-grow: 1;flex-direction: column">
+    <iframe id="myiframe" style="flex-grow:1;width: 100%;border: none" src="VirtualCouchCustomizer.html"></iframe>
+    <div style="display: flex;flex-direction: row;padding: 16px">
+        <div id="b1" style="height: 30px;width: 30px;margin:8px;background-color: #0a0a0b"></div>
+        <div id="b2" style="height: 30px;width: 30px;margin:8px;background-color: #efeeef"></div>
+        <div id="b3" style="height: 30px;width: 30px;margin:8px;background-color: #f8e3c4"></div>
+        <div id="b4" style="height: 30px;width: 30px;margin:8px;background-color: #8f8c86"></div>
+        <div id="camera" style="height: 30px;width: 30px;margin:8px;background-color: #f5001c"></div>
+    </div>
+    <script>
+        let iframe=document.getElementById("myiframe");
+
+        let findAndConfigure=function(id,color){
+            let button=document.getElementById(id);
+            button.onclick=function () {
+                let window = iframe.contentWindow
+                window.changeColor(color)
+            }
+        }
+
+        iframe.onload=function() {
+            console.log("IframeLoaded");
+
+
+            findAndConfigure("b1",'rgb(10,10,10)');
+            findAndConfigure("b2",'rgb(221,221,221)');
+            findAndConfigure("b3",'rgb(209,178,125)');
+            findAndConfigure("b4",'rgb(103,101,96)');
+
+            let button=document.getElementById("camera");
+            button.onclick=function () {
+                let window = iframe.contentWindow
+                window.rotate();
+            };
+        };
+    </script>
+</body>
+</html>

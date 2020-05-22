@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en" class="fullscreen">
+
+<head>
+    <meta charset="utf-8">
+    <title>Couch Customizer</title>
+    <link rel="stylesheet" href="css/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="white"/>
+    <link rel="icon"
+          type="image/png"
+          href="favicon-uqido.png">
+    <meta name="description" content="">
+
+    <script src="https://unpkg.com/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+
+    <script src="https://unpkg.com/intersection-observer/intersection-observer.js"></script>
+
+    <script src="https://unpkg.com/resize-observer-polyfill/dist/ResizeObserver.js"></script>
+
+    <script src="https://unpkg.com/fullscreen-polyfill/dist/fullscreen.polyfill.js"></script>
+
+    <script src="https://unpkg.com/focus-visible/dist/focus-visible.js" defer></script>
+
+    <style>
+        .color-button {
+            width: 30px;
+            height: 30px;
+            margin-top: 5px;
+            background-color: white;
+            border-radius: 50%;
+        }
+
+        .color-button.selected {
+            border: 2px solid #717171;
+        }
+
+        .fullscreen{
+            background: white;
+        }
+
+        .right-description{
+            position: absolute;
+            top: 5%;
+            right: 5%;
+            width: 20em;
+            text-align: start;
+        }
+        .right-description:after{
+            background: transparent;
+        }
+
+        .call-to-action-button{
+            background-color: rgba(0, 51, 153, 1);
+            width: -webkit-fill-available;
+            text-align: center;
+        }
+
+        .text{
+            font-family: Verdana,serif;
+            line-height: 30px;
+            font-size: 1em;
+        }
+
+        .model-viewer-w80{
+            height: 100%;
+            width: 100%;
+            min-width: 300px;
+            flex: 1;
+        }
+
+        @font-face {font-family: "Verdana";
+            src: url("fonts/verdana/1ae9b9868bd3121e932225b140a839a5.eot"); /* IE9*/
+            url("fonts/verdana/1ae9b9868bd3121e932225b140a839a5.woff2") format("woff2"), /* chrome、firefox */
+            url("fonts/verdana/1ae9b9868bd3121e932225b140a839a5.woff") format("woff"), /* chrome、firefox */
+            url("fonts/verdana/1ae9b9868bd3121e932225b140a839a5.ttf") format("truetype"), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
+        }
+
+        @media only screen and (max-width: 950px) {
+            .model-viewer-w80{
+                height: 364px;
+            }
+            .right-description{
+                position: relative;
+                bottom: 8px;
+                right: auto;
+                width: auto;
+                padding: 8px;
+                top: auto;
+                text-align: start;
+            }
+            .right-description:after{
+                background: transparent;
+                height: 0;
+            }
+            .flex{
+                display: flex;
+                flex-direction: row;
+            }
+        }
+    </style>
+
+</head>
+
+<body class="fullscreen">
+
+<div class="flex" style="height: 100%;min-height: 100%;flex-wrap: wrap">
+    <model-viewer id="model-viewer" class='model-viewer-w80' camera-controls src='models/Vallentuna.glb'
+                  ios-src='models/Vallentuna.usdz' alt='' min-field-of-view="20deg" field-of-view="35deg"
+                  max-field-of-view="60deg" camera-target="0m 0.4m 0m"
+                  max-camera-orbit="auto 85.5deg 0" min-camera-orbit="auto 28.5deg 0" exposure="0.6"
+                  shadow-intensity="2.5" shadow-softness="0.4"
+                  quick-look-browsers="safari chrome">
+        <div class="logo-bar">
+            <div class="upper-left-logo uqido-logo"></div>
+        </div>
+
+        <div class="viewer-bottom">
+            <div id="colorBlack" class="clickable color-button" style="background-color: rgb(10,10,10);"></div>
+            <div id="colorWhite" class="clickable color-button selected" style="background-color: rgb(241,240,240);"></div>
+            <div id="colorBeige" class="clickable color-button" style="background-color: rgb(250,229,197);"></div>
+            <div id="colorGrey" class="clickable color-button" style="background-color: rgb(144,141,134);"></div>
+            <div id="move_camera" class="clickable" style="background-image: url(img/Move.png);"></div>
+        </div>
+        <script src="js/ContentCustomizer.js"></script>
+        <script src="js/LoadingBar.js"></script>
+        <script>
+            initializeCustomizerOnMaterials(["Vallentuna_Murum","Vallentuna_Hillared"])
+
+            assignColorToButton([{colorBlack: 'rgb(10,10,10)'}, {colorWhite: 'rgb(221,221,221)'},
+                {colorBeige: 'rgb(209,178,125)'}, {colorGrey: 'rgb(103,101,96)'}]);
+
+            const modelViewer = document.getElementById('model-viewer');
+
+            const cameraSwitch = document.getElementById('move_camera');
+
+            const positions = ["35deg 65deg 105%", "-60deg 65deg 105%", "180deg 65deg 105%"];
+            let cameraIndex = 0;
+
+            cameraSwitch.onclick = rotateCamera;
+
+            function rotateCamera() {
+                cameraIndex = (++cameraIndex) % positions.length;
+                modelViewer.cameraOrbit = positions[cameraIndex];
+            }
+
+            console.log(window.changeColor);
+
+            if(typeof window.changeColor==="undefined"){
+                window.changeColor=function (color) {
+                    let arraycolor=colorToArray(color);
+                    worker.postMessage({type: "change-color", payload: arraycolor})
+                }
+            }
+
+            if(typeof window.rotate==="undefined"){
+                window.rotate=function () {
+                    rotateCamera();
+                }
+            }
+
+        </script>
+        <style>
+            .iframe-loader {
+                color: #181818;
+            }
+
+            .iframe-loader > div {
+                background: #181818;
+            }
+        </style>
+    </model-viewer>
+    <div class="right-description">
+        <div>
+            <div style="color: black;font-size: 1.5em;font-family: Verdana,serif;font-weight: bold;">DIVANO ANGOLARE</div>
+            <br><br>
+            <div class="text">Un divano 3 posti, infinite possibilità. Hai bisogno di un letto extra, di un contenitore o di un
+                angolo accogliente dove leggere? Scegli gli elementi che più ti piacciono, combinali tra loro come
+                preferisci e cambia la tua soluzione ogni volta che vuoi.
+            </div>
+            <br><br><br>
+            <div class="call-to-action-button" style="font-family: Verdana,serif; ">AGGIUNGI AL CARRELLO</div>
+        </div>
+    </div>
+</div>
+<script type="module" src="js/model-viewer/dist/model-viewer.js"></script>
+<script nomodule src="https://unpkg.com/@google/model-viewer/dist/model-viewer-legacy.js"></script>
+
+</body>
+
+</html>
