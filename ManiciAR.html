@@ -10,13 +10,13 @@
 
     <script src="https://unpkg.com/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
 
-    <script src="https://unpkg.com/intersection-observer/intersection-observer.js"></script>
-
-    <script src="https://unpkg.com/resize-observer-polyfill/dist/ResizeObserver.js"></script>
 
     <script src="https://unpkg.com/fullscreen-polyfill/dist/fullscreen.polyfill.js"></script>
 
     <script src="https://unpkg.com/focus-visible/dist/focus-visible.js" defer></script>
+    <script src="https://unpkg.com/event-target@latest/min.js"></script>
+    <script src="https://unpkg.com/resize-observer-polyfill@1.5.0/dist/ResizeObserver.global.js"></script>
+    <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=IntersectionObserver"></script>
 
     <style>
         .color-button {
@@ -27,40 +27,42 @@
             border-radius: 50%;
         }
 
+        .unselectable {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            pointer-events:none;
+        }
+
         .color-button.selected {
             border: 2px solid #717171;
         }
 
-        @media only screen and (max-width: 950px) {
-            .model-viewer-w80{
-                height: 364px;
-            }
-            .right-description{
-                position: relative;
-                bottom: 8px;
-                right: auto;
-                width: auto;
-                padding: 8px;
-                top: auto;
-                text-align: start;
-            }
-            .right-description:after{
-                background: transparent;
-                height: 0;
-            }
-            .flex{
-                display: flex;
-                flex-direction: row;
-            }
+        .text-white{
+            color: #f7f7f7;
         }
     </style>
 
 </head>
 <body class="fullscreen-100">
-<model-viewer id="ManiciAR-load"
+<model-viewer id="modelViewer"
               class='model-viewer' ar autoplay camera-controls src='models/ManiciAR.glb'
-              ios-src='models/ManiciAR.usdz' alt=''
+              ios-src='models/ManiciAR.usdz' alt='' noloop
               exposure="0.6" shadow-intensity="1.5" shadow-softness="0.8" quick-look-browsers="safari chrome">
+    <div class="unselectable" id="hotspot-button" slot="hotspot-button" data-position="-0.07 0.085 0" data-normal="0 1 0">
+        <div class="unselectable" style="display: flex;transform: translateX(50%)">
+            <div style="width: 2px; height: 100px; background-color: #6ca0cf"></div>
+            <div class="unselectable text-white" style="height: 30px;margin-left:8px;margin-top:-4px;max-width: 200px;font-size: medium;">EASY & SAFE DETACHING BUTTON</div>
+        </div>
+    </div>
+    <div class="unselectable" id="hotspot-grip" slot="hotspot-grip" data-position="-0.2 0.03 0" data-normal="0 1 0">
+        <div class="unselectable" style="display: flex;">
+            <div class="unselectable text-white" style="height: 30px;margin-left:8px;margin-top:-4px;max-width: 200px;font-size: medium;">FULL AND ROUND BACK FOR PERFECT GRIP</div>
+        </div>
+    </div>
     <div class="viewer-bottom">
         <div id="colorBlack" class="clickable color-button selected" style="background-color: rgb(10,10,10);"></div>
         <div id="colorRed" class="clickable color-button" style="background-color: rgb(223,62,43);"></div>
@@ -74,17 +76,31 @@
         assignColorToButton([{colorBlack: 'rgb(10,10,10)'}, {colorRed: 'rgb(229,26,26)'},
             {colorGrey: 'rgb(43,43,44)'}]);
 
-        const modelViewer = document.getElementById('ManiciAR-load');
-
         const cameraSwitch = document.getElementById('move_camera');
 
         const positions = ["35deg 65deg 105%", "-60deg 65deg 105%", "180deg 65deg 105%"];
+
+        const annotations=[document.getElementById("hotspot-button"),document.getElementById("hotspot-grip")];
+
+        const positionToAnnotation={0:["hotspot-button"],1:["hotspot-grip"],2:[]};
+
         let cameraIndex = 0;
 
         cameraSwitch.onclick = rotateCamera;
 
         function rotateCamera() {
             cameraIndex = (++cameraIndex) % positions.length;
+
+            const toEnable = positionToAnnotation[cameraIndex];
+
+            for (let annotation of annotations) {
+                annotation.style.display="none";
+                if(toEnable.includes(annotation.id)){
+                    annotation.style.display="block";
+                }
+            }
+
+
             modelViewer.cameraOrbit = positions[cameraIndex];
         }
 
@@ -105,7 +121,6 @@
 
     </script>
 </model-viewer>
-<script type="module" src="js/model-viewer/dist/model-viewer.js"></script>
-<script nomodule src="https://unpkg.com/@google/model-viewer/dist/model-viewer-legacy.js"></script>
+<script type="module" src="js/model-viewer/dist/model-viewer-new.js"></script>
 </body>
 </html>
