@@ -21,7 +21,8 @@
 </head>
 <body style="height: 100%;width: 100%;margin: 0;display: flex;flex-grow: 1;flex-direction: column">
 
-<iframe id="model-iframe" style="flex-grow:1;width: 100%;border: none" src="ManiciAR.html"></iframe>
+<!--<iframe id="model-iframe" style="flex-grow:1;width: 100%;border: none" src="ManiciAR.html"></iframe>-->
+<iframe id="model-iframe" style="flex-grow:1;width: 100%;border: none" src="https://uqido.github.io/product-virtualization-cdn/ManiciAR.html"></iframe>
 <div style="display: flex;flex-direction: row;padding: 16px">
     <div id="b1" style="height: 30px;width: 30px;margin:8px;background-color: rgb(10,10,10)"></div>
     <div id="b2" style="height: 30px;width: 30px;margin:8px;background-color: rgb(231,15,8)"></div>
@@ -34,8 +35,8 @@
     let findAndConfigure=function(id,color){
         let button=document.getElementById(id);
         button.onclick=function () {
-            let window = iframe.contentWindow
-            window.changeColor(color)
+            const action={action:"changeColor",data:color};
+            iframe.contentWindow.postMessage(JSON.stringify(action),"*");
         }
     }
 
@@ -49,8 +50,8 @@
 
         let button=document.getElementById("camera");
         button.onclick=function () {
-            let window = iframe.contentWindow
-            window.rotate();
+            const action={action:"changeCamera"};
+            iframe.contentWindow.postMessage(JSON.stringify(action),"*");
         };
     };
 </script>
