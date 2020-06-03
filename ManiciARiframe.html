@@ -21,8 +21,8 @@
 </head>
 <body style="height: 100%;width: 100%;margin: 0;display: flex;flex-grow: 1;flex-direction: column">
 
-<!--<iframe id="model-iframe" style="flex-grow:1;width: 100%;border: none" src="ManiciAR.html"></iframe>-->
-<iframe id="model-iframe" style="flex-grow:1;width: 100%;border: none" src="https://uqido.github.io/product-virtualization-cdn/ManiciAR.html"></iframe>
+<iframe id="model-iframe" style="flex-grow:1;width: 100%;border: none" src="ManiciAR.html"></iframe>
+<!--<iframe id="model-iframe" style="flex-grow:1;width: 100%;border: none" src="https://uqido.github.io/product-virtualization-cdn/ManiciAR.html"></iframe>-->
 <div style="display: flex;flex-direction: row;padding: 16px">
     <div id="b1" style="height: 30px;width: 30px;margin:8px;background-color: rgb(10,10,10)"></div>
     <div id="b2" style="height: 30px;width: 30px;margin:8px;background-color: rgb(231,15,8)"></div>
@@ -32,11 +32,13 @@
 <script>
     let iframe=document.getElementById("model-iframe");
 
-    let findAndConfigure=function(id,color){
+    let findAndConfigure=function(id,color,bumpStrength){
         let button=document.getElementById(id);
         button.onclick=function () {
-            const action={action:"changeColor",data:color};
-            iframe.contentWindow.postMessage(JSON.stringify(action),"*");
+            const colorMessage={action:"changeColor",data:color};
+            iframe.contentWindow.postMessage(JSON.stringify(colorMessage),"*");
+            const bumpMessage={action:"changeBumpStrength",data:bumpStrength};
+            iframe.contentWindow.postMessage(JSON.stringify(bumpMessage),"*");
         }
     }
 
@@ -44,9 +46,9 @@
         console.log("IframeLoaded");
 
 
-        findAndConfigure("b1",'rgb(10,10,10)');
-        findAndConfigure("b2",'rgb(231,15,8)');
-        findAndConfigure("b3",'rgb(85,84,84)');
+        findAndConfigure("b1",'rgb(10,10,10)',1);
+        findAndConfigure("b2",'rgb(231,15,8)',0);
+        findAndConfigure("b3",'rgb(85,84,84)',0);
 
         let button=document.getElementById("camera");
         button.onclick=function () {

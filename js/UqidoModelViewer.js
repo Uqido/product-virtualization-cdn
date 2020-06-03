@@ -1,58 +1,8 @@
-<!DOCTYPE html>
-<html lang="en" class="fullscreen-100">
-<head>
-    <meta charset="utf-8">
-    <title>ManiciAR</title>
-    <link rel="stylesheet" href="css/style.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="white"/>
-    <meta name="description" content="">
-
-    <script src="https://unpkg.com/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
-
-
-    <script src="https://unpkg.com/fullscreen-polyfill/dist/fullscreen.polyfill.js"></script>
-
-    <script src="https://unpkg.com/focus-visible/dist/focus-visible.js" defer></script>
-    <script src="https://unpkg.com/event-target@latest/min.js"></script>
-    <script src="https://unpkg.com/resize-observer-polyfill@1.5.0/dist/ResizeObserver.global.js"></script>
-    <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=IntersectionObserver"></script>
-
-    <style>
-        .color-button {
-            width: 30px;
-            height: 30px;
-            margin-top: 5px;
-            background-color: white;
-            border-radius: 50%;
-        }
-
-        .unselectable {
-            -webkit-touch-callout: none;
-            -webkit-user-select: none;
-            -khtml-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-            pointer-events:none;
-        }
-
-        .color-button.selected {
-            border: 2px solid #717171;
-        }
-
-        .text-white{
-            color: #f7f7f7;
-        }
-
-        .no-default-loading{
-            --progress-mask:#0000;
-            --progress-bar-height:0px
-        }
-    </style>
-
-</head>
-<body class="fullscreen-100">
+class UqidoModelViewer extends HTMLElement {
+    constructor() {
+        super();
+        this.attachShadow({ mode: "open" });
+        this.shadowRoot.innerHTML = `
 <model-viewer id="modelViewer"
               class='model-viewer' ar autoplay camera-controls src='models/ManiciAR.glb'
               ios-src='models/ManiciAR.usdz' alt='' noloop
@@ -81,8 +31,6 @@
 
         assignColorToButton([{colorBlack: 'rgb(10,10,10)'}, {colorRed: 'rgb(231,15,8)'},
             {colorGrey: 'rgb(85,84,84)'}]);
-
-        assignColorToBump([{colorBlack: 1}, {colorRed: 0}, {colorGrey: 0}]);
 
         const cameraSwitch = document.getElementById('move_camera');
 
@@ -130,12 +78,6 @@
             }
         }
 
-        if(typeof window.changeBumpStrength==="undefined"){
-            window.changeBumpStrength=function (bumpStrength) {
-                worker.postMessage({type: "change-bump", payload: bumpStrength})
-            }
-        }
-
         window.addEventListener("message",receiveMessage,false);
 
         function receiveMessage(event) {
@@ -148,13 +90,13 @@
                 changeColor(action.data);
             }else if(action.action==="changeCamera"){
                 rotateCamera();
-            }else if(action.action==="changeBumpStrength"){
-                changeBumpStrength(action.data)
             }
         }
 
     </script>
 </model-viewer>
-<script type="module" src="js/model-viewer/dist/uqido-model-viewer.js"></script>
-</body>
-</html>
+<script type="module" src="js/model-viewer/dist/model-viewer-new.js"></script>`
+    }
+}
+
+window.customElements.define('uqido-model-viewer', UqidoModelViewer);
