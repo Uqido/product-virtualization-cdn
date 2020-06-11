@@ -6,6 +6,7 @@ if (typeof modelviewer === "undefined") {
 }
 
 modelviewer.addEventListener("worklet-created", (event) => {
+    console.log("Worklet-created");
     if (typeof worker === "undefined") {
         window.worker = event.detail.worklet;
     }else {
@@ -26,6 +27,7 @@ function colorToArray(color) {
 }
 
 let NameToColor;
+let NameToBump;
 
 function initCallbacks() {
     for (let button of buttons) {
@@ -34,19 +36,35 @@ function initCallbacks() {
 }
 
 function onClickCallback(event) {
-    if (worker === undefined) return;
+    if (typeof worker === "undefined") return;
     if (NameToColor === undefined) return;
 
-    const found=NameToColor.find(elem => Object.keys(elem)[0]===event.target.id)
+    const colorFound=NameToColor.find(elem => Object.keys(elem)[0]===event.target.id)
 
-    if (found === undefined) return;
+    if (colorFound === undefined) return;
 
-    const colorString=Object.values(found)[0]
+    const colorString=Object.values(colorFound)[0]
 
     let color = colorToArray(colorString);
+    console.log(color)
+    console.log(worker)
     worker.postMessage({type: "change-color", payload: color})
     clearSelected()
     event.target.classList.add("selected")
+
+
+    /*
+        BUMP
+     */
+    if(NameToBump === undefined) return;
+
+    const bumpFound=NameToBump.find(elem => Object.keys(elem)[0]===event.target.id)
+
+    if (bumpFound === undefined) return;
+
+    const bump=Object.values(bumpFound)[0]
+
+    worker.postMessage({type: "change-bump", payload: bump})
 }
 
 
@@ -55,12 +73,15 @@ function assignColorToButton(buttonNameAndColor) {
     console.log(buttonNameAndColor)
     NameToColor=buttonNameAndColor;
 }
+function assignColorToBump(buttonNameAndBump) {
+    console.log(buttonNameAndBump)
+    NameToBump=buttonNameAndBump;
+}
 
 
 function initializeCustomizerOnMaterials(materialsName) {
-    if (modelviewer === undefined) return;
 
-    modelviewer.innerHTML +=`<script type="experimental-scene-graph-worklet"  allow="material-properties;messaging">
+    modelviewer.innerHTML +=`<script type="experimental-scene-graph-worklet" allow="material-properties;messaging" >
 
         console.log('Hello from the scene graph worklet!');
 
@@ -73,18 +94,15 @@ function initializeCustomizerOnMaterials(materialsName) {
         });
     
         self.addEventListener('message', (event) => {
-            /*if(event.data.type==="toggle-visibility"){
-                if(ColoredMat.visible===true){
-                    console.log('Become invisible');
-                    ColoredMat.setVisible(false);
-                }else{
-                    console.log('Become visible');
-                    ColoredMat.setVisible(true);
-                }
-            }else */if(event.data.type==="change-color"){
+            if(event.data.type==="change-color"){
                 console.log('Changing color to:', event.data.payload);
                 for(let mat of materials){
                     mat.pbrMetallicRoughness.setBaseColorFactor(event.data.payload);
+                }
+            }else if(event.data.type==="change-bump"){
+                console.log('Changing bump to:', event.data.payload);
+                for(let mat of materials){
+                    mat.pbrMetallicRoughness.setNormalScale(event.data.payload);
                 }
             }
         });

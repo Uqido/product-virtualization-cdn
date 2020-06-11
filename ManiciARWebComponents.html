@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" class="fullscreen-100">
+<head>
+    <meta charset="utf-8">
+    <title>ManiciAR</title>
+    <link rel="stylesheet" href="css/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="white"/>
+    <meta name="description" content="">
+
+    <script src="https://unpkg.com/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+
+
+    <script src="https://unpkg.com/fullscreen-polyfill/dist/fullscreen.polyfill.js"></script>
+
+    <script src="https://unpkg.com/focus-visible/dist/focus-visible.js" defer></script>
+    <script src="https://unpkg.com/event-target@latest/min.js"></script>
+    <script src="https://unpkg.com/resize-observer-polyfill@1.5.0/dist/ResizeObserver.global.js"></script>
+    <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=IntersectionObserver"></script>
+
+    <style>
+        .color-button {
+            width: 30px;
+            height: 30px;
+            margin-top: 5px;
+            background-color: white;
+            border-radius: 50%;
+        }
+
+        .unselectable {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            pointer-events:none;
+        }
+
+        .color-button.selected {
+            border: 2px solid #717171;
+        }
+
+        .text-white{
+            color: #f7f7f7;
+        }
+
+        .no-default-loading{
+            --progress-mask:#0000;
+            --progress-bar-height:0px
+        }
+    </style>
+
+</head>
+<body class="fullscreen-100">
+
+<uqido-model-viewer class="model-viewer"></uqido-model-viewer>
+<script type="module" src="js/UqidoModelViewer.js"></script>
+</body>
+</html>
