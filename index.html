@@ -22,8 +22,6 @@
         }
 
         .image-element {
-            width: 300px;
-            height: 300px;
             margin: 8px;
             background-size: contain;
             box-shadow: 2px 3px 3px 0 rgba(0, 0, 0, 0.6);
@@ -45,6 +43,13 @@
             transition: all 250ms;
         }
 
+        .image-element::before {
+            content: "";
+            display: block;
+            height: 0;
+            padding-bottom: 100%
+        }
+
         .image-element:hover {
             transform: scale(1.02);
         }
@@ -61,11 +66,25 @@
             justify-content: space-evenly;
         }
 
-        .indexescontent{
+        .indexescontent {
             flex: 1;
             flex-direction: column;
             align-items: center;
             display: flex
+        }
+
+        .indexescontent > .image-element{
+            width: 300px;
+        }
+
+        .leftColumn {
+            flex: 1;
+            min-width: 300px;
+            max-width: 400px;
+            margin: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center
         }
 
         .title {
@@ -79,7 +98,7 @@
             height: 92px;
         }
 
-        .grid-containter{
+        .grid-containter {
         }
 
         @media only screen and (max-width: 1700px) and (min-width: 960px) {
@@ -95,8 +114,17 @@
         }
 
         @media only screen and (max-width: 979px) and (min-width: 650px) {
-            .indexescontent{
+            .indexescontent {
                 flex-direction: row;
+                flex: 1;
+            }
+
+            .indexescontent > .image-element{
+                width: 200px;
+            }
+
+            .leftColumn {
+                max-width: 100%;
             }
         }
 
@@ -105,23 +133,27 @@
                 height: 64px;
             }
 
+            .indexescontent > .image-element{
+                width: 100px;
+            }
+
             .title > img {
                 height: 64px;
+            }
+
+            .leftColumn {
+                max-width: 100%;
             }
 
             .modelcontent {
                 grid-template-columns: 1fr 1fr;
             }
 
-            .indexescontent{
+            .indexescontent {
                 flex-direction: row;
+                flex: 1;
             }
 
-            .image-element {
-                width: 200px;
-                height: 200px;
-                margin: 4px;
-            }
         }
     </style>
 </head>
@@ -136,9 +168,11 @@
     </div>
 
     <div style="display: flex;flex-direction:row; flex-wrap: wrap">
-        <div style="flex:1;min-width: 300px; max-width: 400px;margin: 8px;display: flex;flex-direction: column;align-items: center ">
-            <div style="color: white;font-size: x-large">Indexes</div>
-            <div id="IndexesContentRoot" class="indexescontent"></div>
+        <div>
+            <div style="color: white;font-size: x-large;text-align: center">Indexes</div>
+            <div class="leftColumn">
+                <div id="IndexesContentRoot" class="indexescontent"></div>
+            </div>
         </div>
         <div class="grid-containter" style="flex:1; justify-content: space-around; padding-bottom: 48px;margin:8px;">
             <div id="modelContentRoot" class="modelcontent">
