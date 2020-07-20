@@ -1,9 +1,12 @@
-
-var contentRoot;
+let contentRoot;
+let indexesContentRoot;
 
 function getContentRoot(){
     contentRoot=document.getElementById("modelContentRoot")
+}
 
+function getIndexesContentRoot() {
+    indexesContentRoot=document.getElementById("IndexesContentRoot")
 }
 
 function instantiateModelContent(srcUrl,assetName){
@@ -12,6 +15,14 @@ function instantiateModelContent(srcUrl,assetName){
     element.style.backgroundImage=`url('img/index/${assetName}.jpg')`;
     element.href=`${srcUrl}/${assetName}.html`;
     contentRoot.appendChild(element);
+}
+
+function instantiateIndexContent(srcUrl,indexName){
+    const element = document.createElement("a");
+    element.classList.add("image-element");
+    element.style.backgroundImage=`url('img/index/indexes/${indexName}.jpg')`;
+    element.href=`${srcUrl}`;
+    indexesContentRoot.appendChild(element);
 }
 
 function isLocalhost(){
@@ -29,9 +40,18 @@ function parseJson(json){
     console.log("Base Url:"+baseurl);
     var assets=json.assets;
     getContentRoot();
+    getIndexesContentRoot();
     for(asset of assets){
         instantiateModelContent(`${baseurl}`,asset);
     }
+
+    console.log(json.indexes)
+    if(indexesContentRoot!=null && json.indexes!=null){
+        for(index of json.indexes){
+            instantiateIndexContent(`${index.url}`,index.name);
+        }
+    }
+
 }
 
 

@@ -1,5 +1,54 @@
-{"baseUrl":"https://uqido.github.io/product-virtualization-cdn",
- "assets":["VirtualDermatic","VirtualShoe1","VirtualShoe2","VirtualShoe3","VirtualShoes","PoltronaPolpetta","VirtualBag","VirtualCouchCustomizer","VirtualPlant","VirtualRemote","VirtualValve","VirtualVase","VirtualWashingMachine","FittForcePro"],
- "assets_shoes":["GeoxBeige","GeoxBlu1","GeoxBlu2","GeoxBordeaux","GeoxRossoOro","Leopardata","Stivaletto"],
- "assets_bostel":["Bostel-Chiave","Bostel-Ciotola","Bostel-Coppa","Bostel-GrandeDolio","Bostel-Macina","Bostel-Vaso","Bostel-VasoNero","Bostel-VasoTripode"]
+{
+  "baseUrl": "https://uqido.github.io/product-virtualization-cdn",
+  "assets": [
+    "VirtualDermatic",
+    "VirtualShoe1",
+    "VirtualShoe2",
+    "VirtualShoe3",
+    "VirtualShoes",
+    "PoltronaPolpetta",
+    "VirtualBag",
+    "VirtualCouchCustomizer",
+    "VirtualPlant",
+    "VirtualRemote",
+    "VirtualValve",
+    "VirtualVase",
+    "VirtualWashingMachine",
+    "FittForcePro",
+    "BorsaFendi",
+    "MaglioneBenetton"
+  ],
+  "assets_shoes": [
+    "GeoxBeige",
+    "GeoxBlu1",
+    "GeoxBlu2",
+    "GeoxBordeaux",
+    "GeoxRossoOro",
+    "Leopardata",
+    "Stivaletto"
+  ],
+  "assets_bostel": [
+    "Bostel-Chiave",
+    "Bostel-Ciotola",
+    "Bostel-Coppa",
+    "Bostel-GrandeDolio",
+    "Bostel-Macina",
+    "Bostel-Vaso",
+    "Bostel-VasoNero",
+    "Bostel-VasoTripode"
+  ],
+  "indexes": [
+    {
+      "name": "ManiciAR",
+      "url": "https://uqido.github.io/termoplastic-webar/index.html"
+    },
+    {
+      "name": "TubiAR",
+      "url": "https://uqido.github.io/fitt-webar/index.html"
+    },
+    {
+      "name": "Bostel",
+      "url": "https://uqido.github.io/product-virtualization-cdn/Bostel.html"
+    }
+  ]
 }
