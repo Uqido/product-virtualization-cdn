@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>D'orica Rialto</title>
+    <link rel="stylesheet" href="css/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="white"/>
+    <link rel="icon"
+          type="image/png"
+          href="favicon-uqido.png">
+    <meta name="description" content="">
+
+    <script src="https://unpkg.com/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+
+    <script src="https://unpkg.com/intersection-observer/intersection-observer.js"></script>
+
+    <script src="https://unpkg.com/resize-observer-polyfill/dist/ResizeObserver.js"></script>
+
+    <script src="https://unpkg.com/fullscreen-polyfill/dist/fullscreen.polyfill.js"></script>
+
+    <script src="https://unpkg.com/focus-visible/dist/focus-visible.js" defer></script>
+    <style>
+        @font-face {
+            font-family: 'NicolasCochin';
+        url('fonts/Nicolas_Cochin_Regular.ttf')  format('truetype'), /* Safari, Android, iOS */
+        }
+
+        .fullscreen {
+            background: linear-gradient(360deg, rgb(171, 161, 183) 0%, rgba(244, 244, 244, 1) 100%);
+        }
+
+        .right-description:after {
+            background: linear-gradient(360deg, rgb(171, 161, 183) 0%, rgba(244, 244, 244, 1) 100%);
+        }
+
+        .text {
+            line-height: 30px;
+            font-family: NicolasCochin, serif;
+            color: #313131;
+            text-align: justify;
+        }
+
+        .dorica-logo {
+            background-image: url("img/dorica-logo.png");
+            background-size: 128px 128px;
+            height: 128px;
+            width: 128px;
+        }
+
+        @media only screen and (max-width: 950px) {
+            .right-description:after {
+                background: transparent;
+            }
+        }
+    </style>
+</head>
+
+<body class="fullscreen">
+
+<div style="display: flex; flex-direction: row;height: 100%;min-height: 100%;flex-wrap: wrap">
+    <model-viewer id="model-viewer" class='model-viewer-w80' ar camera-controls src='models/Bracciale.glb'
+                  ios-src='models/Bracciale.usdz' alt='' exposure="0.6" min-camera-orbit="auto auto 0.125m"
+                  max-camera-orbit="auto auto 0.35m" camera-orbit="auto auto 100%" min-field-of-view="45deg"
+                  shadow-intensity="2.5" shadow-softness="0.6"
+                  quick-look-browsers="safari chrome">
+        <div class="logo-bar">
+            <div class="upper-left-logo dorica-logo"></div>
+        </div>
+
+        <div class="viewer-bottom">
+            <div id="move_camera" class="clickable" style="background-image: url(img/Move.png);"></div>
+        </div>
+        <script src="js/LoadingBar.js"></script>
+        <style>
+            .iframe-loader {
+                color: #242424;
+            }
+
+            .iframe-loader > div {
+                background: #242424;
+            }
+        </style>
+        <script>
+            const modelViewer = document.getElementById('model-viewer');
+
+            const cameraSwitch = document.getElementById('move_camera');
+
+            const positions = ["-35deg 65deg 105%", "-90deg 65deg 105%", "180deg 65deg 105%"];
+            let cameraIndex = 0;
+
+            cameraSwitch.onclick = function () {
+                cameraIndex = (++cameraIndex) % positions.length;
+                modelViewer.cameraOrbit = positions[cameraIndex];
+            };
+        </script>
+    </model-viewer>
+    <div class="right-description">
+        <div>
+            <div style="color: black;font-family: NicolasCochin,serif; font-size: 3em;">D’ORICA RIALTO</div>
+            <br><br>
+            <div class="text">Il bracciale bangle Rialto di D’orica in oro 18 Karati è caratterizzato da una trama
+                leggera e sinuosa, e da una lucentezza ineguagliabile, che deriva da una meticolosa dedizione
+                artigianale e da una particolare attenzione nell’innovazione e alla ricerca di oltre trent’anni di
+                attività. <br><br>
+                L’intreccio tra la catena di palline gemellate in oro bianco e le sfere diamantate di oro giallo crea
+                una struttura reticolare che richiama alla mente il celebre ponte di Venezia, città natale di Daniela
+                Raccanello, cuore creativo dell’azienda, a cui si è ispirata dedicandole appunto questa collezione. <br><br>
+                Eleganti e raffinati, i gioielli di questa linea sono creazioni senza tempo, sempre contemporanei,
+                ottenuti dalla sapiente lavorazione manuale dei nostri “sarti orafi”, che con ago e filo d’oro
+                realizzano queste preziose creazioni. <br><br>
+                La chiusura brevettata del bracciale, caratterizzata dalla forma decagonale, rappresenta la tipica
+                sfaccettatura “dorica”, garantendone l’originalità.
+            </div>
+        </div>
+    </div>
+</div>
+<script type="module" src="js/model-viewer/dist/uqido-model-viewer.js"></script>
+<script nomodule src="js/model-viewer/dist/uqido-model-viewer-legacy.js"></script>
+
+</body>
+
+</html>

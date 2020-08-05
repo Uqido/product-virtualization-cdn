@@ -3,17 +3,25 @@ if (typeof modelviewer === "undefined") {
     window.modelviewer = document.getElementsByTagName("model-viewer")[0];
 }
 
-document.addEventListener('DOMContentLoaded', ()=>init(), false);
+document.addEventListener('DOMContentLoaded', ()=>{
+    //console.log("ContentLoaded");
+    init()
+}, false);
 
 let loadingWasDismissed=false;
 
 function init() {
+    //console.log("LoadingBar Init!")
+
     if(loadingWasDismissed) return;
+        loadingWasDismissed=true
 
     const progress = document.getElementById('loading-bar');
 
 
     modelviewer.addEventListener("progress", function (event) {
+        //console.log("Progress!")
+
         const percent = parseInt(event.detail.totalProgress) * 100;
 
         progress.innerHTML = `Loading ${percent}%
@@ -23,13 +31,17 @@ function init() {
     modelviewer.addEventListener("load",function () {
         console.log("Model load");
         progress.classList.add("hidden");
-        loadingWasDismissed=true
+
     });
+    setTimeout(()=>{
+        progress.classList.add("hidden");
+    },4000);
 
     setTimeout(()=>{
         progress.classList.remove("hidden");
     },100);
 }
+
 
 if (modelviewer) {
     modelviewer.classList.add("no-default-loading");
@@ -50,7 +62,7 @@ if (modelviewer) {
         font-size: 1.2rem;
         pointer-events: none;
     }
-    
+
     .iframe-loader > div {
         position: absolute;
         bottom: -10px;
@@ -59,8 +71,8 @@ if (modelviewer) {
         height: 3px;
         background: #DDD;
     }
-    
-   
+
+
     .iframe-loader.hidden {
         animation: none;
         opacity: 0;
@@ -69,8 +81,8 @@ if (modelviewer) {
         -o-transition: all 0.25s ease-out;
         transition: all 0.25s ease-out;
     }
-    
-    
+
+
     @media only screen and (max-width: 950px) {
             .iframe-loader {
                 color: #3d3d3d;
@@ -81,5 +93,5 @@ if (modelviewer) {
     }
     </style>`;
 
-    init()
+    //init()
 }

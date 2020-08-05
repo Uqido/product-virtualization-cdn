@@ -45,7 +45,8 @@ html{
 
 .no-default-loading{
     --progress-mask:#0000;
-    --progress-bar-height:0px
+    --progress-bar-height:0px;
+    --poster-color:#0000;
 }
 
 .model-viewer-w80 {
