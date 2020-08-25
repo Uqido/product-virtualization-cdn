@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Lekythos</title>
+    <link rel="stylesheet" href="css/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="white"/>
+    <link rel="icon"
+          type="image/png"
+          href="favicon-uqido.png">
+    <meta name="description" content="">
+
+    <script src="https://unpkg.com/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+
+    <script src="https://unpkg.com/intersection-observer/intersection-observer.js"></script>
+
+    <script src="https://unpkg.com/resize-observer-polyfill/dist/ResizeObserver.js"></script>
+
+    <script src="https://unpkg.com/fullscreen-polyfill/dist/fullscreen.polyfill.js"></script>
+
+    <script src="https://unpkg.com/focus-visible/dist/focus-visible.js" defer></script>
+
+
+    <style>
+        .fullscreen{
+            background: black;
+        }
+
+        .call-to-action-button {
+            background-color: #ff7e33;
+            color: black;
+            font-weight: bold;
+        }
+
+        .right-description:after{
+            background: black;
+        }
+        .text{
+            color: white;
+        }
+    </style>
+
+</head>
+
+<body class="fullscreen">
+
+<div style="display: flex; flex-direction: row;height: 100%;min-height: 100%;flex-wrap: wrap">
+    <model-viewer id="model-viewer" class='model-viewer-w80' ar camera-controls src='models/Altopiano.glb'
+                  ios-src='models/Altopiano.usdz' alt='' min-field-of-view="45deg" max-camera-orbit="auto 90deg 1.40m"
+                  min-camera-orbit="auto auto 0.0m" camera-orbit="30deg 60deg 1m" camera-target="0m 0m 0m" exposure="1"
+                  shadow-intensity="1.5" shadow-softness="0.6"
+                  quick-look-browsers="safari chrome">
+        <div class="logo-bar">
+            <div class="upper-left-logo uqido-logo-white"></div>
+        </div>
+
+        <div class="viewer-bottom">
+            <div id="move_camera" class="clickable" style="background-image: url(img/Move-white.png);"></div>
+        </div>
+        <script src="js/LoadingBar.js"></script>
+        <script>
+            const modelViewer = document.getElementById('model-viewer');
+
+            const cameraSwitch = document.getElementById('move_camera');
+
+            const positions = ["-35deg 65deg 120%", "-90deg 65deg 120%", "180deg 65deg 120%"];
+            let cameraIndex = 0;
+
+            cameraSwitch.onclick = function () {
+                cameraIndex = (++cameraIndex) % positions.length;
+                modelViewer.cameraOrbit = positions[cameraIndex];
+            };
+        </script>
+    </model-viewer>
+    <div class="right-description">
+        <div>
+            <div style="color: #ff7e33; font-size: 3em; font-weight: bold">Plastico dell'altopiano</div>
+            <br><br>
+            <div class="text">Plastico dell'altopiano di Rotzo presente nel museo.
+            </div>
+            <br><br><br>
+            <div class="call-to-action-button">SCOPRI DI PIU'</div>
+        </div>
+    </div>
+</div>
+<script type="module" src="js/model-viewer/dist/model-viewer.js"></script>
+<script nomodule src="https://unpkg.com/@google/model-viewer/dist/model-viewer-legacy.js"></script>
+
+</body>
+
+</html>
