@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en" class="fullscreen-100">
+
 <head>
     <meta charset="utf-8">
     <title>Brain</title>
     <link rel="stylesheet" href="css/style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="white"/>
+    <meta name="theme-color" content="white" />
     <meta name="description" content="">
 
     <script src="https://unpkg.com/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
@@ -20,14 +21,22 @@
 </head>
 
 <body class="fullscreen-100">
-<model-viewer id="modelViewer"
-              class='model-viewer' ar autoplay camera-controls src='models/Brains.glb'
-              ios-src='models/Brains.usdz' alt='' max-camera-orbit="130deg 105.5deg 0.90m"
-              min-camera-orbit="50deg 50deg 0.50m" camera-orbit="auto auto 0.80m" ar-modes="scene-viewer webxr quick-look"
-              exposure="1" shadow-intensity="1.5" shadow-softness="0.8" quick-look-browsers="safari chrome">
-    <script src="js/LoadingBar.js"></script>
-    <script src="js/ContentCustomizer.js"></script>
-</model-viewer>
-<script type="module" src="js/model-viewer/dist/uqido-model-viewer.js"></script>
+    <model-viewer id="modelViewer" class='model-viewer' ar autoplay camera-controls src='models/Brains.glb'
+        ios-src='models/Brains.usdz' alt='' max-camera-orbit="220deg 105.5deg 0.90m"
+        min-camera-orbit="140deg 50deg 0.50m" camera-orbit="170deg 80deg 0.80m" ar-modes="scene-viewer webxr quick-look"
+        exposure="1" shadow-intensity="1.5" shadow-softness="0.8" quick-look-browsers="safari chrome">
+        <script src="js/LoadingBar.js"></script>
+    </model-viewer>
+    <script>
+        (() => {
+            const modelViewer = document.querySelector('#modelViewer');
+
+            self.setTimeout(() => {
+                modelViewer.animationName = 'loop fluttua';
+            }, 4000);
+        })();
+    </script>
+    <script type="module" src="js/model-viewer/dist/uqido-model-viewer.js"></script>
 </body>
+
 </html>
