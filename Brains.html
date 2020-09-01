@@ -23,14 +23,20 @@
 <body class="fullscreen-100">
     <model-viewer id="modelViewer" class='model-viewer' ar autoplay camera-controls src='models/Brains.glb'
         ios-src='models/Brains.usdz' alt='' max-camera-orbit="220deg 105.5deg 0.90m"
-        min-camera-orbit="140deg 50deg 0.50m" camera-orbit="170deg 80deg 0.80m" ar-modes="scene-viewer webxr quick-look"
+        min-camera-orbit="140deg 50deg 0.50m" camera-orbit="170deg 80deg 0.80m"
         exposure="1" shadow-intensity="1.5" shadow-softness="0.8" quick-look-browsers="safari chrome">
         <script src="js/LoadingBar.js"></script>
     </model-viewer>
     <script>
-        (() => {
-            const modelViewer = document.querySelector('#modelViewer');
+        const modelViewer = document.querySelector('#modelViewer');
 
+        /*modelViewer.addEventListener("load", function () {
+            setTimeout(() => {
+                modelViewer.animationName = 'loop fluttua';
+            }, 4000);
+        });*/
+
+        (() => {
             self.setTimeout(() => {
                 modelViewer.animationName = 'loop fluttua';
             }, 4000);
