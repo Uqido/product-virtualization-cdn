@@ -52,7 +52,7 @@
             width: 30px;
             height: 30px;
             margin-top: 5px;
-            background-color: white;
+            background-color: rgba(255, 255, 255, 0);
             border-radius: 50%;
         }
 
@@ -74,7 +74,8 @@
 
 <body class="fullscreen-100">
     <model-viewer class='model-viewer' id="astronaut" camera-controls interaction-prompt="none" src="models/a.glb"
-        ios-src="models/a.usdz" ar alt="A 3D model of an astronaut" ar-modes="scene-viewer webxr quick-look">
+        ios-src="models/a.usdz" ar alt="A 3D model of an astronaut" ar-modes="scene-viewer webxr quick-look" noloop
+        quick-look-browsers="safari chrome">
 
         <div class="unselectable" id="hotspot-Fittings" slot="hotspot-Fittings" data-position="0.00 0.04 -0.01"
             data-normal="0.00 1.00 0.00">
@@ -102,43 +103,51 @@
             </div>
         </div>
 
-        <div id="controls" class="viewer-bottom">
-            <!--<button data-color="0.06,0.18,0.33,1" class="clickable color-button selected"
-                style="background-color: rgb(0, 151, 215);">Boh</button>
-            <button data-color="0.7,0.2,0.2,1" class="clickable color-button"
-                style="background-color: rgb(0, 151, 215);">Original</button>
-            <button data-color="0.44,0.03,0.03,1" class="clickable color-button"
-                style="background-color: rgb(0, 151, 215);">Blue</button>
-            <button data-color="1,1,1,1" class="clickable color-button"
-                style="background-color: rgb(0, 151, 215);">White</button>-->
-            <button class="clickable color-button selected" data-color="0.7,0.2,0.2,1"
-                style="background-color: rgb(0, 151, 215);"></button>
-            <button class="clickable color-button" data-color="0.44,0.03,0.03,1"
-                style="background-color: rgb(149, 193, 31);"></button>
-            <button class="clickable color-button" data-color="0.7,0.2,0.2,1"
-                style="background-color: rgb(20, 20, 20);"></button>
-            <button id="move_camera" onclick="rotateCamera()" class="clickable"
-                style="background-image: url(img/Move.png);"></button>
-            <button id="animate" onclick="modelAnimate()" class="clickable"
-                style="background-image: url(img/Animate.png);"></button>
+        <div id="viewer-bottom" class="viewer-bottom">
+            <div id="color1" class="clickable color-button selected" data-color="0.7,0.2,0.2,1" data-index=0
+                style="background-color: rgb(0, 151, 215);"></div>
+            <div id="color2" class="clickable color-button" data-color="0.44,0.03,0.03,1" data-index=1
+                style="background-color: rgb(149, 193, 31);"></div>
+            <div id="color3" class="clickable color-button" data-color="0.2,0.2,0.7,1" data-index=2
+                style="background-color: rgb(20, 20, 20);"></div>
+            <div id="move_camera" onclick="rotateCamera()" class="clickable"
+                style="background-color: rgba(20, 20, 20, 0); background-image: url(img/Move.png);"></div>
+            <div id="animate" onclick="modelAnimate()" class="clickable"
+                style="background-color: rgba(20, 20, 20, 0); background-image: url(img/Animate.png);"></div>
         </div>
     </model-viewer>
     <script>
         const modelViewer = document.querySelector("model-viewer");
+        const colorButtons = document.getElementsByClassName("color-button");
 
-        document.querySelector('#controls').addEventListener('click', (event) => {
+        modelViewer.addEventListener('finished', () => {
+            modelViewer.pause();
+        });
+
+        function clearSelected() {
+            for (let button of colorButtons) {
+                button.classList.remove("selected")
+            }
+        }
+
+        document.querySelector('#viewer-bottom').addEventListener('click', (event) => {
             const colorString = event.target.dataset.color;
+            const index = event.target.dataset.index;
 
             if (!colorString) {
                 return;
             }
+
+            clearSelected();
+            console.log(event.target.dataset);
+            colorButtons[index].classList.add("selected");
 
             const color = colorString.split(',')
                 .map(numberString => parseFloat(numberString));
 
             matName = 'FITT_Force_colorable';
             console.log('Changing color to: ', color);
-            //console.log(modelViewer.model.materials);
+            console.log(modelViewer);
             for (let mat of modelViewer.model.materials) {
                 console.log(mat.name);
                 if (mat.name === matName)

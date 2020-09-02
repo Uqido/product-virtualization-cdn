@@ -46634,6 +46634,8 @@ Object.assign( AnimationAction.prototype, {
 				else this.enabled = false;
 
 				this.time = time;
+				
+				modelViewer.dispatchEvent(new Event('finished'));
 
 				this._mixer.dispatchEvent( {
 					type: 'finished', action: this,
@@ -57452,7 +57454,8 @@ class Model extends Object3D {
      * provided, or if no animation is found by the given name, always falls back
      * to playing the first animation.
      */
-    playAnimation(name = null, crossfadeTime = 0) {
+    playAnimation(name = null, crossfadeTime = 0, loop = true) {
+		var _d;
         const { animations } = this;
         if (animations == null || animations.length === 0) {
             console.warn(`Cannot play animation (model does not have any animations)`);
@@ -57465,11 +57468,18 @@ class Model extends Object3D {
         if (animationClip == null) {
             animationClip = animations[0];
         }
+        if ((_d = this.currentAnimationAction) === null || _d === void 0 ? void 0 : _d.paused) {
+            this.stopAnimation();
+        }
         try {
             const { currentAnimationAction: lastAnimationAction } = this;
             this.currentAnimationAction =
                 this.mixer.clipAction(animationClip, this).play();
-            this.currentAnimationAction.enabled = true;
+			this.currentAnimationAction.enabled = true;
+            if (!loop) {
+                this.currentAnimationAction.setLoop(LoopOnce, 0);
+                this.currentAnimationAction.clampWhenFinished = true;
+            }
             if (lastAnimationAction != null &&
                 this.currentAnimationAction !== lastAnimationAction) {
                 this.currentAnimationAction.crossFadeFrom(lastAnimationAction, crossfadeTime, false);
@@ -61666,7 +61676,7 @@ class ModelViewerElementBase extends UpdatingElement {
             new ModelScene({ canvas: this[$canvas], element: this, width, height });
         this[$scene].addEventListener('model-load', (event) => {
             this[$markLoaded]();
-            this[$onModelLoad]();
+			this[$onModelLoad]();
             this.dispatchEvent(new CustomEvent('load', { detail: { url: event.url } }));
         });
         // Update initial size on microtask timing so that subclasses have a
@@ -61994,7 +62004,8 @@ const AnimationMixin = (ModelViewerElement) => {
     class AnimationModelViewerElement extends ModelViewerElement {
         constructor() {
             super(...arguments);
-            this.autoplay = false;
+			this.autoplay = false;
+			this.noloop = false;
             this.animationName = undefined;
             this.animationCrossfadeDuration = 300;
             this[_a] = true;
@@ -62072,18 +62083,21 @@ const AnimationMixin = (ModelViewerElement) => {
         }
         [$changeAnimation]() {
             const { model } = this[$scene];
-            model.playAnimation(this.animationName, this.animationCrossfadeDuration / MILLISECONDS_PER_SECOND);
+            model.playAnimation(this.animationName, this.animationCrossfadeDuration / MILLISECONDS_PER_SECOND, !this.noloop);
             // If we are currently paused, we need to force a render so that
             // the model updates to the first frame of the new animation
             if (this[$paused]) {
                 model.updateAnimation(0);
                 this[$needsRender]();
-            }
+			}
         }
     }
     __decorate$1([
         property({ type: Boolean })
     ], AnimationModelViewerElement.prototype, "autoplay", void 0);
+    __decorate$1([
+        property({ type: Boolean })
+    ], AnimationModelViewerElement.prototype, "noloop", void 0);
     __decorate$1([
         property({ type: String, attribute: 'animation-name' })
     ], AnimationModelViewerElement.prototype, "animationName", void 0);
