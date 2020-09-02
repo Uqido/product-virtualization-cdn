@@ -46635,7 +46635,8 @@ Object.assign( AnimationAction.prototype, {
 
 				this.time = time;
 				
-				modelViewer.dispatchEvent(new Event('finished'));
+				const modelViewer = document.querySelector("model-viewer");
+				modelViewer.dispatchEvent(new Event('finished-animation'));
 
 				this._mixer.dispatchEvent( {
 					type: 'finished', action: this,
@@ -110979,6 +110980,9 @@ Object.assign( AnimationAction$1.prototype, {
 
 				this.time = time;
 
+				const modelViewer = document.querySelector("model-viewer");
+				modelViewer.dispatchEvent(new Event('finished-animation'));
+				
 				this._mixer.dispatchEvent( {
 					type: 'finished', action: this,
 					direction: deltaTime < 0 ? - 1 : 1
