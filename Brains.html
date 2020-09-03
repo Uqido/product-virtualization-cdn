@@ -22,30 +22,46 @@
 
 <body class="fullscreen-100">
     <model-viewer id="modelViewer" class='model-viewer' ar camera-controls src='models/Brains.glb'
-        ios-src='models/Brains.usdz' alt='' max-camera-orbit="40deg 105.5deg 0.90m"
-        min-camera-orbit="-40deg 50deg 0.50m" camera-orbit="-10deg 80deg 0.80m" noloop
-        exposure="1" shadow-intensity="1.5" shadow-softness="0.8" quick-look-browsers="safari chrome">
+        ios-src='models/Brains.usdz' alt='' autoplay max-camera-orbit="40deg 105.5deg 0.90m" animation-name="idle"
+        min-camera-orbit="-40deg 50deg 0.50m" camera-orbit="-10deg 80deg 0.80m" noloop exposure="1"
+        shadow-intensity="1.5" shadow-softness="0.8" quick-look-browsers="safari chrome">
         <script src="js/LoadingBar.js"></script>
+
+        <div id="viewer-bottom" class="viewer-bottom">
+            <div id="animate" onclick="modelAnimate()" class="clickable"
+                style="background-image: url(img/Animate.png);"></div>
+        </div>
+
+        <script>
+            const modelViewer = document.querySelector('#modelViewer');
+            let animate = true;
+
+            function modelAnimate() {
+                if (animate) {
+                    animate = false;
+                    modelViewer.animationName = 'scaling';
+                    modelViewer.play();
+                    setTimeout(() => {
+                        modelViewer.removeAttribute("noloop");
+                        modelViewer.animationName = 'loop fluttua';
+                        modelViewer.play();
+                    }, 4000);
+                    setTimeout(() => {
+                        animate = true;
+                        console.log(animate)
+                    }, 10000);
+                }
+            }
+
+            /*(() => {
+                setTimeout(() => {
+                    modelViewer.animationName = 'loop fluttua';
+                }, 4000);
+            })();*/
+        </script>
     </model-viewer>
-    <script>
-        const modelViewer = document.querySelector('#modelViewer');
 
-        modelViewer.addEventListener("load", function () {
-            modelViewer.play();
-            setTimeout(() => {
-                modelViewer.removeAttribute("noloop");
-                modelViewer.animationName = 'loop fluttua';
-                modelViewer.play();
-            }, 4000);
-        });
-
-        /*(() => {
-            setTimeout(() => {
-                modelViewer.animationName = 'loop fluttua';
-            }, 4000);
-        })();*/
-    </script>
-    <script type="module" src="js/model-viewer/dist/uqido-model-viewer.js"></script>
+    <script type="module" src="js/model-viewer/dist/new-model-viewer.js"></script>
 </body>
 
 </html>
