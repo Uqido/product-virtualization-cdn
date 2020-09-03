@@ -21,26 +21,29 @@
 </head>
 
 <body class="fullscreen-100">
-    <model-viewer id="modelViewer" class='model-viewer' ar autoplay camera-controls src='models/Brains.glb'
+    <model-viewer id="modelViewer" class='model-viewer' ar camera-controls src='models/Brains.glb'
         ios-src='models/Brains.usdz' alt='' max-camera-orbit="40deg 105.5deg 0.90m"
-        min-camera-orbit="-40deg 50deg 0.50m" camera-orbit="-10deg 80deg 0.80m"
+        min-camera-orbit="-40deg 50deg 0.50m" camera-orbit="-10deg 80deg 0.80m" noloop
         exposure="1" shadow-intensity="1.5" shadow-softness="0.8" quick-look-browsers="safari chrome">
         <script src="js/LoadingBar.js"></script>
     </model-viewer>
     <script>
         const modelViewer = document.querySelector('#modelViewer');
 
-        /*modelViewer.addEventListener("load", function () {
+        modelViewer.addEventListener("load", function () {
+            modelViewer.play();
+            setTimeout(() => {
+                modelViewer.removeAttribute("noloop");
+                modelViewer.animationName = 'loop fluttua';
+                modelViewer.play();
+            }, 4000);
+        });
+
+        /*(() => {
             setTimeout(() => {
                 modelViewer.animationName = 'loop fluttua';
             }, 4000);
-        });*/
-
-        (() => {
-            self.setTimeout(() => {
-                modelViewer.animationName = 'loop fluttua';
-            }, 4000);
-        })();
+        })();*/
     </script>
     <script type="module" src="js/model-viewer/dist/uqido-model-viewer.js"></script>
 </body>

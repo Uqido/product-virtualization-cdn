@@ -111,90 +111,82 @@
             <div id="color3" class="clickable color-button" data-color="0.2,0.2,0.7,1" data-index=2
                 style="background-color: rgb(20, 20, 20);"></div>
             <div id="move_camera" onclick="rotateCamera()" class="clickable"
-                style="background-color: rgba(20, 20, 20, 0); background-image: url(img/Move.png);"></div>
+                style="background-image: url(img/Move.png);"></div>
             <div id="animate" onclick="modelAnimate()" class="clickable"
-                style="background-color: rgba(20, 20, 20, 0); background-image: url(img/Animate.png);"></div>
+                style="background-image: url(img/Animate.png);"></div>
         </div>
+        
+        <script>
+            const materialArray = [['FITT_Force_colorable',]];
+    
+            //Questi valori sono tunati a mano per risolvere bug del viewer che li fa diversi
+            let colors = ['rgb(15, 45, 84)', 'rgb(73, 117, 11)', 'rgb(20, 20, 20)']
+    
+            let bumps = [1, 1, 1]
+    
+            const positions = [
+                "60deg 55deg 60%",
+                "-30deg 55deg 60%",
+                "180deg 60deg 70%",
+                "20deg 50deg 60%",
+            ];
+    
+            const getAnnotations = function () {
+                return [
+                    document.getElementById('hotspot-Fittings'), document.getElementById('hotspot-Couplings'), document.getElementById('hotspot-Gun')
+                ].filter((elem) => elem);
+            }
+    
+            const positionToAnnotation = {
+                0: [], 1: ['hotspot-Fittings'], 2: ['hotspot-Couplings'], 3: ['hotspot-Gun']
+            };
+    
+            const hasAnimations = true
+    
+            if (!hasAnimations)
+                animate.style.display = "none"
+    
+        </script>
+
+        <script>
+            const modelViewer = document.querySelector("model-viewer");
+            const colorButtons = document.getElementsByClassName("color-button");
+    
+            modelViewer.addEventListener('finished-animation', () => {
+                modelViewer.pause();
+            });
+    
+            document.querySelector('#viewer-bottom').addEventListener('click', (event) => {
+                const colorString = event.target.dataset.color;
+                const index = event.target.dataset.index;
+    
+                if (!colorString) {
+                    return;
+                }
+    
+                clearSelected();
+                console.log(event.target.dataset);
+                colorButtons[index].classList.add("selected");
+    
+                const color = colorString.split(',')
+                    .map(numberString => parseFloat(numberString));
+    
+                matName = 'FITT_Force_colorable';
+                console.log('Changing color to: ', color);
+                for (let mat of modelViewer.model.materials) {
+                    console.log(mat.name);
+                    if (mat.name === matName)
+                        material = mat;
+                }
+                console.log(material.pbrMetallicRoughness);
+                material.pbrMetallicRoughness.setBaseColorFactor(color);
+            });
+        </script>
+
+        <script src="js/TubiCustomizer.js"></script>
     </model-viewer>
-    <script>
-        const modelViewer = document.querySelector("model-viewer");
-        const colorButtons = document.getElementsByClassName("color-button");
 
-        modelViewer.addEventListener('finished-animation', () => {
-            modelViewer.pause();
-        });
-
-        function clearSelected() {
-            for (let button of colorButtons) {
-                button.classList.remove("selected")
-            }
-        }
-
-        document.querySelector('#viewer-bottom').addEventListener('click', (event) => {
-            const colorString = event.target.dataset.color;
-            const index = event.target.dataset.index;
-
-            if (!colorString) {
-                return;
-            }
-
-            clearSelected();
-            console.log(event.target.dataset);
-            colorButtons[index].classList.add("selected");
-
-            const color = colorString.split(',')
-                .map(numberString => parseFloat(numberString));
-
-            matName = 'FITT_Force_colorable';
-            console.log('Changing color to: ', color);
-            console.log(modelViewer);
-            for (let mat of modelViewer.model.materials) {
-                console.log(mat.name);
-                if (mat.name === matName)
-                    material = mat;
-                //materials.push(model.materials.find(mat=> mat.name===matName));
-            }
-            //const [material] = modelViewer.model.materials.find(mat=> mat.name===matName);
-            console.log(material.pbrMetallicRoughness);
-            material.pbrMetallicRoughness.setBaseColorFactor(color);
-            //console.log(mat.pbrMetallicRoughness.getMetallic());
-        });
-    </script>
-
-    <script>
-        const materialArray = [['FITT_Force_colorable',]];
-
-        //Questi valori sono tunati a mano per risolvere bug del viewer che li fa diversi
-        let colors = ['rgb(15, 45, 84)', 'rgb(73, 117, 11)', 'rgb(20, 20, 20)']
-
-        let bumps = [1, 1, 1]
-
-        const positions = [
-            "60deg 55deg 60%",
-            "-30deg 55deg 60%",
-            "180deg 60deg 70%",
-            "20deg 50deg 60%",
-        ];
-
-        const getAnnotations = function () {
-            return [
-                document.getElementById('hotspot-Fittings'), document.getElementById('hotspot-Couplings'), document.getElementById('hotspot-Gun')
-            ].filter((elem) => elem);
-        }
-
-        const positionToAnnotation = {
-            0: [], 1: ['hotspot-Fittings'], 2: ['hotspot-Couplings'], 3: ['hotspot-Gun']
-        };
-
-        const hasAnimations = true
-
-        if (!hasAnimations)
-            animate.style.display = "none"
-
-    </script>
-    <script src="js/TubiCustomizer.js"></script>
     <script type="module" src="js/model-viewer/dist/new-model-viewer.js"></script>
-    <!-- <script nomodule src="https://unpkg.com/@google/model-viewer/dist/model-viewer-legacy.js"></script> -->
 </body>
 
 </html>

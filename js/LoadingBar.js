@@ -31,7 +31,6 @@ function init() {
     modelviewer.addEventListener("load",function () {
         console.log("Model load");
         progress.classList.add("hidden");
-
     });
     setTimeout(()=>{
         progress.classList.add("hidden");
