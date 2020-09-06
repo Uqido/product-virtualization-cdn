@@ -1,8 +1,25 @@
 .uqido-model-viewer {
-  width: 470px;
-  height: 470px;
+  width: 100%;
+  height: 100%;
+}
+
+.uqido-container {
+  display: flex;
+  height: 468px;
+}
+
+#uqido-slave {
+  flex-grow: 1;
+  height: 468px;
+}
+
+@media screen and (max-width: 740px) {
+  #uqido-slave {
+    display: none;
+  }
 }
 
 #uqido-target {
-  overflow: visible;
+  flex-grow: 6;
+  height: 468px;
 }
