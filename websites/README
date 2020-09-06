@@ -15,7 +15,7 @@ wget --mirror --convert-links --adjust-extension --page-requisites --no-parent h
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
-<iframe id="uqido-iframe" src="websites/www.whatever.com/target.html" style="width: 100%; height: 100%"></iframe>
+<iframe id="uqido-iframe" src="websites/www.whatever.com/target.html"></iframe>
 <template id="uqido-model">
   <model-viewer class="uqido-model-viewer" ar autoplay camera-controls
                 src='/models/whatever.glb'
@@ -35,7 +35,7 @@ wget --mirror --convert-links --adjust-extension --page-requisites --no-parent h
 </body>
 </html>
 
-3) add the uqido-target id to the frame target html injection point, plus any other relevant custom resources
+3) add the uqido-target id to the frame target html injection point, plus any other relevant custom resources, ids, css classes
 
 4) serve locally and possibly adjust for missing http calls (ie. those invoked through js) by adding the missing resources by hand
 
