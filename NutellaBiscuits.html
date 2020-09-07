@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Nutella Biscuit</title>
+    <link rel="stylesheet" href="websites/shared/base.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+    <iframe id="uqido-iframe" src="websites/www.nutella.com/it/it/nutella-biscuits.html"></iframe>
+    <template id="uqido-model">
+        <model-viewer class="uqido-model-viewer" ar autoplay camera-controls src='../../../../models/NutellaBiscuit.glb'
+            ios-src='../../../../models/NutellaBiscuit.usdz' alt='' environment-image="../../../../img/skies/room.jpg"
+            camera-orbit="-20deg 85deg 105%" exposure="5" shadow-intensity="1.5" shadow-softness="0.8"
+            quick-look-browsers="safari chrome" style="width: 100%;height: 100%;">
+
+            <!-- <div class="unselectable" id="hotspot-Couplings" slot="hotspot-Couplings" data-position="0 0 0"
+                data-normal="0.00 1.00 0.00">
+                <div class="unselectable" style="display: flex;transform: translateX(50%)">
+                    <div class="hotspot-bar"></div>
+                    <div class="unselectable hotspot-text text-white">Un biscotto delizioso e fragrante!</div>
+                </div>
+            </div>
+
+            <div class="unselectable" id="hotspot-Hose" slot="hotspot-Hose" data-position="0 0 0"
+                data-normal="0.00 1.00 0.00">
+                <div class="unselectable" style="display: flex;transform: translateX(50%)">
+                    <div class="hotspot-bar"></div>
+                    <div class="unselectable hotspot-text text-white">Un cuore cremoso di Nutella!</div>
+                </div>
+            </div>
+
+            <div id="viewer-bottom" class="viewer-bottom">
+                <div id="move_camera" onclick="rotateCamera()" class="clickable"
+                    style="background-image: url(img/Move.png);"></div>
+            </div> -->
+
+        </model-viewer>
+        <script>/*
+            let cameraIndex = 0;
+
+            const positions = [
+                "-30deg 55deg 80%",
+                "180deg 60deg 75%",
+                "20deg 60deg 90%",
+            ];
+
+            function rotateCamera() {
+                cameraIndex = (++cameraIndex) % positions.length;
+                modelViewer.cameraOrbit = positions[cameraIndex];
+            }*/
+        </script>
+        <script type="module" src="../../../../websites/shared/model-viewer.js"></script>
+    </template>
+    <script>
+        const iframe = document.getElementById("uqido-iframe");
+        iframe.onload = function () {
+            const container = iframe.contentDocument.getElementById("uqido-target");
+            container.appendChild(document.getElementById("uqido-model").content.cloneNode(true));
+        };
+    </script>
+</body>
+
+</html>

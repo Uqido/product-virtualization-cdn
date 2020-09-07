@@ -1,0 +1,16 @@
+@media(min-width:768px){
+  body .view-recipes-overview .view-header .field--name-title{
+    margin-top:0;
+    padding-top:25px;
+  }
+  body .recipe-overview-bg,
+  body .node-nutella-giallo-zafferano{
+    background-image:url(../../../../../s3fs-media/nutella_it/public/2020-04/nutella_it_recipe_bg.jpg@t=1599127087);
+    background-color:#FFF;
+  }
+  
+  body .node--type-recipe:not(.nutella-football):not(.nutella-christmas):not(.christmas-recipe-teaser):not(.desayunar-recipes):not(.node--view-mode-teaser):not(.node-type-recipes--decoration-it):not(.node-type-recipes--decoration){
+      background-image:url(../../../../../s3fs-media/nutella_it/public/2020-04/nutella_it_recipe_bg.jpg@t=1599127087);
+      background-color:#FFF;
+  }
+}
