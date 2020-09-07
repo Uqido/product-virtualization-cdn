@@ -1,0 +1,21 @@
+.paragraph--type--carousel-with-links.mobile .slick-dots {
+  right: auto;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.carousel-with-links .slick-arrow {
+  height: 80%;
+  width: 20%;
+  margin-top: -40%;
+}
+
+.carousel-with-links .slick-arrow.slick-prev {
+  padding-left: 10px;
+  text-align: left;
+}
+
+.carousel-with-links .slick-arrow.slick-next {
+  padding-right: 10px;
+  text-align: right;
+}
