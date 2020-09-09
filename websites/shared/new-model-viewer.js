@@ -119145,7 +119145,6 @@ export { ModelViewerElement };
 changeARButton()
 
 function changeARButton() {
-	console.log("bau")
 	var modelViewer = document.getElementsByTagName("model-viewer")[0];
 	modelViewer.innerHTML += `
 	<button slot="ar-button"

@@ -22,11 +22,38 @@
 
 <body class="fullscreen-100">
     <model-viewer id="modelViewer" class='model-viewer' ar camera-controls src='models/Nutella.glb'
-        ios-src='models/Nutella.usdz' alt='' max-camera-orbit="auto 105.5deg 0.90m"
-        min-camera-orbit="auto 50deg 0.50m" camera-orbit="-10deg 80deg 0.80m"
-        exposure="1" shadow-intensity="1.5" shadow-softness="0.8" quick-look-browsers="safari chrome">
+        ios-src='models/Nutella.usdz' alt='' max-camera-orbit="auto 105.5deg 0.70m" min-camera-orbit="auto 50deg 0.50m"
+        camera-orbit="-10deg 80deg 0.60m" exposure="1" shadow-intensity="1.5" shadow-softness="0.8"
+        quick-look-browsers="safari chrome" noloop camera-target="0 0.1m 0">
         <script src="js/LoadingBar.js"></script>
     </model-viewer>
+    <div id="viewer-bottom" class="viewer-bottom">
+        <div id="animate" onclick="modelAnimate()" class="clickable" style="background-image: url(img/Animate.png);">
+        </div>
+    </div>
+    <script>
+        modelviewer = document.getElementsByTagName("model-viewer")[0];
+        let isOpen = false;
+
+        modelViewer.addEventListener('finished-animation', () => {
+            modelViewer.pause();
+        });
+
+        function modelAnimate() {
+            if (modelviewer.paused) {
+                if (isOpen) {
+                    console.log("close")
+                    modelviewer.animationName = "Close";
+                    isOpen = false;
+                } else {
+                    console.log("open")
+                    modelviewer.animationName = "Open";
+                    isOpen = true;
+                }
+                modelviewer.play();
+            }
+        }
+    </script>
     <script type="module" src="js/model-viewer/dist/new-model-viewer.js"></script>
 </body>
 
