@@ -47,11 +47,15 @@
 
 <body class="fullscreen-100">
     <model-viewer id="modelViewer" class='model-viewer' ar autoplay camera-controls src='models/OcchialiCK.glb'
-        ios-src='models/OcchialiCK.usdz' environment-image="img/sunset.hdr"
-        alt='' noloop camera-orbit="-40deg 75deg 60%" min-camera-orbit="auto auto 230%"
-        max-camera-orbit="auto auto 10%" exposure="1" shadow-intensity="1" shadow-softness="0.8"
-        ar-modes="scene-viewer webxr quick-look" quick-look-browsers="safari chrome">
+        ios-src='models/OcchialiCK.usdz' environment-image="img/sunset_desat.hdr" alt='' noloop
+        camera-orbit="-40deg 75deg 60%" min-camera-orbit="auto auto 230%" max-camera-orbit="auto auto 10%" exposure="1"
+        shadow-intensity="1" shadow-softness="0.8" ar-modes="scene-viewer webxr quick-look"
+        quick-look-browsers="safari chrome">
         <script src="js/LoadingBar.js"></script>
+
+        <button slot="ar-button" id="custom-ar-button" style="display: none; background-color: white; border-radius: 4px; border: none; position: absolute; bottom: 32px; right: 16px; ">
+            View in AR
+        </button>
 
         <div id="viewer-bottom" class="viewer-bottom">
             <div id="color1" onclick="changeTextureByIndex(0)" class="clickable color-button selected"
@@ -74,7 +78,7 @@
 
             let textures = ['occhiali-ck/purple.png', 'occhiali-ck/orange-purple.png', 'occhiali-ck/pink-blue.png', 'occhiali-ck/purple-black.png', 'occhiali-ck/white.png']
 
-            let bumps = [1, 1, 1]
+            let bumps = [1, 1, 1, 1, 1]
 
             const positions = [
                 "-40deg 75deg 60%",
@@ -106,6 +110,11 @@
             modelViewer.addEventListener('finished-animation', () => {
                 modelViewer.pause();
             });
+
+            setTimeout(() => {
+                arButton = document.getElementById("custom-ar-button");
+                arButton.style.display = "block";
+            }, 200);
 
             modelViewer.addEventListener('change-color', (event) => {
                 const colorString = event.detail;
