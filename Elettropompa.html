@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" class="fullscreen-100">
+
+<head>
+    <meta charset="utf-8">
+    <title>Elettropompa</title>
+    <link rel="stylesheet" href="css/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="white" />
+    <meta name="description" content="">
+
+    <script src="https://unpkg.com/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+
+
+    <script src="https://unpkg.com/fullscreen-polyfill/dist/fullscreen.polyfill.js"></script>
+
+    <script src="https://unpkg.com/focus-visible/dist/focus-visible.js" defer></script>
+    <script src="https://unpkg.com/event-target@latest/min.js"></script>
+    <script src="https://unpkg.com/resize-observer-polyfill@1.5.0/dist/ResizeObserver.global.js"></script>
+    <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=IntersectionObserver"></script>
+
+    <style>
+        .color-button {
+            width: 30px;
+            height: 30px;
+            margin-top: 5px;
+            background-color: white;
+            border-radius: 50%;
+        }
+
+        .unselectable {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            pointer-events: none;
+        }
+
+        .color-button.selected {
+            border: 2px solid #717171;
+        }
+    </style>
+
+</head>
+
+<body class="fullscreen-100" style="background: linear-gradient(360deg, rgba(45, 129, 158, 1) 0%, rgba(74, 170, 184, 1) 10%, rgba(144, 215, 219, 1) 100%);">
+    <model-viewer id="modelViewer" class='model-viewer' ar camera-controls src='models/Elettropompa.glb'
+        ios-src='models/Elettropompa.usdz' alt='' max-camera-orbit="auto 105.5deg 3m" min-camera-orbit="auto 50deg 1.5m"
+        camera-orbit="130deg 75deg 2.5m" exposure="1" shadow-intensity="1.5" shadow-softness="0.8"
+        quick-look-browsers="safari chrome" noloop camera-target="0 0.27m 0" ar-modes="scene-viewer webxr quick-look">
+        <script src="js/LoadingBar.js"></script>
+    </model-viewer>
+    <script type="module" src="js/model-viewer/dist/new-model-viewer.js"></script>
+</body>
+
+</html>
