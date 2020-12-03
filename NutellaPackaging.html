@@ -33,6 +33,7 @@
         .call-action-color-bg {
             background-color: whitesmoke;
             color: #D90210;
+            text-decoration: none;
         }
         .fullscreen {
             background: #D90210;
@@ -54,7 +55,8 @@
     <model-viewer id="model-viewer" class='model-viewer-w80' ar camera-controls src='models/NutellaPackaging.glb'
                   ios-src='models/NutellaPackaging.usdz' alt='' min-field-of-view="45deg"
                   camera-target="0m 0.1m 0m" max-camera-orbit="auto 105.5deg 0.65m"
-                  min-camera-orbit="auto auto 0.15m" camera-orbit="0deg 45deg 0.45m" exposure="0.8" shadow-intensity="2.5" shadow-softness="0.6"
+                  environment-image="img/music_hall_01_1k.hdr"
+                  min-camera-orbit="auto auto 0.15m" camera-orbit="-25deg 65deg 0.35m" exposure="1.25" shadow-intensity="2.5" shadow-softness="0.6"
                   quick-look-browsers="safari chrome">
 
         <div class="viewer-bottom">
@@ -66,7 +68,7 @@
 
             const cameraSwitch = document.getElementById('move_camera');
 
-            const positions = ["180deg 45deg 0.55m", "0deg 75deg 105%", "180deg 75deg 105%"];
+            const positions = ["-25deg 65deg 0.35m", "0deg 75deg 105%", "180deg 75deg 105%"];
             let cameraIndex = 0;
 
             cameraSwitch.onclick = function () {
@@ -94,12 +96,13 @@
                 Sono le persone che ami a farti sentire meglio e i momenti più belli sono quelli trascorsi con loro. 
                 Condividere un biscotto delizioso come questo può rendere tutto ancora più speciale! Nutella Biscuits, 
                 fatti per essere condivisi con chi ami. 
-                Nutella Biscuits, croccanti biscotti con farina di frumento con cuore cremoso di Nutella®. 
+                Nutella Biscuits, croccanti biscotti con farina di frumento con cuore cremoso di Nutella®.
+                <br>
                 C'è più gusto a stare insieme!
             </div>
             <br>
             <br>
-            <a class="call-action-color-bg call-to-action-button" href="https://www.nutella.com/it/it/prodotti/nutella-biscuits">SCHEDA TECNICA</a>
+            <a class="call-action-color-bg call-to-action-button" href="https://www.nutella.com/it/it/prodotti/nutella-biscuits">Ingredienti</a>
         </div>
     </div>
 </div>
