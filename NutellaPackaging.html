@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Nutella Biscuits</title>
+    <link rel="stylesheet" href="css/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="white"/>
+    <link rel="icon"
+          type="image/png"
+          href="favicon-uqido.png">
+    <meta name="description" content="">
+
+    <script src="https://unpkg.com/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+
+    <script src="https://unpkg.com/intersection-observer/intersection-observer.js"></script>
+
+    <script src="https://unpkg.com/resize-observer-polyfill/dist/ResizeObserver.js"></script>
+
+    <script src="https://unpkg.com/fullscreen-polyfill/dist/fullscreen.polyfill.js"></script>
+
+    <script src="https://unpkg.com/focus-visible/dist/focus-visible.js" defer></script>
+
+    <style>
+        .uqido-logo{
+            background-image: url("img/nutella-packaging-logo.png");
+            background-size: 172px 90px;
+            height: 90px;
+            width: 172px;
+        }
+        .title-color {
+            color: #562F1D;
+        }
+        .call-action-color-bg {
+            background-color: #562F1D;
+        }
+        .fullscreen {
+            background: #D90210;
+        }
+        .right-description:after {
+            background: transparent;
+        }
+        .text{
+            color: whitesmoke;
+        }
+    </style>
+
+</head>
+
+<body class="fullscreen">
+
+
+<div style="display: flex; flex-direction: row;height: 100%;min-height: 100%;flex-wrap: wrap">
+    <model-viewer id="model-viewer" class='model-viewer-w80' ar camera-controls src='models/NutellaPackaging.glb'
+                  ios-src='models/NutellaPackaging.usdz' alt='' min-field-of-view="45deg"
+                  camera-target="0m 0.1m 0m" max-camera-orbit="auto 105.5deg 0.65m"
+                  min-camera-orbit="auto auto 0.15m" camera-orbit="180deg 45deg 0.55m" exposure="0.8" shadow-intensity="2.5" shadow-softness="0.6"
+                  quick-look-browsers="safari chrome">
+        <div class="logo-bar">
+            <div class="upper-left-logo uqido-logo"></div>
+        </div>
+
+        <div class="viewer-bottom">
+            <div id="move_camera" class="clickable" style="background-image: url(img/Move-white.png);"></div>
+        </div>
+        <script src="js/LoadingBar.js"></script>
+        <script>
+            const modelViewer = document.getElementById('model-viewer');
+
+            const cameraSwitch = document.getElementById('move_camera');
+
+            const positions = ["180deg 45deg 0.55m", "0deg 75deg 105%", "180deg 75deg 105%"];
+            let cameraIndex = 0;
+
+            cameraSwitch.onclick = function () {
+                cameraIndex = (++cameraIndex) % positions.length;
+                modelViewer.cameraOrbit = positions[cameraIndex];
+            };
+        </script>
+        <style>
+            @media only screen and (max-width: 950px) {
+                .iframe-loader {
+                    color: #dfdfdf;
+                }
+                .iframe-loader > div {
+                    background: #dfdfdf;
+                }
+            }
+        </style>
+    </model-viewer>
+    <div class="right-description">
+        <div>
+            <div class="title-color" style="font-size: 3em;">Nutella Biscuits</div>
+            <br><br>
+            <div class="text" style="font-weight: bold;">Nuovi sistemi di automazione e <br>
+                gestione via radio BiDirezionali Nice
+            </div>
+            <br>
+            <br>
+            <div class="text">
+                Con i motori tubolari e l’elettronica di comando
+                bidirezionali Nice per l’automazione di tende interne
+                ora è possibile ricevere la conferma di ricezione
+                del comando e verificare lo stato delle automazioni.
+                Il protocollo radio bidirezionale Nice
+                con tecnologia mesh garantisce
+                numerosi vantaggi
+            </div>
+            <br>
+            <br>
+            <div class="call-action-color-bg call-to-action-button">SCHEDA TECNICA</div>
+        </div>
+    </div>
+</div>
+<script type="module" src="js/model-viewer/dist/model-viewer.js"></script>
+<script nomodule src="https://unpkg.com/@google/model-viewer/dist/model-viewer-legacy.js"></script>
+
+</body>
+
+</html>
