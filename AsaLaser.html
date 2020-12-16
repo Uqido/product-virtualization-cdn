@@ -51,13 +51,13 @@
 <body class="fullscreen">
 
 
-<div style="display: flex; flex-direction: row;height: 100%;min-height: 100%;flex-wrap: wrap">
-    <model-viewer id="modelViewer" class='model-viewer-w80' ar camera-controls src='models/AsaLaser.glb'
+<div class="fullscreen-100">
+    <model-viewer id="modelViewer" class='model-viewer' ar camera-controls src='models/AsaLaser.glb'
                   ios-src='models/AsaLaser.usdz' alt=''
-                  camera-target="0m 0m 0m" exposure="0.6" shadow-softness="0.6"
+                  camera-target="0m 0.2m 0m" exposure="0.6" shadow-softness="0.6"
                   quick-look-browsers="safari chrome"
-                  ar-modes="scene-viewer webxr quick-look"
-                  shadow-intensity="1.1" environment-image="img/music_hall_01_1k.hdr" camera-orbit="-1591deg 32.76deg 0.6977m" min-camera-orbit="auto 0deg 0.5027m" max-camera-orbit="auto 88deg auto" min-field-of-view="42.62deg" max-field-of-view="auto">
+                  ar-modes="scene-viewer webxr quick-look" noloop
+                  shadow-intensity="1.1" environment-image="img/small_cathedral_1k.hdr" camera-orbit="-1591deg 32.76deg 0.6977m" min-camera-orbit="auto 0deg 0.5027m" max-camera-orbit="auto 88deg 1.5m" min-field-of-view="42.62deg" max-field-of-view="auto">
             
             <div id="hotspot-1" class="unselectable" slot="hotspot-2" data-position="-0.05097608580020303m 0.13821627202038406m -0.05458033833100299m" data-normal="0 1 0" data-visibility-attribute="visible">
                 <div class="unselectable" style="display: flex;transform: translateX(50%)">
@@ -84,9 +84,6 @@
             <div style="width: 2px; height: 100px; background-color: #6ca0cf"></div>
             <div class="unselectable text-white" style="height: 30px;margin-left:8px;margin-top:-4px;max-width: 400px;font-size: medium;">Battery &amp; Back-up System: M-VET ensures continuity and precision in all conditions, when connected to the power supply, in case of a voltage drop and even outdoors.</div></div>
             </div>
-        <div class="logo-bar">
-            <div class="upper-left-logo uqido-logo"></div>
-        </div>
 
         <div class="viewer-bottom">
             <div id="move_camera"  onclick="rotateCamera()" class="clickable" style="background-image: url(img/Move.png);"></div>
@@ -117,31 +114,8 @@
             }
         </style>
     </model-viewer>
-    <div class="right-description">
-        <div>
-            <div class="title-color" style="font-size: 3em;">Asa Laser</div>
-            <br><br>
-            <div class="text" style="font-weight: bold;">Nuovi sistemi di automazione e <br>
-                gestione via radio BiDirezionali Nice
-            </div>
-            <br>
-            <br>
-            <div class="text">
-                Con i motori tubolari e l’elettronica di comando
-                bidirezionali Nice per l’automazione di tende interne
-                ora è possibile ricevere la conferma di ricezione
-                del comando e verificare lo stato delle automazioni.
-                Il protocollo radio bidirezionale Nice
-                con tecnologia mesh garantisce
-                numerosi vantaggi
-            </div>
-            <br>
-            <br>
-            <div class="call-action-color-bg call-to-action-button">SCHEDA TECNICA</div>
-        </div>
-    </div>
 </div>
-<script type="module" src="js/model-viewer/dist/model-viewer-1.3.0.min.js"></script>
+<script type="module" src="js/model-viewer/dist/new-model-viewer.js"></script>
 <script nomodule src="https://unpkg.com/@google/model-viewer/dist/model-viewer-legacy.js"></script>
 
 </body>
