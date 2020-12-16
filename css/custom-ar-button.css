@@ -39,6 +39,9 @@
         .fab > * {
           opacity: 0.87;
         }
+        .slot.default {
+          pointer-events: none;
+        }
 
         #default-ar-button {
           position: absolute;
@@ -48,6 +51,13 @@
           transform-origin: bottom right;
         }
 
-        .slot.default {
-          pointer-events: none;
+        @media only screen and (max-width: 950px) {
+
+        #default-ar-button {
+          position: absolute;
+          bottom: 16px;
+          right: 16px;
+          transform: scale(var(--ar-button-scale, 1));
+          transform-origin: bottom right;
         }
+}
