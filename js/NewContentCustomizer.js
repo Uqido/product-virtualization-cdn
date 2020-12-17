@@ -3,6 +3,11 @@ if (typeof modelviewer === "undefined") {
     window.modelviewer = document.getElementsByTagName("model-viewer")[0];
 }
 
+customElements.whenDefined("model-viewer").then(()=>{
+    console.log("model-viewer is ready")
+    customElements.get("model-viewer").minimumRenderScale=1;
+})
+
 modelviewer.addEventListener("worklet-created", (event) => {
     //console.log("Worklet-created");
     annotations = getAnnotations();
@@ -12,6 +17,10 @@ modelviewer.addEventListener("worklet-created", (event) => {
         worker = event.detail.worklet;
     }
 })
+
+window.modelViewer.addEventListener('finished-animation', () => {
+    window.modelViewer.pause();
+});
 
 const buttons = document.getElementsByClassName("color-button")
 

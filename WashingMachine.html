@@ -49,6 +49,10 @@
          data-amount="36"></div>
     <div id="WashingMachine-button-load" class="button-load-class" slot="poster">Load 3D Model</div>
     <script>
+        customElements.whenDefined("model-viewer").then(()=>{
+            customElements.get("model-viewer").minimumRenderScale=1;
+        })
+
         function inIframe() {
             try {
                 return window.self !== window.top;
