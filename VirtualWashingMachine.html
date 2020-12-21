@@ -69,7 +69,15 @@
         </div>
         <script src="js/LoadingBar.js"></script>
         <script>
+            customElements.whenDefined("model-viewer").then(()=>{
+            customElements.get("model-viewer").minimumRenderScale=1;
+            })
+
             const modelViewer = document.getElementById('model-viewer');
+
+            modelViewer.addEventListener('finished-animation', () => {
+                modelViewer.pause();
+            });
 
             const animate = document.getElementById('animate');
             const cameraSwitch = document.getElementById('move_camera');
@@ -128,7 +136,7 @@
         </div>
     </div>
 </div>
-<script type="module" src="js/model-viewer/dist/model-viewer.js"></script>
+<script type="module" src="js/model-viewer/dist/new-model-viewer.js"></script>
 <script nomodule src="https://unpkg.com/@google/model-viewer/dist/model-viewer-legacy.js"></script>
 
 </body>
