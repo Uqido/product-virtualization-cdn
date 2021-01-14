@@ -49,6 +49,25 @@
             color: whitesmoke;
             text-shadow: 2px 1px 2px #000;
         }
+
+        .hotspot-content {
+            height: 60px;
+            margin-left: 8px;
+            margin-top: -4px;
+            max-width: 350px;
+            font-size: 0.9rem;
+            background-color: #06070869;
+            border-radius: 10px;
+            padding: 4px;
+        }
+
+        @media only screen and (max-width: 950px) {
+            .hotspot-content {
+                height: 90px;
+                max-width: 150px;
+                font-size: 0.73em;
+            }
+        }
     </style>
 
 </head>
@@ -61,30 +80,30 @@
                   ar-modes="scene-viewer webxr quick-look" noloop
                   shadow-intensity="1.1" environment-image="img/small_cathedral_1k.hdr" camera-orbit="-1591deg 32.76deg 0.6977m" min-camera-orbit="auto 0deg 0.5027m" max-camera-orbit="auto 88deg 1.5m" min-field-of-view="42.62deg" max-field-of-view="auto">
             
-            <div id="hotspot-1" class="unselectable" slot="hotspot-2" data-position="-0.05097608580020303m 0.13821627202038406m -0.05458033833100299m" data-normal="0 1 0" data-visibility-attribute="visible">
+            <div id="hotspot-1" class="unselectable" slot="hotspot-2" data-position="-0.0097608580020303m 0.13821627202038406m -0.05458033833100299m" data-normal="0 1 0" data-visibility-attribute="visible">
                 <div class="unselectable" style="display: flex;transform: translateX(50%)">
                 <div style="width: 2px; height: 100px; background-color: #6ca0cf"></div>
-                <div class="unselectable text-white" style="height: 30px;margin-left:8px;margin-top:-4px;max-width: 400px;font-size: medium;">10.1” Touch Screen Display: the software is full of pre-set programs and customisation options. Updatable software and qualified personnel assistance.</div></div>
+                <div class="unselectable text-white hotspot-content">10.1” Touch Screen Display: the software is full of pre-set programs and customisation options. Updatable software and qualified personnel assistance.</div></div>
             </div>
-            <div id="hotspot-2" class="unselectable" slot="hotspot-3" data-position="-0.056355620408485976m 0.054634910920275306m -0.20597698024565153m" data-normal="0 1 0" data-visibility-attribute="visible">
+            <div id="hotspot-2" class="unselectable" slot="hotspot-3" data-position="-0.006355620408485976m 0.074634910920275306m -0.20597698024565153m" data-normal="0 1 0" data-visibility-attribute="visible">
                 <div class="unselectable" style="display: flex;transform: translateX(50%)">
             <div style="width: 2px; height: 100px; background-color: #6ca0cf"></div>
-            <div class="unselectable text-white" style="height: 30px;margin-left:8px;margin-top:-4px;max-width: 400px;font-size: medium;">Optical Fibre: flexible, resistant and protected by a double sheath. For an optimal distribution of the energy mix over the target area.</div></div>
+            <div class="unselectable text-white hotspot-content">Optical Fibre: flexible, resistant and protected by a double sheath. For an optimal distribution of the energy mix over the target area.</div></div>
             </div>
             <div id="hotspot-3" class="unselectable" slot="hotspot-4" data-position="-0.06758326757836984m 0.18027717361586956m 0.1356011369233579m" data-normal="0 1 0" data-visibility-attribute="visible">
                 <div class="unselectable" style="display: flex;transform: translateX(50%)">
             <div style="width: 2px; height: 100px; background-color: #6ca0cf"></div>
-            <div class="unselectable text-white" style="height: 30px;margin-left:8px;margin-top:-4px;max-width: 400px;font-size: medium;">Hardware: M-VET is lightweight, pleasant to the touch and ultra-resistant against knocks, scratches and bites.</div></div>
+            <div class="unselectable text-white hotspot-content">Hardware: M-VET is lightweight, pleasant to the touch and ultra-resistant against knocks, scratches and bites.</div></div>
             </div>
             <div id="hotspot-4" class="unselectable" slot="hotspot-5" data-position="0.13570368605289662m 0.18092579863863011m 0.07082931474443667m" data-normal="0 1 0" data-visibility-attribute="visible">
                 <div class="unselectable" style="display: flex;transform: translateX(50%)">
             <div style="width: 2px; height: 100px; background-color: #6ca0cf"></div>
-            <div class="unselectable text-white" style="height: 30px;margin-left:8px;margin-top:-4px;max-width: 400px;font-size: medium;">Handpiece: light and compact, provided with 4 lenses. The connection system allows immediate interchangeability and automatic adaptation of the treatment parameters.</div></div>
+            <div class="unselectable text-white hotspot-content">Handpiece: light and compact, provided with 4 lenses. The connection system allows immediate interchangeability and automatic adaptation of the treatment parameters.</div></div>
             </div>
             <div id="hotspot-5" class="unselectable" slot="hotspot-6" data-position="0.09561311060212618m 0.15556548130171581m -0.11783879168076895m" data-normal="0 1 0" data-visibility-attribute="visible">
                 <div class="unselectable" style="display: flex;transform: translateX(50%)">
             <div style="width: 2px; height: 100px; background-color: #6ca0cf"></div>
-            <div class="unselectable text-white" style="height: 30px;margin-left:8px;margin-top:-4px;max-width: 400px;font-size: medium;">Battery &amp; Back-up System: M-VET ensures continuity and precision in all conditions, when connected to the power supply, in case of a voltage drop and even outdoors.</div></div>
+            <div class="unselectable text-white hotspot-content">Battery &amp; Back-up System: M-VET ensures continuity and precision in all conditions, when connected to the power supply, in case of a voltage drop and even outdoors.</div></div>
             </div>
 
         <div class="viewer-bottom">
@@ -92,7 +111,7 @@
             <div id="animate" onclick="modelAnimate()" class="clickable" style="background-image: url(img/Animate.png);"></div>
         </div>
         <script>
-        const positions = ["-1591deg 32.76deg 0.6977m","145deg 70deg 100%", "135deg 70deg 100%", "135deg 30deg 100%", "165deg 70deg 100%", "25deg 20deg 100%"];
+        const positions = ["-1591deg 32.76deg 0.6977m","145deg 70deg 100%", "195deg 70deg 100%", "135deg 30deg 100%", "165deg 70deg 100%", "-25deg 20deg 100%"];
 
         const getAnnotations=function () {
             return [document.getElementById("hotspot-1"),document.getElementById("hotspot-2"),document.getElementById("hotspot-3"),document.getElementById("hotspot-4"),document.getElementById("hotspot-5")].filter((elem)=>elem);
