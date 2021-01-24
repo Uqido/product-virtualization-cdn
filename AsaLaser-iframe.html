@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en" class="fullscreen-100">
+<head>
+    <meta charset="utf-8">
+    <title>ManiciAR</title>
+    <link rel="stylesheet" href="css/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="white"/>
+    <meta name="description" content="">
+
+    <script src="https://unpkg.com/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
+
+
+    <script src="https://unpkg.com/fullscreen-polyfill/dist/fullscreen.polyfill.js"></script>
+
+    <script src="https://unpkg.com/focus-visible/dist/focus-visible.js" defer></script>
+    <script src="https://unpkg.com/event-target@latest/min.js"></script>
+    <script src="https://unpkg.com/resize-observer-polyfill@1.5.0/dist/ResizeObserver.global.js"></script>
+    <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=IntersectionObserver"></script>
+
+</head>
+<body style="height: 100%;width: 100%;margin: 0;display: flex;flex-grow: 1;flex-direction: column">
+
+<iframe id="model-iframe" style="flex-grow:1;width: 100%;border: none"
+        src="http://192.168.2.108:8080/AsaLaser.html"></iframe>
+<div style="display: flex;flex-direction: row;padding: 16px">
+    <div id="camera" style="height: 30px;width: 30px;margin:8px;background-image: url(img/rotate.svg)"></div>
+    <div id="animate" style="height: 30px;width: 30px;margin:8px;background-image: url(img/Animate.svg);"></div>
+    <img id="AR" style="height: 30px;width: 30px" src="https://img.icons8.com/ios/96/000000/augmented-reality.png"/>
+</div>
+<script>
+    let iframe = document.getElementById("model-iframe");
+
+    let cameraPositionCount = 0;
+    let colorCount = 0;
+
+    const receiveMessage = function (messageAsString) {
+        if (!messageAsString.data || typeof messageAsString.data != "string")
+            return;
+        try {
+            const message = JSON.parse(messageAsString.data);
+            const action = message.action;
+            const data = message.data;
+            if (!action)
+                return;
+            if (action === "cameraPositionCount") {
+                console.log("Received:" + data + " camera positions");
+                cameraPositionCount = data;
+            } else if (action === "colorCount") {
+                console.log("Received:" + data + " colors");
+                colorCount = data;
+            }
+        } catch (e) {
+            console.error('[Uqido-ModelViewer] Error response parsing')
+            console.error(e)
+        }
+    }
+
+    iframe.onload = function () {
+        console.log("IframeLoaded");
+
+        window.addEventListener("message", receiveMessage);
+
+
+        const cameraCountAction = JSON.stringify({action: "getCameraPositionCount"});
+        iframe.contentWindow.postMessage(cameraCountAction, "*");
+        iframe.contentWindow.postMessage(JSON.stringify({action: "getColorCount"}), "*");
+
+
+        let cameraPositionIndex = 0;
+
+        let cameraButton = document.getElementById("camera");
+        cameraButton.onclick = function () {
+            cameraPositionIndex = (++cameraPositionIndex) % cameraPositionCount;
+            const action = {action: "changeCamera", data: cameraPositionIndex};
+            iframe.contentWindow.postMessage(JSON.stringify(action), "*");
+        };
+
+
+        let animateButton = document.getElementById("animate");
+        animateButton.onclick = function () {
+            const animateAction = {action: "animate"};
+            iframe.contentWindow.postMessage(JSON.stringify(animateAction), "*");
+        };
+
+        let ArButton = document.getElementById("AR");
+        ArButton.onclick = function () {
+            console.log("Activating AR");
+            const action = {action: "enableAR"};
+            iframe.contentWindow.postMessage(JSON.stringify(action), "*");
+        };
+
+        function checkForSupport() {
+
+            // check for AR support
+            const a = document.createElement('a'),
+                supportsAR = a.relList.supports('ar');
+
+            if (!supportsAR) {
+                // if the host device don't support AR disable the button
+                ArButton.style.display = "none";
+                console.log("no AR Support")
+            }
+
+        }
+
+        checkForSupport();
+
+    };
+</script>
+</body>
+</html>

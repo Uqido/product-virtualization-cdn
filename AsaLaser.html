@@ -23,35 +23,40 @@
     <script src="https://unpkg.com/focus-visible/dist/focus-visible.js" defer></script>
 
     <style>
-        .uqido-logo{
+        .uqido-logo {
             background-image: url("img/asalaser-logo.png");
             background-size: 175px 72px;
             height: 72px;
             width: 175px;
         }
+
         .title-color {
             color: #007C7D;
         }
+
         .call-action-color-bg {
             background-color: #007C7D;
         }
+
         .fullscreen {
             background: whitesmoke;
         }
+
         .right-description:after {
             background: transparent;
         }
-        .text{
+
+        .text {
             color: black;
         }
 
-        .text-white{
+        .text-white {
             color: whitesmoke;
             text-shadow: 2px 1px 2px #000;
         }
 
         .hotspot-content {
-            height: 60px;
+            height: 4.5rem;
             margin-left: 8px;
             margin-top: -4px;
             max-width: 350px;
@@ -61,9 +66,14 @@
             padding: 4px;
         }
 
+        .no-loading-mask{
+            --progress-mask:#0000;
+            --poster-color:#0000;
+        }
+
         @media only screen and (max-width: 950px) {
             .hotspot-content {
-                height: 90px;
+                height: 6rem;
                 max-width: 150px;
                 font-size: 0.73em;
             }
@@ -73,68 +83,111 @@
 </head>
 
 <body class="fullscreen-100">
-    <model-viewer id="modelViewer" class='model-viewer' ar camera-controls src='models/AsaLaser.glb'
-                  ios-src='models/AsaLaser.usdz' alt=''
-                  camera-target="0m 0.1m 0m" exposure="0.6" shadow-softness="0.6"
-                  quick-look-browsers="safari chrome"
-                  ar-modes="scene-viewer webxr quick-look" noloop
-                  shadow-intensity="1.1" environment-image="img/small_cathedral_1k.hdr" camera-orbit="-1591deg 32.76deg 0.6977m" min-camera-orbit="auto 0deg 0.5027m" max-camera-orbit="auto 88deg 1.5m" min-field-of-view="42.62deg" max-field-of-view="auto">
-            
-            <div id="hotspot-1" class="unselectable" slot="hotspot-2" data-position="-0.0097608580020303m 0.13821627202038406m -0.05458033833100299m" data-normal="0 1 0" data-visibility-attribute="visible">
-                <div class="unselectable" style="display: flex;transform: translateX(50%)">
-                <div style="width: 2px; height: 100px; background-color: #6ca0cf"></div>
-                <div class="unselectable text-white hotspot-content">10.1” Touch Screen Display: the software is full of pre-set programs and customisation options. Updatable software and qualified personnel assistance.</div></div>
-            </div>
-            <div id="hotspot-2" class="unselectable" slot="hotspot-3" data-position="-0.006355620408485976m 0.074634910920275306m -0.20597698024565153m" data-normal="0 1 0" data-visibility-attribute="visible">
-                <div class="unselectable" style="display: flex;transform: translateX(50%)">
-            <div style="width: 2px; height: 100px; background-color: #6ca0cf"></div>
-            <div class="unselectable text-white hotspot-content">Optical Fibre: flexible, resistant and protected by a double sheath. For an optimal distribution of the energy mix over the target area.</div></div>
-            </div>
-            <div id="hotspot-3" class="unselectable" slot="hotspot-4" data-position="-0.06758326757836984m 0.18027717361586956m 0.1356011369233579m" data-normal="0 1 0" data-visibility-attribute="visible">
-                <div class="unselectable" style="display: flex;transform: translateX(50%)">
-            <div style="width: 2px; height: 100px; background-color: #6ca0cf"></div>
-            <div class="unselectable text-white hotspot-content">Hardware: M-VET is lightweight, pleasant to the touch and ultra-resistant against knocks, scratches and bites.</div></div>
-            </div>
-            <div id="hotspot-4" class="unselectable" slot="hotspot-5" data-position="0.13570368605289662m 0.18092579863863011m 0.07082931474443667m" data-normal="0 1 0" data-visibility-attribute="visible">
-                <div class="unselectable" style="display: flex;transform: translateX(50%)">
-            <div style="width: 2px; height: 100px; background-color: #6ca0cf"></div>
-            <div class="unselectable text-white hotspot-content">Handpiece: light and compact, provided with 4 lenses. The connection system allows immediate interchangeability and automatic adaptation of the treatment parameters.</div></div>
-            </div>
-            <div id="hotspot-5" class="unselectable" slot="hotspot-6" data-position="0.09561311060212618m 0.15556548130171581m -0.11783879168076895m" data-normal="0 1 0" data-visibility-attribute="visible">
-                <div class="unselectable" style="display: flex;transform: translateX(50%)">
-            <div style="width: 2px; height: 100px; background-color: #6ca0cf"></div>
-            <div class="unselectable text-white hotspot-content">Battery &amp; Back-up System: M-VET ensures continuity and precision in all conditions, when connected to the power supply, in case of a voltage drop and even outdoors.</div></div>
-            </div>
+<model-viewer id="modelViewer" class='model-viewer no-loading-mask' ar camera-controls src='models/AsaLaser.glb'
+              ios-src='models/AsaLaser.usdz' alt=''
+              camera-target="0m 0.1m 0m" exposure="0.6" shadow-softness="0.6"
+              quick-look-browsers="safari chrome"
+              ar-modes="scene-viewer webxr quick-look" noloop
+              shadow-intensity="1.1" environment-image="img/small_cathedral_1k.hdr"
+              camera-orbit="-1591deg 32.76deg 0.6977m" min-camera-orbit="auto 0deg 0.5027m"
+              max-camera-orbit="auto 88deg 1.5m" min-field-of-view="42.62deg" max-field-of-view="auto">
 
-        <div class="viewer-bottom">
-            <div id="move_camera"  onclick="rotateCamera()" class="clickable" style="background-image: url(img/Move.png);"></div>
-            <div id="animate" onclick="modelAnimate()" class="clickable" style="background-image: url(img/Animate.png);"></div>
+    <div id="hotspot-1" class="unselectable" slot="hotspot-2"
+         data-position="-0.0097608580020303m 0.13821627202038406m -0.05458033833100299m" data-normal="0 1 0"
+         data-visibility-attribute="visible">
+        <div class="unselectable" style="display: flex;transform: translateX(50%)">
+            <div style="width: 2px; height: 100px; background-color: #6ca0cf"></div>
+            <div class="unselectable text-white hotspot-content">10.1” Touch Screen Display: the software is full of
+                pre-set programs and customisation options. Updatable software and qualified personnel assistance.
+            </div>
         </div>
-        <script>
-        const positions = ["-1591deg 32.76deg 0.6977m","145deg 70deg 100%", "195deg 70deg 100%", "135deg 30deg 100%", "165deg 70deg 100%", "-25deg 20deg 100%"];
+    </div>
+    <div id="hotspot-2" class="unselectable" slot="hotspot-3"
+         data-position="-0.006355620408485976m 0.074634910920275306m -0.20597698024565153m" data-normal="0 1 0"
+         data-visibility-attribute="visible">
+        <div class="unselectable" style="display: flex;transform: translateX(50%)">
+            <div style="width: 2px; height: 100px; background-color: #6ca0cf"></div>
+            <div class="unselectable text-white hotspot-content">Optical Fibre: flexible, resistant and protected by a
+                double sheath. For an optimal distribution of the energy mix over the target area.
+            </div>
+        </div>
+    </div>
+    <div id="hotspot-3" class="unselectable" slot="hotspot-4"
+         data-position="-0.06758326757836984m 0.18027717361586956m 0.1356011369233579m" data-normal="0 1 0"
+         data-visibility-attribute="visible">
+        <div class="unselectable" style="display: flex;transform: translateX(50%)">
+            <div style="width: 2px; height: 100px; background-color: #6ca0cf"></div>
+            <div class="unselectable text-white hotspot-content">Hardware: M-VET is lightweight, pleasant to the touch
+                and ultra-resistant against knocks, scratches and bites.
+            </div>
+        </div>
+    </div>
+    <div id="hotspot-4" class="unselectable" slot="hotspot-5"
+         data-position="0.13570368605289662m 0.18092579863863011m 0.07082931474443667m" data-normal="0 1 0"
+         data-visibility-attribute="visible">
+        <div class="unselectable" style="display: flex;transform: translateX(50%)">
+            <div style="width: 2px; height: 100px; background-color: #6ca0cf"></div>
+            <div class="unselectable text-white hotspot-content">Handpiece: light and compact, provided with 4 lenses.
+                The connection system allows immediate interchangeability and automatic adaptation of the treatment
+                parameters.
+            </div>
+        </div>
+    </div>
+    <div id="hotspot-5" class="unselectable" slot="hotspot-6"
+         data-position="0.09561311060212618m 0.15556548130171581m -0.11783879168076895m" data-normal="0 1 0"
+         data-visibility-attribute="visible">
+        <div class="unselectable" style="display: flex;transform: translateX(50%)">
+            <div style="width: 2px; height: 100px; background-color: #6ca0cf"></div>
+            <div class="unselectable text-white hotspot-content">Battery &amp; Back-up System: M-VET ensures continuity
+                and precision in all conditions, when connected to the power supply, in case of a voltage drop and even
+                outdoors.
+            </div>
+        </div>
+    </div>
 
-        const getAnnotations=function () {
-            return [document.getElementById("hotspot-1"),document.getElementById("hotspot-2"),document.getElementById("hotspot-3"),document.getElementById("hotspot-4"),document.getElementById("hotspot-5")].filter((elem)=>elem);
+    <div id="viewer-bottom" class="viewer-bottom">
+        <div id="move_camera" onclick="rotateCamera()" class="clickable"
+             style="background-image: url(img/Move.png);"></div>
+        <div id="animate" onclick="modelAnimate()" class="clickable"
+             style="background-image: url(img/Animate.png);"></div>
+    </div>
+    <script>
+
+        let colors = [];
+
+        const positions = ["-1591deg 32.76deg 0.6977m", "170deg 70deg 100%", "195deg 70deg 100%", "135deg 30deg 100%", "165deg 70deg 100%", "-25deg 20deg 100%"];
+
+        const getAnnotations = function () {
+            return [document.getElementById("hotspot-1"), document.getElementById("hotspot-2"), document.getElementById("hotspot-3"), document.getElementById("hotspot-4"), document.getElementById("hotspot-5")].filter((elem) => elem);
         }
 
-        const positionToAnnotation={0:[],1:["hotspot-1"],2:["hotspot-2"],3:["hotspot-3"],4:["hotspot-4"],5:["hotspot-5"]};
+        const positionToAnnotation = {
+            0: [],
+            1: ["hotspot-1"],
+            2: ["hotspot-2"],
+            3: ["hotspot-3"],
+            4: ["hotspot-4"],
+            5: ["hotspot-5"]
+        };
 
     </script>
     <script src="js/NewContentCustomizer.js"></script>
-        <style>
-            @media only screen and (max-width: 950px) {
-                .iframe-loader {
-                    color: #dfdfdf;
-                }
-                .iframe-loader > div {
-                    background: #dfdfdf;
-                }
-                .uqido-logo{
-                    margin: 20px auto 0 0;
-                }
+    <style>
+        @media only screen and (max-width: 950px) {
+            .iframe-loader {
+                color: #dfdfdf;
             }
-        </style>
-    </model-viewer>
+
+            .iframe-loader > div {
+                background: #dfdfdf;
+            }
+
+            .uqido-logo {
+                margin: 20px auto 0 0;
+            }
+        }
+    </style>
+</model-viewer>
 <script type="module" src="js/model-viewer/dist/new-model-viewer.js"></script>
 <script nomodule src="https://unpkg.com/@google/model-viewer/dist/model-viewer-legacy.js"></script>
 

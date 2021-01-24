@@ -99,7 +99,7 @@ function initializeCustomizerOnMaterials(materialsName) {
     
         modelViewer.addEventListener('message', (event) => {
             if(event.data.type==="change-color"){
-                var colorArray=event.data.payload;
+                let colorArray=event.data.payload;
                 if(colorArray.length===3){
                     colorArray.push(1);
                 }
