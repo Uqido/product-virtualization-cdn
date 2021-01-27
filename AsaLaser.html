@@ -38,8 +38,13 @@
             background-color: #007C7D;
         }
 
-        .fullscreen {
-            background: whitesmoke;
+        .fullscreen-100{
+            background: unset;
+            background: unset;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
         }
 
         .right-description:after {
@@ -48,6 +53,22 @@
 
         .text {
             color: black;
+        }
+
+        .viewer-bottom {
+            display: flex;
+            flex-direction: row;
+            left: 8px;
+            bottom: 8px;
+        }
+
+        .viewer-bottom-full {
+            position: absolute;
+            left: 0px;
+            right: 0px;
+            bottom: 0px;
+            height: 60px;
+            background-color: #dddddd;
         }
 
         .text-white {
@@ -66,9 +87,20 @@
             padding: 4px;
         }
 
-        .no-loading-mask{
-            --progress-mask:#0000;
-            --poster-color:#0000;
+        .no-loading-mask {
+            --progress-mask: #0000;
+            --poster-color: #0000;
+        }
+
+        .clickable {
+            z-index: 21;
+            user-select: none;
+            text-align: center;
+            width: 42px;
+            height: 42px;
+            background-size: 42px 42px;
+            cursor: pointer;
+            margin: auto 8px auto auto;
         }
 
         @media only screen and (max-width: 950px) {
@@ -77,6 +109,40 @@
                 max-width: 150px;
                 font-size: 0.73em;
             }
+
+            .fullscreen-100{
+                background: unset;
+                background: unset;
+                margin: 0;
+                padding: 0;
+                width: 100%;
+                height: 100%;
+            }
+
+            .no-loading-mask {
+                --progress-mask: #0000;
+                --poster-color: #0000;
+            }
+
+            .clickable {
+                z-index: 21;
+                user-select: none;
+                text-align: center;
+                width: 42px;
+                height: 42px;
+                background-size: 42px 42px;
+                cursor: pointer;
+                margin: auto 8px auto auto;
+            }
+
+            .viewer-bottom-full {
+                position: absolute;
+                left: 0px;
+                right: 0px;
+                bottom: 0px;
+                height: 60px;
+                background-color: #dddddd;
+            }
         }
     </style>
 
@@ -84,7 +150,7 @@
 
 <body class="fullscreen-100">
 <model-viewer id="modelViewer" class='model-viewer no-loading-mask' ar camera-controls src='models/AsaLaser.glb'
-              ios-src='models/AsaLaser.usdz' alt=''
+              ios-src='models/AsaLaser.usdz' alt='' style="background-color: unset;"
               camera-target="0m 0.1m 0m" exposure="0.6" shadow-softness="0.6"
               quick-look-browsers="safari chrome"
               ar-modes="scene-viewer webxr quick-look" noloop
@@ -145,13 +211,17 @@
         </div>
     </div>
 
-    <div id="viewer-bottom" class="viewer-bottom">
-        <div id="move_camera" onclick="rotateCamera()" class="clickable"
-             style="background-image: url(img/Move.png);"></div>
-        <div id="animate" onclick="modelAnimate()" class="clickable"
-             style="background-image: url(img/Animate.png);"></div>
+    <div class="viewer-bottom-full">
+        <div id="viewer-bottom" class="viewer-bottom">
+            <div id="move_camera" onclick="rotateCamera()" class="clickable"
+                 style="background-image: url(img/Move.png);"></div>
+            <div id="animate" onclick="modelAnimate()" class="clickable"
+                 style="background-image: url(img/Animate.png);"></div>
+        </div>
     </div>
     <script>
+
+        let forceNoIframe=true;
 
         let colors = [];
 
@@ -172,6 +242,10 @@
 
     </script>
     <script src="js/NewContentCustomizer.js"></script>
+    <script>
+        //forcing ModelViewer to show buttons also in iframe
+        forceButtonsInIframe();
+    </script>
     <style>
         @media only screen and (max-width: 950px) {
             .iframe-loader {

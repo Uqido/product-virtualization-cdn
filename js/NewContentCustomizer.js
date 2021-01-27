@@ -118,6 +118,12 @@ function initializeCustomizerOnMaterials(materialsName) {
 }
 
 function inIframe() {
+
+    if(forceNoIframe!==undefined) {
+        console.log("Forcing Buttons in iframe");
+        return false;
+    }
+
     try {
         return window.self !== window.top;
     } catch (e) {
