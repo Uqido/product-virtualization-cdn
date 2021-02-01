@@ -1,11 +1,10 @@
-
 if (typeof modelviewer === "undefined") {
     window.modelviewer = document.getElementsByTagName("model-viewer")[0];
 }
 
-customElements.whenDefined("model-viewer").then(()=>{
+customElements.whenDefined("model-viewer").then(() => {
     console.log("model-viewer is ready")
-    customElements.get("model-viewer").minimumRenderScale=1;
+    customElements.get("model-viewer").minimumRenderScale = 1;
 })
 
 modelviewer.addEventListener("worklet-created", (event) => {
@@ -52,12 +51,12 @@ function changeColorAndBump(index, color, bumpStrength) {
 }
 
 function changeTextureByPath(texturePath) {
-    modelViewer.dispatchEvent(new CustomEvent("change-texture", { detail: texturePath }))
+    modelViewer.dispatchEvent(new CustomEvent("change-texture", {detail: texturePath}))
 }
 
 function changeColorByString(color) {
     let colorArray = colorToArray(color);
-    modelViewer.dispatchEvent(new CustomEvent("change-color", { detail: colorArray }));
+    modelViewer.dispatchEvent(new CustomEvent("change-color", {detail: colorArray}));
 }
 
 function changeBumpStrength(bumpStrength) {
@@ -119,7 +118,7 @@ function initializeCustomizerOnMaterials(materialsName) {
 
 function inIframe() {
 
-    if(forceNoIframe!==undefined) {
+    if (forceNoIframe !== undefined) {
         console.log("Forcing Buttons in iframe");
         return false;
     }
@@ -138,8 +137,11 @@ if (inIframe()) {
 
 let annotations = getAnnotations();
 
-for (let annotation of annotations) {
-    annotation.style.display = "none";
+if (forceAnnotations === undefined) {
+
+    for (let annotation of annotations) {
+        annotation.style.display = "none";
+    }
 }
 
 let cameraIndex = 0;
@@ -189,10 +191,12 @@ function rotateCamera(index) {
         modelViewer.cameraOrbit = positions[index];
     }
 
-    for (let annotation of annotations) {
-        annotation.style.display = "none";
-        if (toEnable.includes(annotation.id)) {
-            annotation.style.display = "block";
+    if (forceAnnotations === undefined) {
+        for (let annotation of annotations) {
+            annotation.style.display = "none";
+            if (toEnable.includes(annotation.id)) {
+                annotation.style.display = "block";
+            }
         }
     }
 }
@@ -225,12 +229,12 @@ function receiveMessage(event) {
             let win = window;
             if (inIframe())
                 win = win.parent;
-            win.postMessage(JSON.stringify({ action: "cameraPositionCount", data: cameraPositionsCount() }), "*");
+            win.postMessage(JSON.stringify({action: "cameraPositionCount", data: cameraPositionsCount()}), "*");
         } else if (action.action === "getColorCount") {
             let win = window;
             if (inIframe())
                 win = win.parent;
-            win.postMessage(JSON.stringify({ action: "colorCount", data: colorsCount() }), "*");
+            win.postMessage(JSON.stringify({action: "colorCount", data: colorsCount()}), "*");
         }
     } catch (e) {
         console.log(e);

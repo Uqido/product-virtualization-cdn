@@ -38,7 +38,7 @@
             background-color: #007C7D;
         }
 
-        .fullscreen-100{
+        .fullscreen-100 {
             background: unset;
             background: unset;
             margin: 0;
@@ -110,7 +110,7 @@
                 font-size: 0.73em;
             }
 
-            .fullscreen-100{
+            .fullscreen-100 {
                 background: unset;
                 background: unset;
                 margin: 0;
@@ -144,13 +144,130 @@
                 background-color: #dddddd;
             }
         }
+
+        .hide-child .hotspot-pin-text {
+            display: none
+        }
+
+        .hide-pulse .pulse {
+            display: none
+        }
+
+        .hotspot-pin-text {
+            transform: translate(-50%, -100%);
+            width: 350px;
+            position: absolute;
+            top: 0;
+        }
+
+        .hotspot-pin {
+            /* background-color: #3CF; */
+            background: radial-gradient(rgba(160, 230, 253, 1), rgb(73, 112, 251)); /* Standard */
+            background: -webkit-radial-gradient(rgba(160, 230, 253, 1), rgb(73, 112, 251)); /* Safari */
+            background: -o-radial-gradient(rgba(160, 230, 253, 1), rgb(73, 112, 251)); /* Opera 11.1 to 12.0 */
+            background: -moz-radial-gradient(rgba(160, 230, 253, 1), rgb(73, 112, 251)); /* FF 3.6 to 15 */
+            border-radius: 50%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 12px;
+            width: 12px;
+            z-index: 10;
+        }
+
+        .pulse {
+            background: transparent;
+            border-radius: 60px;
+            -webkit-border-radius: 60px;
+            -moz-border-radius: 60px;
+            animation: pulse 1.5s linear;
+            -webkit-animation: pulse 1.5s linear;
+            -moz-animation: pulse 1.5s linear;
+            -webkit-animation-iteration-count: infinite;
+            -moz-animation-iteration-count: infinite;
+            animation-iteration-count: infinite;
+            position: absolute;
+            z-index: 1;
+            opacity: 1;
+        }
+
+        .outer {
+            border: 5px solid #FFF;
+            height: 50px;
+            width: 50px;
+            top: -24px;
+            left: -24px;
+        }
+
+        .mid {
+            border: 1px solid #FFF;
+            height: 40px;
+            width: 40px;
+            top: -15px;
+            left: -15px;
+        }
+
+        .inner {
+            border: 1px solid #FFF;
+            height: 20px;
+            width: 20px;
+            top: -5px;
+            left: -5px;
+        }
+
+        @-moz-keyframes pulse {
+            0% {
+                -moz-transform: scale(0);
+                opacity: 0.0;
+            }
+            25% {
+                -moz-transform: scale(0);
+                opacity: 0.2;
+            }
+            50% {
+                -moz-transform: scale(0.1);
+                opacity: 0.5;
+            }
+            75% {
+                -moz-transform: scale(0.5);
+                opacity: 0.9;
+            }
+            100% {
+                -moz-transform: scale(1);
+                opacity: 0.0;
+            }
+        }
+
+        @-webkit-keyframes "pulse" {
+            0% {
+                -webkit-transform: scale(0);
+                opacity: 0.0;
+            }
+            25% {
+                -webkit-transform: scale(0);
+                opacity: 0.2;
+            }
+            50% {
+                -webkit-transform: scale(0.1);
+                opacity: 0.5;
+            }
+            75% {
+                -webkit-transform: scale(0.5);
+                opacity: 0.9;
+            }
+            100% {
+                -webkit-transform: scale(1);
+                opacity: 0.0;
+            }
+        }
+
     </style>
 
 </head>
 
 <body class="fullscreen-100">
 <model-viewer id="modelViewer" class='model-viewer no-loading-mask' ar camera-controls src='models/AsaLaser.glb'
-              ios-src='models/AsaLaser.usdz' alt='' style="background-color: unset;"
+              ios-src='models/AsaLaser.usdz' alt='' style="background-color: unset;" auto-rotate-delay='8000'
               camera-target="0m 0.1m 0m" exposure="0.6" shadow-softness="0.6"
               quick-look-browsers="safari chrome"
               ar-modes="scene-viewer webxr quick-look" noloop
@@ -158,74 +275,95 @@
               camera-orbit="-1591deg 32.76deg 0.6977m" min-camera-orbit="auto 0deg 0.5027m"
               max-camera-orbit="auto 88deg 1.5m" min-field-of-view="42.62deg" max-field-of-view="auto">
 
-    <div id="hotspot-1" class="unselectable" slot="hotspot-2"
-         data-position="-0.0097608580020303m 0.13821627202038406m -0.05458033833100299m" data-normal="0 1 0"
-         data-visibility-attribute="visible">
-        <div class="unselectable" style="display: flex;transform: translateX(50%)">
-            <div style="width: 2px; height: 100px; background-color: #6ca0cf"></div>
-            <div class="unselectable text-white hotspot-content">10.1” Touch Screen Display: the software is full of
-                pre-set programs and customisation options. Updatable software and qualified personnel assistance.
-            </div>
+    <div id="hotspot-1" style="width: 24px;height: 24px" slot="hotspot-2" data-position="-0.0509m 0.1382m -0.0545m"
+         data-normal="0 1 0" data-visibility-attribute="visible" onclick="onPinClick('hotspot-1')">
+        <div class="hotspot-pin-text text-white hotspot-content">10.1” Touch Screen Display: the software is full of
+            pre-set
+            programs and customisation options. Updatable software and qualified personnel assistance.
         </div>
+        <div class="hotspot-pin">
+        </div><!-- dot -->
+        <div class="pulse outer"></div><!-- pulse outer -->
+        <div class="pulse mid"></div><!-- pulse mid -->
+        <div class="pulse inner"></div><!-- pulse inner -->
     </div>
-    <div id="hotspot-2" class="unselectable" slot="hotspot-3"
-         data-position="-0.006355620408485976m 0.074634910920275306m -0.20597698024565153m" data-normal="0 1 0"
+
+
+    <div id="hotspot-2" class="hotspot-pin" slot="hotspot-3"
+         data-position="-0.056355620408485976m 0.054634910920275306m -0.20597698024565153m" data-normal="0 1 0"
          data-visibility-attribute="visible">
-        <div class="unselectable" style="display: flex;transform: translateX(50%)">
-            <div style="width: 2px; height: 100px; background-color: #6ca0cf"></div>
-            <div class="unselectable text-white hotspot-content">Optical Fibre: flexible, resistant and protected by a
-                double sheath. For an optimal distribution of the energy mix over the target area.
+        <div class="hotspot-pin" onclick="onPinClick('hotspot-2')">
+            <div class="hotspot-pin-text text-white hotspot-content">Optical Fibre: flexible, resistant and protected by
+                a double
+                sheath. For an optimal distribution of the energy mix over the target area.
             </div>
-        </div>
+        </div><!-- dot -->
+        <div class="pulse outer"></div><!-- pulse outer -->
+        <div class="pulse mid"></div><!-- pulse mid -->
+        <div class="pulse inner"></div><!-- pulse inner -->
     </div>
-    <div id="hotspot-3" class="unselectable" slot="hotspot-4"
+
+
+    <div id="hotspot-3" class="hotspot-pin" slot="hotspot-4"
          data-position="-0.06758326757836984m 0.18027717361586956m 0.1356011369233579m" data-normal="0 1 0"
          data-visibility-attribute="visible">
-        <div class="unselectable" style="display: flex;transform: translateX(50%)">
-            <div style="width: 2px; height: 100px; background-color: #6ca0cf"></div>
-            <div class="unselectable text-white hotspot-content">Hardware: M-VET is lightweight, pleasant to the touch
-                and ultra-resistant against knocks, scratches and bites.
-            </div>
+        <div class="hotspot-pin" onclick="onPinClick('hotspot-3')">
+            <div class="hotspot-pin-text text-white hotspot-content">Hardware: M-VET is lightweight, pleasant to the
+                touch and
+                ultra-resistant against knocks, scratches and bites.
+            </div><!-- dot -->
+            <div class="pulse outer"></div><!-- pulse outer -->
+            <div class="pulse mid"></div><!-- pulse mid -->
+            <div class="pulse inner"></div><!-- pulse inner -->
+
         </div>
     </div>
-    <div id="hotspot-4" class="unselectable" slot="hotspot-5"
+    <div id="hotspot-4" class="hotspot-pin" slot="hotspot-5"
          data-position="0.13570368605289662m 0.18092579863863011m 0.07082931474443667m" data-normal="0 1 0"
          data-visibility-attribute="visible">
-        <div class="unselectable" style="display: flex;transform: translateX(50%)">
-            <div style="width: 2px; height: 100px; background-color: #6ca0cf"></div>
-            <div class="unselectable text-white hotspot-content">Handpiece: light and compact, provided with 4 lenses.
-                The connection system allows immediate interchangeability and automatic adaptation of the treatment
-                parameters.
+        <div class="hotspot-pin" onclick="onPinClick('hotspot-4')">
+            <div class="hotspot-pin-text text-white hotspot-content">Handpiece: light and compact, provided with 4
+                lenses. The
+                connection
+                system allows immediate interchangeability and automatic adaptation of the treatment parameters.
             </div>
+            <div class="pulse outer"></div><!-- pulse outer -->
+            <div class="pulse mid"></div><!-- pulse mid -->
+            <div class="pulse inner"></div><!-- pulse inner -->
+
         </div>
     </div>
-    <div id="hotspot-5" class="unselectable" slot="hotspot-6"
+    <div id="hotspot-5" class="hotspot-pin" slot="hotspot-6"
          data-position="0.09561311060212618m 0.15556548130171581m -0.11783879168076895m" data-normal="0 1 0"
          data-visibility-attribute="visible">
-        <div class="unselectable" style="display: flex;transform: translateX(50%)">
-            <div style="width: 2px; height: 100px; background-color: #6ca0cf"></div>
-            <div class="unselectable text-white hotspot-content">Battery &amp; Back-up System: M-VET ensures continuity
-                and precision in all conditions, when connected to the power supply, in case of a voltage drop and even
-                outdoors.
+        <div class="hotspot-pin" onclick="onPinClick('hotspot-5')">
+            <div class="hotspot-pin-text text-white hotspot-content">Battery &amp; Back-up System: M-VET ensures
+                continuity and
+                precision in
+                all conditions, when connected to the power supply, in case of a voltage drop and even outdoors.
             </div>
+            <div class="pulse outer"></div><!-- pulse outer -->
+            <div class="pulse mid"></div><!-- pulse mid -->
+            <div class="pulse inner"></div><!-- pulse inner -->
+
         </div>
     </div>
 
-    <div class="viewer-bottom-full">
-        <div id="viewer-bottom" class="viewer-bottom">
-            <div id="move_camera" onclick="rotateCamera()" class="clickable"
-                 style="background-image: url(img/Move.png);"></div>
-            <div id="animate" onclick="modelAnimate()" class="clickable"
-                 style="background-image: url(img/Animate.png);"></div>
-        </div>
+    <div class="viewer-bottom">
+        <div id="move_camera" onclick="rotateCamera()" class="clickable"
+             style="background-image: url(img/Move.png);"></div>
+        <div id="animate" onclick="model_Animate()" class="clickable"
+             style="background-image: url(img/Animate.png);"></div>
     </div>
     <script>
 
-        let forceNoIframe=true;
+        let forceNoIframe = true;
+        let forceAnnotations = true;
 
         let colors = [];
 
-        const positions = ["-1591deg 32.76deg 0.6977m", "170deg 70deg 100%", "195deg 70deg 100%", "135deg 30deg 100%", "165deg 70deg 100%", "-25deg 20deg 100%"];
+        const positions = ["-1591deg 32.76deg 0.6977m", "145deg 70deg 100%", "135deg 70deg 100%", "135deg 30deg 100%", "165deg 70deg 100%", "25deg 20deg 100%"];
+
 
         const getAnnotations = function () {
             return [document.getElementById("hotspot-1"), document.getElementById("hotspot-2"), document.getElementById("hotspot-3"), document.getElementById("hotspot-4"), document.getElementById("hotspot-5")].filter((elem) => elem);
@@ -243,8 +381,75 @@
     </script>
     <script src="js/NewContentCustomizer.js"></script>
     <script>
-        //forcing ModelViewer to show buttons also in iframe
-        forceButtonsInIframe();
+        for (let annotation of annotations) {
+            annotation.classList.add("hide-child");
+        }
+
+
+        let is_Open = false;
+
+        function model_Animate() {
+            console.log("animate")
+            console.log(modelViewer.paused)
+            if (modelViewer.paused) {
+                if (is_Open) {
+                    modelViewer.animationName = "Close";
+                    is_Open = false;
+                    const interval = setInterval(() => {
+                        if (modelViewer.paused) {
+                            clearInterval(interval);
+                            showAndEnablePin();
+                        }
+                    }, 500);
+                } else {
+                    modelViewer.animationName = "Open";
+                    hideAndDisablePin()
+                    is_Open = true;
+                }
+                modelViewer.play();
+            }
+        }
+
+
+        const onPinClick = function (annotationID) {
+
+            const item = document.getElementById(annotationID);
+
+            if (!item.classList.contains("hide-child")) {
+                //it was already opened! closing
+                for (let annotation of annotations) {
+                    annotation.classList.add("hide-child");
+                    annotation.classList.remove("hide-pulse");
+                }
+                return;
+            }
+
+            for (let annotation of annotations) {
+                annotation.classList.add("hide-child");
+                annotation.classList.remove("hide-pulse");
+            }
+
+            item.classList.remove("hide-child")
+            item.classList.add("hide-pulse")
+        }
+
+        const hideAndDisablePin = function () {
+            for (let annotation of annotations) {
+                annotation.classList.add("hide-child");
+                annotation.classList.remove("hide-pulse");
+            }
+
+            for (let annotation of annotations) {
+                annotation.style.display = "none"
+            }
+        }
+
+        const showAndEnablePin = function () {
+
+            for (let annotation of annotations) {
+                annotation.style.display = "block"
+            }
+        }
     </script>
     <style>
         @media only screen and (max-width: 950px) {
