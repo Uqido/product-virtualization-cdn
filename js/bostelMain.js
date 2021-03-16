@@ -15,7 +15,10 @@ function instantiateModelContent(srcUrl,assetName){
 }
 
 function isLocalhost(){
-    return !window.location.host.replace(":8080", "").replace(/localhost|127\.0\.0\.1/i, '');
+    return !window.location.host
+        .replace(":8081", "")
+        .replace(":8080", "")
+        .replace(/localhost|127\.0\.0\.1|192\.168\.\d+\.\d+/i, '');
 }
 
 function parseJson(json){
