@@ -147,7 +147,6 @@ html{
 @media only screen and (max-width: 950px) {
     .logo-bar {
         justify-content: center;
-        transform: translate(0, -25%);
         padding: 0;
     }
 
