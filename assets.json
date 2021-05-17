@@ -50,6 +50,14 @@
     "Bostel-VasoNero",
     "Bostel-VasoTripode"
   ],
+  "assets_forniture": [
+    "PoltronaPolpetta",
+    "FuturismChair",
+    "Pianta",
+    "Vallentuna",
+    "MarbleSink",
+    "MarbleTable"
+  ],
   "indexes": [
     {
       "name": "ManiciAR",

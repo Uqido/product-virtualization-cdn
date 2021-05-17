@@ -10611,6 +10611,16 @@ h3 {
     top: 32%
 }
 
+.refinement .refinment-icon, .refinement.category-refinement>ul>li.icon-filter-accessories-man>a::before, .refinement.category-refinement>ul>li.icon-filter-accessories-woman>a::before, .refinement.category-refinement>ul>li.icon-filter-apparel>a::before, .refinement.category-refinement>ul>li.icon-filter-baby-footwear>a::before, .refinement.category-refinement>ul>li.icon-filter-baby>a::before, .refinement.category-refinement>ul>li.icon-filter-boy>a::before, .refinement.category-refinement>ul>li.icon-filter-forniture>a::before, .refinement.category-refinement>ul>li.icon-filter-girl>a::before, .refinement.category-refinement>ul>li.icon-filter-junior-footwear>a::before, .refinement.category-refinement>ul>li.icon-filter-man>a::before, .refinement.category-refinement>ul>li.icon-filter-news>a::before, .refinement.category-refinement>ul>li.icon-filter-sales>a::before, .refinement.category-refinement>ul>li.icon-filter-specialhighlights>a::before, .refinement.category-refinement>ul>li.icon-filter-technology>a::before, .refinement.category-refinement>ul>li.icon-filter-woman>a::before, .refinement.color-refinement .trigger::before, .refinement.consumertype-refinement .trigger::before, .refinement.heel-height-refinement .trigger::before, .refinement.price .trigger::before, .refinement.size-accessories .trigger::before, .refinement.size-apparel .trigger::before, .refinement.size-footwear .trigger::before {
+    content: " ";
+    height: 17px;
+    width: 19px;
+    display: inline-block;
+    background-repeat: no-repeat;
+    position: absolute;
+    top: 32%
+}
+
 .refinement.color-refinement .trigger::before {
     background-image: url(color.svg)
 }
@@ -10678,6 +10688,10 @@ h3 {
 
 .refinement.category-refinement>ul>li.icon-filter-footwear>a::before {
     background-image: url(shoes.svg)
+}
+
+.refinement.category-refinement>ul>li.icon-filter-forniture>a::before {
+    background-image: url(forniture.svg)
 }
 
 .refinement.category-refinement>ul>li.icon-filter-junior-footwear>a::before {
