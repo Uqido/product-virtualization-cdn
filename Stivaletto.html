@@ -20,19 +20,28 @@
     <script src="https://unpkg.com/fullscreen-polyfill/dist/fullscreen.polyfill.js"></script>
 
     <script src="https://unpkg.com/focus-visible/dist/focus-visible.js" defer></script>
+
+    <style>
+        .fullscreen-100{
+            background: white
+        }
+    </style>
 </head>
 
-<body>
-    <div id="Stivaletto-poster" class="cloudimage-360" data-folder="img/Stivaletto/" data-filename="photo-{index}.png"
-        data-amount="36"></div>
-    <script src="js/js-cloudimage-360-view.min.js"></script>
+<body class="fullscreen-100">
 
-    <script>
-        $(window).resize(function () {
-            var containerWidth = $('.cloudimage-inner-box').width()
-            $('.cloudimage-canvas-box').css({ width: containerWidth, height: containerWidth })
-        });
-    </script>
-</body>
+
+    <model-viewer id="Stivaletto-load" class='model-viewer'
+																	ar autoplay camera-controls
+																	src='models/Stivaletto.glb'
+																	ios-src='models/Stivaletto.usdz' alt=''
+																	exposure="0.6" shadow-intensity="1.5"
+																	min-field-of-view="20deg"
+																	shadow-softness="0.8"
+																	quick-look-browsers="safari chrome">
+																</model-viewer>
+    <script type="module" src="js/model-viewer/dist/model-viewer-1.3.0.min.js"></script>
+    <script nomodule src="https://unpkg.com/@google/model-viewer/dist/model-viewer-legacy.js"></script>
+    </body>
 
 </html>
